@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+/*package main
 
 import (
 	"context"
@@ -74,9 +74,9 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 	}
 
 	return s, nil
-}
+}*/
 
-func main() {
+fn main() {/*
 	shard := flag.String("shard", "", "search in a specific shard")
 	index := flag.String("index_dir",
 		filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
@@ -154,5 +154,5 @@ func main() {
 	displayMatches(sres.Files, pat, *withRepo, *list)
 	if *verbose {
 		log.Printf("stats: %#v", sres.Stats)
-	}
+	}*/
 }

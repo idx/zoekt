@@ -1,0 +1,7 @@
+[package]
+name = "zoekt"
+version = "0.1.0"
+
+[[bin]]
+name = "zoekt"
+path = "cmd/zoekt/src/main.rs"
