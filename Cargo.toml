@@ -1,8 +1,8 @@
 [package]
 name = "zoekt"
 version = "0.1.0"
+edition = "2021"
 #module github.com/google/zoekt
-#go 1.13
 
 [[bin]]
 name = "zoekt"
