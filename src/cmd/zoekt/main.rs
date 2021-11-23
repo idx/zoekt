@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package main
+//package main
 
-import (
+use clap::{App};
+
+/*import (
 	"context"
 	"flag"
 	"fmt"
@@ -76,7 +78,11 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 	return s, nil
 }*/
 
-fn main() {/*
+fn main() {
+	let matches = App::new("zoekt")
+	.version("0.1.0")
+	.get_matches();
+	/*
 	shard := flag.String("shard", "", "search in a specific shard")
 	index := flag.String("index_dir",
 		filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
@@ -93,9 +99,11 @@ fn main() {/*
 		flag.PrintDefaults()
 		fmt.Fprintf(os.Stderr, "\n")
 	}
-	flag.Parse()
+	flag.Parse()*/
 
-	if len(flag.Args()) == 0 {
+	let _verbose = matches.is_present("verbose");
+
+/*	if len(flag.Args()) == 0 {
 		fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
 		flag.Usage()
 		os.Exit(2)

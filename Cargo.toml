@@ -31,3 +31,6 @@ path = "src/cmd/zoekt/main.rs"
 #	gopkg.in/yaml.v2 v2.2.8 // indirect
 #	humungus.tedunangst.com/r/gerc v0.1.2
 #)
+
+[dependencies]
+clap = "2.33.3"
