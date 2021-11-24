@@ -14,7 +14,10 @@
 
 //package main
 
-use clap::{App};
+use clap::{App, Arg};
+use env_logger;
+use log::{info};
+use std::env;
 
 /*import (
 	"context"
@@ -79,20 +82,23 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 }*/
 
 fn main() {
+	env::set_var("RUST_LOG", "info");
+	env_logger::init();
 	let matches = App::new("zoekt")
 	.version("0.1.0")
-	.get_matches();
 	/*
 	shard := flag.String("shard", "", "search in a specific shard")
 	index := flag.String("index_dir",
-		filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
+	filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
 	cpuProfile := flag.String("cpu_profile", "", "write cpu profile to `file`")
-	profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")
-	verbose := flag.Bool("v", false, "print some background data")
-	withRepo := flag.Bool("r", false, "print the repo before the file name")
-	list := flag.Bool("l", false, "print matching filenames only")
+	profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
+	//verbose := flag.Bool("v", false, "print some background data")
+	.arg(Arg::from_usage("-v, --verbose 'print some background data'"))
+    // withRepo := flag.Bool("r", false, "print the repo before the file name")
+	// list := flag.Bool("l", false, "print matching filenames only")
+	.get_matches();
 
-	flag.Usage = func() {
+/*	flag.Usage = func() {
 		name := os.Args[0]
 		fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [option] QUERY\n"+
 			"for example\n\n  %s 'byte file:java -file:test'\n\n", name, name)
@@ -101,7 +107,7 @@ fn main() {
 	}
 	flag.Parse()*/
 
-	let _verbose = matches.is_present("verbose");
+	let verbose = matches.is_present("verbose");
 
 /*	if len(flag.Args()) == 0 {
 		fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
@@ -125,12 +131,12 @@ fn main() {
 	query, err := query.Parse(pat)
 	if err != nil {
 		log.Fatal(err)
-	}
-	if *verbose {
-		log.Println("query:", query)
+	}*/
+	if verbose {
+		info!("query: {}", "query");
 	}
 
-	var sOpts zoekt.SearchOptions
+/*	var sOpts zoekt.SearchOptions
 	sres, err := searcher.Search(context.Background(), query, &sOpts)
 	if *cpuProfile != "" {
 		// If profiling, do it another time so we measure with
