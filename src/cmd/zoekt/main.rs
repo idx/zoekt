@@ -82,41 +82,31 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 }*/
 
 fn main() {
+//	let args: Vec<_> = env::args().collect();
+//	let s: String = args[0];
 	env::set_var("RUST_LOG", "info");
 	env_logger::init();
 	let matches = App::new("zoekt")
 	.version("0.1.0")
-	/*
-	shard := flag.String("shard", "", "search in a specific shard")
-	index := flag.String("index_dir",
-	filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
-	cpuProfile := flag.String("cpu_profile", "", "write cpu profile to `file`")
-	profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
-	//verbose := flag.Bool("v", false, "print some background data")
-	.arg(Arg::from_usage("-v, --verbose 'print some background data'"))
-    // withRepo := flag.Bool("r", false, "print the repo before the file name")
-	// list := flag.Bool("l", false, "print matching filenames only")
+	.arg(Arg::from_usage("-s, --shard=[shard] 'Search in a specific shard'"))
+	//index := flag.String("index_dir",
+	//filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
+	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
+	//profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
+	.arg(Arg::from_usage("-v, --verbose 'Print some background data'"))
+	.arg(Arg::from_usage("-r, --repo 'Print the repo before the file name'"))
+	.arg(Arg::from_usage("-l, --list 'Print matching filenames only'"))
+	.arg(Arg::from_usage("<QUERY> 'for example\n zoekt \'byte file:java -file:test\''"))
 	.get_matches();
-
-/*	flag.Usage = func() {
-		name := os.Args[0]
-		fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [option] QUERY\n"+
-			"for example\n\n  %s 'byte file:java -file:test'\n\n", name, name)
-		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "\n")
-	}
-	flag.Parse()*/
-
+	
+	let _cpu_profile = matches.is_present("cpu_profile");
 	let verbose = matches.is_present("verbose");
+	let _with_repo = matches.is_present("repo");
+	let _list = matches.is_present("list");
 
-/*	if len(flag.Args()) == 0 {
-		fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
-		flag.Usage()
-		os.Exit(2)
-	}
-	pat := flag.Arg(0)
+	let _pat = matches.value_of("QUERY");
 
-	var searcher zoekt.Searcher
+	/*var searcher zoekt.Searcher
 	var err error
 	if *shard != "" {
 		searcher, err = loadShard(*shard, *verbose)
