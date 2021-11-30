@@ -13,6 +13,7 @@
 // limitations under the License.
 
 //package main
+use zoekt::api as zoekt;
 
 use clap::{App, Arg};
 use env_logger;
@@ -106,8 +107,8 @@ fn main() {
 
 	let _pat = matches.value_of("QUERY");
 
-	/*var searcher zoekt.Searcher
-	var err error
+	let _searcher = zoekt::Searcher {};
+	/*var err error
 	if *shard != "" {
 		searcher, err = loadShard(*shard, *verbose)
 	} else {

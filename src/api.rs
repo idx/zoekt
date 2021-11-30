@@ -262,10 +262,10 @@ type RepoListEntry struct {
 type RepoList struct {
 	Repos   []*RepoListEntry
 	Crashes int
-}
+}*/
 
-type Searcher interface {
-	Search(ctx context.Context, q query.Q, opts *SearchOptions) (*SearchResult, error)
+pub struct Searcher {
+	/*Search(ctx context.Context, q query.Q, opts *SearchOptions) (*SearchResult, error)
 
 	// List lists repositories. The query `q` can only contain
 	// query.Repo atoms.
@@ -273,10 +273,10 @@ type Searcher interface {
 	Close()
 
 	// Describe the searcher for debug messages.
-	String() string
+	String() string*/
 }
 
-type SearchOptions struct {
+/*type SearchOptions struct {
 	// Return an upper-bound estimate of eligible documents in
 	// stats.ShardFilesConsidered.
 	EstimateDocCount bool
