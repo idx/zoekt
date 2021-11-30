@@ -14,7 +14,7 @@
 
 // +build !linux,!darwin
 
-package zoekt
+/*package zoekt
 
 import (
 	"fmt"
@@ -58,4 +58,4 @@ func (f indexFileFromOS) Close() {
 
 func (f indexFileFromOS) Name() string {
 	return f.f.Name()
-}
+}*/

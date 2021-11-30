@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"fmt"
@@ -740,4 +740,4 @@ func (d *indexData) newSubstringMatchTree(s *query.Substring) (matchTree, error)
 	}
 	st.matchIterator = result
 	return st, nil
-}
+}*/

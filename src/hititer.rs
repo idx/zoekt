@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"encoding/binary"
@@ -256,4 +256,4 @@ func (i *mergingIterator) next(limit uint32) {
 	for _, j := range i.iters {
 		j.next(limit)
 	}
-}
+}*/

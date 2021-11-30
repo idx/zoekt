@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"bytes"
@@ -277,4 +277,4 @@ func (i *trimBySectionMatchIter) candidates() []*candidateMatch {
 		ms = ms[1:]
 	}
 	return trimmed
-}
+}*/

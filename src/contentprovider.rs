@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"bytes"
@@ -307,4 +307,4 @@ func sortMatchesByScore(ms []LineMatch) {
 // Sort a slice of results.
 func SortFilesByScore(ms []FileMatch) {
 	sort.Sort(fileMatchSlice(ms))
-}
+}*/

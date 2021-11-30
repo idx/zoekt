@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 // FormatVersion is a version number. It is increased every time the
 // on-disk index format is changed.
@@ -160,4 +160,4 @@ func (t *indexTOC) sectionsTaggedList() []taggedSection {
 // the current iteration of the indexer.
 func (t *indexTOC) sectionsTaggedCompatibilityList() []taggedSection {
 	return []taggedSection{}
-}
+}*/

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"encoding/binary"
@@ -481,4 +481,4 @@ func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
 	}
 
 	return &repo, &md, nil
-}
+}*/

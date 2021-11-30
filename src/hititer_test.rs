@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"fmt"
@@ -108,4 +108,4 @@ func genUints32(size int) []uint32 {
 		nums[i] = r.Uint32()
 	}
 	return nums
-}
+}*/

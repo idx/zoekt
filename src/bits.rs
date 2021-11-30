@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"encoding/binary"
@@ -265,4 +265,4 @@ func fromDeltas(data []byte, buf []uint32) []uint32 {
 		buf = append(buf, offset)
 	}
 	return buf
-}
+}*/

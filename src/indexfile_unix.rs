@@ -14,7 +14,7 @@
 
 // +build linux darwin
 
-package zoekt
+/*package zoekt
 
 import (
 	"fmt"
@@ -73,4 +73,4 @@ func NewIndexFile(f *os.File) (IndexFile, error) {
 	}
 
 	return r, err
-}
+}*/

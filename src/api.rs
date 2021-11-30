@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"context"
@@ -309,4 +309,4 @@ type SearchOptions struct {
 
 func (s *SearchOptions) String() string {
 	return fmt.Sprintf("%#v", s)
-}
+}*/
