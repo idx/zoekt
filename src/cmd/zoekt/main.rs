@@ -89,7 +89,7 @@ fn main() {
 	env_logger::init();
 	let matches = App::new("zoekt")
 	.version("0.1.0")
-	.arg(Arg::from_usage("-s, --shard=[shard] 'Search in a specific shard'"))
+	.arg(Arg::from_usage("-s, --shard [shard] 'Search in a specific shard'"))
 	//index := flag.String("index_dir",
 	//filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
 	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
@@ -108,14 +108,14 @@ fn main() {
 	let _pat = matches.value_of("QUERY");
 
 	let _searcher = zoekt::Searcher {};
-	/*var err error
-	if *shard != "" {
-		searcher, err = loadShard(*shard, *verbose)
+	//var err error
+	if let Some(_shard) = matches.value_of("shard") {
+		//searcher, err = loadShard(*shard, *verbose)
 	} else {
-		searcher, err = shards.NewDirectorySearcher(*index)
+		//searcher, err = shards.NewDirectorySearcher(*index)
 	}
 
-	if err != nil {
+	/*if err != nil {
 		log.Fatal(err)
 	}
 
