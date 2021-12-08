@@ -17,7 +17,7 @@ use zoekt::api as zoekt;
 
 use clap::{App, Arg};
 use env_logger;
-use log::{info};
+use log::{error, info};
 use std::env;
 
 /*import (
@@ -50,10 +50,11 @@ func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list boo
 			fmt.Printf("%s%s:%d:%s\n", r, f.FileName, m.LineNumber, m.Line)
 		}
 	}
-}
+}*/
 
-func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
-	f, err := os.Open(fn)
+//func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
+fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
+	/*f, err := os.Open(fn)
 	if err != nil {
 		return nil, err
 	}
@@ -67,20 +68,21 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 	if err != nil {
 		iFile.Close()
 		return nil, fmt.Errorf("NewSearcher(%s): %v", fn, err)
-	}
+	}*/
 
 	if verbose {
-		repo, index, err := zoekt.ReadMetadata(iFile)
+		/*repo, index, err := zoekt.ReadMetadata(iFile)
 		if err != nil {
 			iFile.Close()
 			return nil, fmt.Errorf("ReadMetadata(%s): %v", fn, err)
 		}
 		log.Printf("repo metadata: %#v", repo)
-		log.Printf("index metadata: %#v", index)
+		log.Printf("index metadata: %#v", index)*/
 	}
 
-	return s, nil
-}*/
+	//return s, nil
+	Ok(String::from("zoekt.Searcher"))
+}
 
 fn main() {
 //	let args: Vec<_> = env::args().collect();
@@ -108,18 +110,17 @@ fn main() {
 	let _pat = matches.value_of("QUERY");
 
 	let _searcher = zoekt::Searcher {};
-	//var err error
 	if let Some(_shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)
+		match load_shard(verbose) {
+			Ok(_s) => {println!("OK")}
+			Err(e) => {error!("{}", e)}
+		}
 	} else {
 		//searcher, err = shards.NewDirectorySearcher(*index)
 	}
 
-	/*if err != nil {
-		log.Fatal(err)
-	}
-
-	query, err := query.Parse(pat)
+	/*query, err := query.Parse(pat)
 	if err != nil {
 		log.Fatal(err)
 	}*/
