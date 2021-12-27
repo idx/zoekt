@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package gitindex
+/*package gitindex
 
 import (
 	"bytes"
@@ -67,7 +67,7 @@ func CloneRepo(destDir, name, cloneURL string, settings map[string]string) (stri
 		return "", err
 	}
 
-	if err := setFetch(repoDest, "origin", "+refs/heads/*:refs/heads/*"); err != nil {
+	if err := setFetch(repoDest, "origin", "+refs/heads\/\*:refs/heads\/\*"); err != nil {
 		log.Printf("addFetch: %v", err)
 	}
 	return repoDest, nil
@@ -93,4 +93,4 @@ func setFetch(repoDir, remote, refspec string) error {
 	}
 
 	return nil
-}
+}*/

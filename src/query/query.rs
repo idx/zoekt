@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package query
+/*package query
 
 import (
 	"fmt"
@@ -391,4 +391,4 @@ func VisitAtoms(q Q, v func(q Q)) {
 		}
 		return iQ
 	})
-}
+}*/

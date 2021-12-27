@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package shards
+/*package shards
 
 import (
 	"io/ioutil"
@@ -126,4 +126,4 @@ func TestHumanTruncateList(t *testing.T) {
 	assert(3, "1, 2, 3... 1 more")
 	assert(4, "1, 2, 3, 4")
 	assert(5, "1, 2, 3, 4")
-}
+}*/

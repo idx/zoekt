@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package query
+/*package query
 
 import (
 	"regexp/syntax"
@@ -64,4 +64,4 @@ func TestLowerRegexp(t *testing.T) {
 	if re.String() != in {
 		t.Errorf("got mutated original %s want %s", re.String(), in)
 	}
-}
+}*/

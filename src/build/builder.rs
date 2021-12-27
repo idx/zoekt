@@ -14,7 +14,7 @@
 
 // package build implements a more convenient interface for building
 // zoekt indices.
-package build
+/*package build
 
 import (
 	"crypto/sha1"
@@ -564,4 +564,4 @@ func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard,
 }
 
 // umask holds the Umask of the current process
-var umask os.FileMode
+var umask os.FileMode*/

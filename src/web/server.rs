@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package web
+/*package web
 
 import (
 	"bytes"
@@ -579,4 +579,4 @@ func (s *Server) servePrintErr(w http.ResponseWriter, r *http.Request) error {
 
 	w.Write(buf.Bytes())
 	return nil
-}
+}*/

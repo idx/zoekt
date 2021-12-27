@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ctags
+/*package ctags
 
 import (
 	"bufio"
@@ -262,4 +262,4 @@ func NewParser(bin string) (Parser, error) {
 
 	log.Fatal("not implemented")
 	return nil, nil
-}
+}*/

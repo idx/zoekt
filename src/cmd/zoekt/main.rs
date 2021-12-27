@@ -13,7 +13,7 @@
 // limitations under the License.
 
 //package main
-use zoekt::api as zoekt;
+use zoekt::query;
 
 use clap::{App, Arg};
 use env_logger;
@@ -109,7 +109,7 @@ fn main() {
 
 	let _pat = matches.value_of("QUERY");
 
-	let _searcher = zoekt::Searcher {};
+	let _searcher = zoekt::api::Searcher {};
 	if let Some(_shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)
 		match load_shard(verbose) {
@@ -120,8 +120,9 @@ fn main() {
 		//searcher, err = shards.NewDirectorySearcher(*index)
 	}
 
-	/*query, err := query.Parse(pat)
-	if err != nil {
+	//query, err := query.Parse(pat)
+	let _query = query::parse::parse();
+	/*if err != nil {
 		log.Fatal(err)
 	}*/
 	if verbose {

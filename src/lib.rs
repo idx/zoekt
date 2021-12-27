@@ -20,3 +20,10 @@ pub mod section_test;
 pub mod section;
 pub mod toc;
 pub mod write;
+
+pub mod build;
+pub mod ctags;
+pub mod gitindex;
+pub mod query;
+pub mod shards;
+pub mod web;

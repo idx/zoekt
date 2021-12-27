@@ -1,4 +1,4 @@
-package gitindex
+/*package gitindex
 
 import (
 	"fmt"
@@ -38,4 +38,4 @@ func DeleteRepos(baseDir string, urlPrefix *url.URL, names map[string]struct{}, 
 		return fmt.Errorf("errors: %v", errs)
 	}
 	return nil
-}
+}*/

@@ -1,4 +1,4 @@
-package build
+/*package build
 
 import (
 	"flag"
@@ -48,4 +48,4 @@ func TestFlags(t *testing.T) {
 			t.Errorf("mismatch for %v (-want +got):\n%s", c.args, cmp.Diff(c.want, got))
 		}
 	}
-}
+}*/

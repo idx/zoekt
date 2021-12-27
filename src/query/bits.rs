@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package query
+/*package query
 
 func toLower(in []byte) []byte {
 	out := make([]byte, len(in))
@@ -23,4 +23,4 @@ func toLower(in []byte) []byte {
 		out[i] = c
 	}
 	return out
-}
+}*/

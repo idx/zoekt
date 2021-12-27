@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // Package gitindex provides functions for indexing Git repositories.
-package gitindex
+/*package gitindex
 
 import (
 	"bytes"
@@ -518,4 +518,4 @@ func uniq(ss []string) []string {
 		last = s
 	}
 	return result
-}
+}*/

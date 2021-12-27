@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package build
+/*package build
 
 import (
 	"bytes"
@@ -275,4 +275,4 @@ func newLinesIndices(in []byte) []uint32 {
 		}
 	}
 	return out
-}
+}*/

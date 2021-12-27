@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package web
+/*package web
 
 import (
 	"time"
@@ -110,4 +110,4 @@ type PrintInput struct {
 	Repo, Name string
 	Lines      []string
 	Last       LastInput
-}
+}*/

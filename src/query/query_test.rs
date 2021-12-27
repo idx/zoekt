@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package query
+/*package query
 
 import (
 	"log"
@@ -108,4 +108,4 @@ func TestVisitAtoms(t *testing.T) {
 	if count != 3 {
 		t.Errorf("got %d, want 3", count)
 	}
-}
+}*/

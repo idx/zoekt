@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package gitindex
+/*package gitindex
 
 import (
 	"net/url"
@@ -114,4 +114,4 @@ func ListRepos(baseDir string, u *url.URL) ([]string, error) {
 		return nil, err
 	}
 	return paths, nil
-}
+}*/

@@ -13,7 +13,7 @@
 // limitations under the License.
 // +build !windows
 
-package build
+/*package build
 
 import (
 	"os"
@@ -23,4 +23,4 @@ import (
 func init() {
 	umask = os.FileMode(syscall.Umask(0))
 	syscall.Umask(int(umask))
-}
+}*/
