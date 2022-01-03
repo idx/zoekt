@@ -107,7 +107,7 @@ fn main() {
 	let _with_repo = matches.is_present("repo");
 	let _list = matches.is_present("list");
 
-	let _pat = matches.value_of("QUERY");
+	let pat: Option<&str>  = matches.value_of("QUERY");
 
 	let _searcher = zoekt::api::Searcher {};
 	if let Some(_shard) = matches.value_of("shard") {
@@ -121,7 +121,7 @@ fn main() {
 	}
 
 	//query, err := query.Parse(pat)
-	let _query = query::parse::parse();
+	let _query = query::parse::parse(pat);
 	/*if err != nil {
 		log.Fatal(err)
 	}*/

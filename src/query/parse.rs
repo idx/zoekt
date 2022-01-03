@@ -79,10 +79,11 @@ func isSpace(c byte) bool {
 
 // Parse parses a string into a query.
 //func Parse(qStr string) (Q, error) {
-pub fn parse() {
-	/*b := []byte(qStr)
+pub fn parse(q_str: Option<&str>) {
+	//b := []byte(qStr)
+	let _b = q_str.unwrap().as_bytes();
 
-	qs, _, err := parseExprList(b)
+	/*qs, _, err := parseExprList(b)
 	if err != nil {
 		return nil, err
 	}
