@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package query
-
-import (
+//package query
+struct Parse {}
+/*import (
     "bytes"
     "fmt"
     "log"
@@ -83,21 +83,23 @@ pub fn parse(q_str: Option<&str>) {
     //b := []byte(qStr)
     let _b = q_str.unwrap().as_bytes();
 
-    /*qs, _, err := parseExprList(b)
-    if err != nil {
+    //qs, _, err := parseExprList(b)
+    /*if err != nil {
         return nil, err
-    }
+    }*/
+    let _qs = Parse::parse_expr_list();
 
-    q, err := parseOperators(qs)
-    if err != nil {
+    //q, err := parseOperators(qs)
+    /*if err != nil {
         return nil, err
-    }
+    }*/
+    let _q = Parse::parse_operators();
 
-    return Simplify(q), nil*/
+    //return Simplify(q), nil
 }
 
 // parseExpr parses a single expression, returning the result, and the
-// number of bytes consumed.
+// number of bytes consumed.pa
 /*func parseExpr(in []byte) (Q, int, error) {
     b := in[:]
     var expr Q
@@ -222,11 +224,13 @@ func regexpQuery(text string, content, file bool) (Q, error) {
     }
 
     return expr, nil
-}
+}*/
 
+impl Parse {
 // parseOperators interprets the orOperator in a list of queries.
-func parseOperators(in []Q) (Q, error) {
-    top := &Or{}
+//func parseOperators(in []Q) (Q, error) {
+pub fn parse_operators() {
+/*    top := &Or{}
     cur := &And{}
 
     seenOr := false
@@ -247,13 +251,14 @@ func parseOperators(in []Q) (Q, error) {
         return nil, fmt.Errorf("query: OR operator should have operand")
     }
     top.Children = append(top.Children, cur)
-    return top, nil
+    return top, nil*/
 }
 
 // parseExprList parses a list of query expressions. It is the
 // workhorse of the Parse function.
-func parseExprList(in []byte) ([]Q, int, error) {
-    b := in[:]
+//func parseExprList(in []byte) ([]Q, int, error) {
+fn parse_expr_list() {
+/*    b := in[:]
     var qs []Q
     for len(b) > 0 {
         for len(b) > 0 && isSpace(b[0]) {
@@ -296,10 +301,11 @@ func parseExprList(in []byte) ([]Q, int, error) {
         }
         return q
     })
-    return qs, len(in) - len(b), nil
+    return qs, len(in) - len(b), nil*/
+}
 }
 
-type token struct {
+/*type token struct {
     Type int
     // The value of the token
     Text []byte
