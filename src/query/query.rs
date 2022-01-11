@@ -327,10 +327,11 @@ func evalConstants(q Q) Q {
         }
     }
     return q
-}
+}*/
 
-func Simplify(q Q) Q {
-    q = evalConstants(q)
+//func Simplify(q Q) Q {
+pub fn simplify(_q: String) -> String {
+    /*q = evalConstants(q)
     for {
         var changed bool
         q, changed = flatten(q)
@@ -339,11 +340,12 @@ func Simplify(q Q) Q {
         }
     }
 
-    return q
+    return q*/
+    "dummy".to_string()
 }
 
 // Map runs f over the q.
-func Map(q Q, f func(q Q) Q) Q {
+/*func Map(q Q, f func(q Q) Q) Q {
     switch s := q.(type) {
     case *And:
         q = &And{Children: mapQueryList(s.Children, f)}

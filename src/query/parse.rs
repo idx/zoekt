@@ -14,6 +14,8 @@
 
 //package query
 struct Parse {}
+use crate::query::query::simplify;
+
 /*import (
     "bytes"
     "fmt"
@@ -79,23 +81,24 @@ func isSpace(c byte) bool {
 
 // Parse parses a string into a query.
 //func Parse(qStr string) (Q, error) {
-pub fn parse(q_str: Option<&str>) {
+pub fn parse(q_str: Option<&str>) -> String {
+    let mut p = Parse {};
     //b := []byte(qStr)
-    let _b = q_str.unwrap().as_bytes();
-
     //qs, _, err := parseExprList(b)
     /*if err != nil {
         return nil, err
     }*/
-    let _qs = Parse::parse_expr_list();
 
     //q, err := parseOperators(qs)
     /*if err != nil {
         return nil, err
     }*/
-    let _q = Parse::parse_operators();
 
     //return Simplify(q), nil
+    simplify(
+        p.parse_expr_list(q_str.unwrap().as_bytes())
+            .parse_operators(),
+    )
 }
 
 // parseExpr parses a single expression, returning the result, and the
@@ -227,82 +230,84 @@ func regexpQuery(text string, content, file bool) (Q, error) {
 }*/
 
 impl Parse {
-// parseOperators interprets the orOperator in a list of queries.
-//func parseOperators(in []Q) (Q, error) {
-pub fn parse_operators() {
-/*    top := &Or{}
-    cur := &And{}
+    // parseOperators interprets the orOperator in a list of queries.
+    //func parseOperators(in []Q) (Q, error) {
+    fn parse_operators(&mut self) -> String {
+        /*    top := &Or{}
+        cur := &And{}
 
-    seenOr := false
-    for _, q := range in {
-        if _, ok := q.(*orOperator); ok {
-            seenOr = true
-            if len(cur.Children) == 0 {
-                return nil, fmt.Errorf("query: OR operator should have operand")
+        seenOr := false
+        for _, q := range in {
+            if _, ok := q.(*orOperator); ok {
+                seenOr = true
+                if len(cur.Children) == 0 {
+                    return nil, fmt.Errorf("query: OR operator should have operand")
+                }
+                top.Children = append(top.Children, cur)
+                cur = &And{}
+            } else {
+                cur.Children = append(cur.Children, q)
             }
-            top.Children = append(top.Children, cur)
-            cur = &And{}
-        } else {
-            cur.Children = append(cur.Children, q)
         }
+
+        if seenOr && len(cur.Children) == 0 {
+            return nil, fmt.Errorf("query: OR operator should have operand")
+        }
+        top.Children = append(top.Children, cur)
+        return top, nil*/
+        "Dummy".to_string()
     }
 
-    if seenOr && len(cur.Children) == 0 {
-        return nil, fmt.Errorf("query: OR operator should have operand")
+    // parseExprList parses a list of query expressions. It is the
+    // workhorse of the Parse function.
+    //func parseExprList(in []byte) ([]Q, int, error) {
+    fn parse_expr_list(&mut self, _b: &[u8]) -> &mut Parse {
+        /*    b := in[:]
+        var qs []Q
+        for len(b) > 0 {
+            for len(b) > 0 && isSpace(b[0]) {
+                b = b[1:]
+            }
+            tok, _ := nextToken(b)
+            if tok != nil && tok.Type == tokParenClose {
+                break
+            } else if tok != nil && tok.Type == tokOr {
+                qs = append(qs, &orOperator{})
+                b = b[len(tok.Input):]
+                continue
+            }
+
+            q, n, err := parseExpr(b)
+            if err != nil {
+                return nil, 0, err
+            }
+
+            if q == nil {
+                // eof or a ')'
+                break
+            }
+            qs = append(qs, q)
+            b = b[n:]
+        }
+
+        setCase := "auto"
+        newQS := qs[:0]
+        for _, q := range qs {
+            if sc, ok := q.(*caseQ); ok {
+                setCase = sc.Flavor
+            } else {
+                newQS = append(newQS, q)
+            }
+        }
+        qs = mapQueryList(newQS, func(q Q) Q {
+            if sc, ok := q.(setCaser); ok {
+                sc.setCase(setCase)
+            }
+            return q
+        })
+        return qs, len(in) - len(b), nil*/
+        self
     }
-    top.Children = append(top.Children, cur)
-    return top, nil*/
-}
-
-// parseExprList parses a list of query expressions. It is the
-// workhorse of the Parse function.
-//func parseExprList(in []byte) ([]Q, int, error) {
-fn parse_expr_list() {
-/*    b := in[:]
-    var qs []Q
-    for len(b) > 0 {
-        for len(b) > 0 && isSpace(b[0]) {
-            b = b[1:]
-        }
-        tok, _ := nextToken(b)
-        if tok != nil && tok.Type == tokParenClose {
-            break
-        } else if tok != nil && tok.Type == tokOr {
-            qs = append(qs, &orOperator{})
-            b = b[len(tok.Input):]
-            continue
-        }
-
-        q, n, err := parseExpr(b)
-        if err != nil {
-            return nil, 0, err
-        }
-
-        if q == nil {
-            // eof or a ')'
-            break
-        }
-        qs = append(qs, q)
-        b = b[n:]
-    }
-
-    setCase := "auto"
-    newQS := qs[:0]
-    for _, q := range qs {
-        if sc, ok := q.(*caseQ); ok {
-            setCase = sc.Flavor
-        } else {
-            newQS = append(newQS, q)
-        }
-    }
-    qs = mapQueryList(newQS, func(q Q) Q {
-        if sc, ok := q.(setCaser); ok {
-            sc.setCase(setCase)
-        }
-        return q
-    })
-    return qs, len(in) - len(b), nil*/
-}
 }
 
 /*type token struct {
