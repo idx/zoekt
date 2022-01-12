@@ -15,6 +15,7 @@
 //package query
 struct Parse {}
 use crate::query::query::simplify;
+use String as Q;
 
 /*import (
     "bytes"
@@ -81,24 +82,28 @@ func isSpace(c byte) bool {
 
 // Parse parses a string into a query.
 //func Parse(qStr string) (Q, error) {
-pub fn parse(q_str: Option<&str>) -> String {
+pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
     let mut p = Parse {};
-    //b := []byte(qStr)
-    //qs, _, err := parseExprList(b)
-    /*if err != nil {
-        return nil, err
-    }*/
+    /*b := []byte(qStr)
 
-    //q, err := parseOperators(qs)
-    /*if err != nil {
+    qs, _, err := parseExprList(b)
+    if err != nil {
         return nil, err
-    }*/
+    }
 
-    //return Simplify(q), nil
-    simplify(
-        p.parse_expr_list(q_str.unwrap().as_bytes())
-            .parse_operators(),
-    )
+    q, err := parseOperators(qs)
+    if err != nil {
+        return nil, err
+    }
+
+    return Simplify(q), nil*/
+    match p
+        .parse_expr_list(q_str.unwrap().as_bytes())
+        .parse_operators()
+    {
+        Ok(q) => Ok(simplify(q)),
+        Err(err) => Err(err),
+    }
 }
 
 // parseExpr parses a single expression, returning the result, and the
@@ -232,7 +237,7 @@ func regexpQuery(text string, content, file bool) (Q, error) {
 impl Parse {
     // parseOperators interprets the orOperator in a list of queries.
     //func parseOperators(in []Q) (Q, error) {
-    fn parse_operators(&mut self) -> String {
+    fn parse_operators(&mut self) -> Result<Q, String> {
         /*    top := &Or{}
         cur := &And{}
 
@@ -255,7 +260,7 @@ impl Parse {
         }
         top.Children = append(top.Children, cur)
         return top, nil*/
-        "Dummy".to_string()
+        Ok("Dummy".to_string())
     }
 
     // parseExprList parses a list of query expressions. It is the
