@@ -74,11 +74,13 @@ type orOperator struct{}
 
 func (o *orOperator) String() string {
     return "orOp"
-}
-
-func isSpace(c byte) bool {
-    return c == ' ' || c == '\t'
 }*/
+
+//func isSpace(c byte) bool {
+fn is_space(c: char) -> bool {
+    //    return c == ' ' || c == '\t'
+    return c == ' ' || c == '\t';
+}
 
 // Parse parses a string into a query.
 //func Parse(qStr string) (Q, error) {
@@ -266,12 +268,15 @@ impl Parse {
     // parseExprList parses a list of query expressions. It is the
     // workhorse of the Parse function.
     //func parseExprList(in []byte) ([]Q, int, error) {
-    fn parse_expr_list(&mut self, _b: &[u8]) -> &mut Parse {
-        /*    b := in[:]
-        var qs []Q
-        for len(b) > 0 {
-            for len(b) > 0 && isSpace(b[0]) {
-                b = b[1:]
+    fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
+        /*b := in[:]
+        var qs []Q*/
+        let mut b = &r#in[..];
+        let _qs: &Q;
+        //for len(b) > 0 {
+        while b.len() > 0 {
+            /*for len(b) > 0 && isSpace(b[0]) {
+            b = b[1:]
             }
             tok, _ := nextToken(b)
             if tok != nil && tok.Type == tokParenClose {
@@ -280,9 +285,14 @@ impl Parse {
                 qs = append(qs, &orOperator{})
                 b = b[len(tok.Input):]
                 continue
+            }*/
+            while b.len() > 0 && is_space(b[0] as char) {
+                b = &b[1..];
             }
 
-            q, n, err := parseExpr(b)
+            let _tok = next_token(b);
+
+            /*q, n, err := parseExpr(b)
             if err != nil {
                 return nil, 0, err
             }
@@ -292,10 +302,10 @@ impl Parse {
                 break
             }
             qs = append(qs, q)
-            b = b[n:]
+            b = b[n:]*/
         }
 
-        setCase := "auto"
+        /*        setCase := "auto"
         newQS := qs[:0]
         for _, q := range qs {
             if sc, ok := q.(*caseQ); ok {
@@ -408,85 +418,88 @@ func (t *token) setType() {
         t.Type = typ
         break
     }
-}
+}*/
 
 // nextToken returns the next token from the given input.
-func nextToken(in []byte) (*token, error) {
-    left := in[:]
+//func nextToken(in []byte) (*token, error) {
+fn next_token(r#in: &[u8]) -> Result<String, String> {
+    /*left := in[:]
     parenCount := 0
     var cur token
     if len(left) == 0 {
         return nil, nil
-    }
+    }*/
+    let _left = &r#in[..];
 
-    if left[0] == '-' {
-        return &token{
-            Type:  tokNegate,
-            Text:  []byte{'-'},
-            Input: in[:1],
-        }, nil
-    }
+    /*if left[0] == '-' {
+            return &token{
+                Type:  tokNegate,
+                Text:  []byte{'-'},
+                Input: in[:1],
+            }, nil
+        }
 
-    foundSpace := false
+        foundSpace := false
 
-loop:
-    for len(left) > 0 {
-        c := left[0]
-        switch c {
-        case '(':
-            parenCount++
-            cur.Text = append(cur.Text, c)
-            left = left[1:]
-        case ')':
-            if parenCount == 0 {
-                if len(cur.Text) == 0 {
-                    cur.Text = []byte{')'}
-                    left = left[1:]
+    loop:
+        for len(left) > 0 {
+            c := left[0]
+            switch c {
+            case '(':
+                parenCount++
+                cur.Text = append(cur.Text, c)
+                left = left[1:]
+            case ')':
+                if parenCount == 0 {
+                    if len(cur.Text) == 0 {
+                        cur.Text = []byte{')'}
+                        left = left[1:]
+                    }
+                    break loop
+                }
+
+                cur.Text = append(cur.Text, c)
+                left = left[1:]
+                parenCount--
+
+            case '"':
+                t, n, err := parseStringLiteral(left)
+                if err != nil {
+                    return nil, err
+                }
+                cur.Text = append(cur.Text, t...)
+                left = left[n:]
+            case '\\':
+                left = left[1:]
+                if len(left) == 0 {
+                    return nil, fmt.Errorf("query: lone \\ at end")
+                }
+                c := left[0]
+                cur.Text = append(cur.Text, '\\', c)
+                left = left[1:]
+
+            case ' ', '\n', '\t':
+                if parenCount > 0 {
+                    foundSpace = true
                 }
                 break loop
+            default:
+                cur.Text = append(cur.Text, c)
+                left = left[1:]
             }
-
-            cur.Text = append(cur.Text, c)
-            left = left[1:]
-            parenCount--
-
-        case '"':
-            t, n, err := parseStringLiteral(left)
-            if err != nil {
-                return nil, err
-            }
-            cur.Text = append(cur.Text, t...)
-            left = left[n:]
-        case '\\':
-            left = left[1:]
-            if len(left) == 0 {
-                return nil, fmt.Errorf("query: lone \\ at end")
-            }
-            c := left[0]
-            cur.Text = append(cur.Text, '\\', c)
-            left = left[1:]
-
-        case ' ', '\n', '\t':
-            if parenCount > 0 {
-                foundSpace = true
-            }
-            break loop
-        default:
-            cur.Text = append(cur.Text, c)
-            left = left[1:]
         }
-    }
 
-    if len(cur.Text) == 0 {
-        return nil, nil
-    }
+        if len(cur.Text) == 0 {
+            return nil, nil
+        }
 
-    if foundSpace && cur.Text[0] == '(' {
-        cur.Text = cur.Text[:1]
-        cur.Input = in[:1]
-    } else {
-        cur.Input = in[:len(in)-len(left)]
-    }
-    cur.setType()
-    return &cur, nil
-}*/
+        if foundSpace && cur.Text[0] == '(' {
+            cur.Text = cur.Text[:1]
+            cur.Input = in[:1]
+        } else {
+            cur.Input = in[:len(in)-len(left)]
+        }
+        cur.setType()
+        return &cur, nil*/
+    Ok("dummy".to_string())
+}
