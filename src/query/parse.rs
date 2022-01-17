@@ -85,10 +85,19 @@ fn is_space(c: char) -> bool {
 // Parse parses a string into a query.
 //func Parse(qStr string) (Q, error) {
 pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
-    let mut p = Parse {};
     /*b := []byte(qStr)
 
-    qs, _, err := parseExprList(b)
+	qs, _, err := parseExprList(b)
+	if err != nil {
+		return nil, err
+	}
+
+	q, err := parseOperators(qs)
+	if err != nil {
+		return nil, err
+	}
+
+	return Simplify(q), nilqs, _, err := parseExprList(b)
     if err != nil {
         return nil, err
     }
@@ -99,13 +108,14 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
     }
 
     return Simplify(q), nil*/
-    match p
-        .parse_expr_list(q_str.unwrap().as_bytes())
-        .parse_operators()
-    {
-        Ok(q) => Ok(simplify(q)),
-        Err(err) => Err(err),
-    }
+    let b = q_str.unwrap().as_bytes();
+
+    let _qs = Parse::parse_expr_list(b);
+
+    let _q = Parse::parse_operators();
+    
+    let _dummy = simplify("Q".to_string());
+    Ok("simplify(q)".to_string())
 }
 
 // parseExpr parses a single expression, returning the result, and the
@@ -239,8 +249,10 @@ func regexpQuery(text string, content, file bool) (Q, error) {
 impl Parse {
     // parseOperators interprets the orOperator in a list of queries.
     //func parseOperators(in []Q) (Q, error) {
-    fn parse_operators(&mut self) -> Result<Q, String> {
-        /*    top := &Or{}
+    //fn parse_operators(&mut self) -> Result<Q, String> {
+    //fn parse_operators(r#_in: &[Q]) -> Result<Q, String> {
+    fn parse_operators() -> Result<Q, String> {
+            /*    top := &Or{}
         cur := &And{}
 
         seenOr := false
@@ -268,8 +280,9 @@ impl Parse {
     // parseExprList parses a list of query expressions. It is the
     // workhorse of the Parse function.
     //func parseExprList(in []byte) ([]Q, int, error) {
-    fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
-        /*b := in[:]
+    //fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
+    fn parse_expr_list(r#in: &[u8]) -> Result<(String, i32), String> {
+            /*b := in[:]
         var qs []Q*/
         let mut b = &r#in[..];
         let _qs: &Q;
@@ -321,7 +334,8 @@ impl Parse {
             return q
         })
         return qs, len(in) - len(b), nil*/
-        self
+        //self
+        Ok(("Q".to_string(), 0))
     }
 }
 
