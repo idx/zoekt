@@ -97,23 +97,19 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 		return nil, err
 	}
 
-	return Simplify(q), nilqs, _, err := parseExprList(b)
-    if err != nil {
-        return nil, err
-    }
-
-    q, err := parseOperators(qs)
-    if err != nil {
-        return nil, err
-    }
-
-    return Simplify(q), nil*/
+	return Simplify(q), nil*/
     let b = q_str.unwrap().as_bytes();
 
-    let _qs = Parse::parse_expr_list(b);
+    let qs = Parse::parse_expr_list(b);
+    if let Err(e) = qs {
+        return Err(e.to_string())
+    };
 
-    let _q = Parse::parse_operators();
-    
+    let q = Parse::parse_operators();
+    if let Err(e) = q {
+        return Err(e.to_string())
+    };
+
     let _dummy = simplify("Q".to_string());
     Ok("simplify(q)".to_string())
 }
