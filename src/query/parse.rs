@@ -298,8 +298,10 @@ impl Parse {
             while b.len() > 0 && is_space(b[0] as char) {
                 b = &b[1..];
             }
+            let tok = next_token(b);
+            if tok.unwrap()._text.is_empty() {
 
-            let _tok = next_token(b);
+            }
 
             /*q, n, err := parseExpr(b)
             if err != nil {
@@ -342,14 +344,19 @@ impl Parse {
 
     // The input that we consumed to form the token.
     Input []byte
+}*/
+struct Token {
+    _type: String,
+    _text: String,
+    _input: String,
 }
 
-func (t *token) String() string {
+/*func (t *token) String() string {
     return fmt.Sprintf("%s:%q", tokNames[t.Type], t.Text)
-}
+}*/
 
 // token types.
-const (
+/*const (
     tokText       = 0
     tokFile       = 1
     tokRepo       = 2
@@ -364,9 +371,25 @@ const (
     tokContent    = 11
     tokLang       = 12
     tokSym        = 13
-)
+)*/
+enum _Tok {
+    TokText       = 0,
+    TokFile       = 1,
+    TokRepo       = 2,
+    TokCase       = 3,
+    TokBranch     = 4,
+    TokParenOpen  = 5,
+    TokParenClose = 6,
+    TokError      = 7,
+    TokNegate     = 8,
+    TokRegex      = 9,
+    TokOr         = 10,
+    TokContent    = 11,
+    TokLang       = 12,
+    TokSym        = 13,
+}
 
-var tokNames = map[int]string{
+/*var tokNames = map[int]string{
     tokBranch:     "Branch",
     tokCase:       "Case",
     tokError:      "Error",
@@ -432,7 +455,7 @@ func (t *token) setType() {
 
 // nextToken returns the next token from the given input.
 //func nextToken(in []byte) (*token, error) {
-fn next_token(r#in: &[u8]) -> Result<String, String> {
+fn next_token(r#in: &[u8]) -> Result<Token, String> {
     /*left := in[:]
     parenCount := 0
     var cur token
@@ -440,6 +463,12 @@ fn next_token(r#in: &[u8]) -> Result<String, String> {
         return nil, nil
     }*/
     let _left = &r#in[..];
+
+    let cur = Token {
+        _type: String::from("type"),
+        _text: String::from("text"),
+        _input:  String::from("input"),
+    };
 
     /*if left[0] == '-' {
             return &token{
@@ -511,5 +540,5 @@ fn next_token(r#in: &[u8]) -> Result<String, String> {
         }
         cur.setType()
         return &cur, nil*/
-    Ok("dummy".to_string())
+    Ok(cur)
 }
