@@ -298,9 +298,9 @@ impl Parse {
             while b.len() > 0 && is_space(b[0] as char) {
                 b = &b[1..];
             }
-            let tok = next_token(b);
-            if tok.unwrap()._text.is_empty() {
-
+            let tok = next_token(b).unwrap();
+            if tok.text.is_empty() && tok.r#type == TokOr as usize {
+                
             }
 
             /*q, n, err := parseExpr(b)
@@ -346,8 +346,8 @@ impl Parse {
     Input []byte
 }*/
 struct Token {
-    _type: String,
-    _text: String,
+    r#type: usize,
+    text: String,
     _input: String,
 }
 
@@ -372,22 +372,24 @@ struct Token {
     tokLang       = 12
     tokSym        = 13
 )*/
-enum _Tok {
+enum Tok {
     TokText       = 0,
-    TokFile       = 1,
-    TokRepo       = 2,
-    TokCase       = 3,
-    TokBranch     = 4,
-    TokParenOpen  = 5,
-    TokParenClose = 6,
-    TokError      = 7,
-    TokNegate     = 8,
-    TokRegex      = 9,
+    _TokFile       = 1,
+    _TokRepo       = 2,
+    _TokCase       = 3,
+    _TokBranch     = 4,
+    _TokParenOpen  = 5,
+    _TokParenClose = 6,
+    _TokError      = 7,
+    _TokNegate     = 8,
+    _TokRegex      = 9,
     TokOr         = 10,
-    TokContent    = 11,
-    TokLang       = 12,
-    TokSym        = 13,
+    _TokContent    = 11,
+    _TokLang       = 12,
+    _TokSym        = 13,
 }
+
+use Tok::{*};
 
 /*var tokNames = map[int]string{
     tokBranch:     "Branch",
@@ -462,13 +464,16 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     if len(left) == 0 {
         return nil, nil
     }*/
-    let _left = &r#in[..];
-
+    let left = &r#in[..];
+    let _paren_count = 0;
     let cur = Token {
-        _type: String::from("type"),
-        _text: String::from("text"),
+        r#type: TokText as usize,
+        text: String::from("text"),
         _input:  String::from("input"),
     };
+    if left.len() == 0 {
+
+    }
 
     /*if left[0] == '-' {
             return &token{
