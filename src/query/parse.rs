@@ -281,7 +281,8 @@ impl Parse {
             /*b := in[:]
         var qs []Q*/
         let mut b = &r#in[..];
-        let _qs: &Q;
+        //let _qs: &Q;
+        let mut qs = Vec::new();
         //for len(b) > 0 {
         while b.len() > 0 {
             /*for len(b) > 0 && isSpace(b[0]) {
@@ -299,8 +300,11 @@ impl Parse {
                 b = &b[1..];
             }
             let tok = next_token(b).unwrap();
-            if tok.text.is_empty() && tok.r#type == TokOr as usize {
-                
+            if !tok.text.is_empty() && tok.r#type == TokParenClose as usize {
+                break;
+            } else if !tok.text.is_empty() && tok.r#type == TokOr as usize {
+                qs.push("orOperator");
+                continue;
             }
 
             /*q, n, err := parseExpr(b)
@@ -379,7 +383,7 @@ enum Tok {
     _TokCase       = 3,
     _TokBranch     = 4,
     _TokParenOpen  = 5,
-    _TokParenClose = 6,
+    TokParenClose = 6,
     _TokError      = 7,
     _TokNegate     = 8,
     _TokRegex      = 9,
