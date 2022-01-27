@@ -66,15 +66,16 @@ loop:
         return nil, 0, fmt.Errorf("query: unterminated quoted string")
     }
     return lit, len(in) - len(left), nil
-}
+}*/
 
 // orOperator is a placeholder intermediate so we can represent [A,
 // or, B] before we convert it to Or{A, B}
-type orOperator struct{}
+/*type orOperator struct{}
 
 func (o *orOperator) String() string {
     return "orOp"
 }*/
+
 
 //func isSpace(c byte) bool {
 fn is_space(c: char) -> bool {
@@ -303,6 +304,7 @@ impl Parse {
             if !tok.text.is_empty() && tok.r#type == TokParenClose as usize {
                 break;
             } else if !tok.text.is_empty() && tok.r#type == TokOr as usize {
+                b = &b[tok.input.len()..];
                 qs.push("orOperator");
                 continue;
             }
@@ -352,7 +354,7 @@ impl Parse {
 struct Token {
     r#type: usize,
     text: String,
-    _input: String,
+    input: String,
 }
 
 /*func (t *token) String() string {
@@ -473,7 +475,7 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     let cur = Token {
         r#type: TokText as usize,
         text: String::from("text"),
-        _input:  String::from("input"),
+        input:  String::from("input"),
     };
     if left.len() == 0 {
 
