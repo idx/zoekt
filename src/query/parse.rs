@@ -301,9 +301,9 @@ impl Parse {
                 b = &b[1..];
             }
             let tok = next_token(b).unwrap();
-            if !tok.text.is_empty() && tok.r#type == TokParenClose as usize {
+            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
                 break;
-            } else if !tok.text.is_empty() && tok.r#type == TokOr as usize {
+            } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
                 b = &b[tok.input.len()..];
                 qs.push("orOperator");
                 continue;
@@ -351,10 +351,13 @@ impl Parse {
     // The input that we consumed to form the token.
     Input []byte
 }*/
-struct Token {
+struct Token<'a> {
     r#type: usize,
+    // The value of the token
     text: String,
-    input: String,
+
+    // The input that we consumed to form the token.
+    input: &'a[u8],
 }
 
 /*func (t *token) String() string {
@@ -379,23 +382,23 @@ struct Token {
     tokSym        = 13
 )*/
 enum Tok {
-    TokText       = 0,
-    _TokFile       = 1,
-    _TokRepo       = 2,
-    _TokCase       = 3,
-    _TokBranch     = 4,
-    _TokParenOpen  = 5,
-    TokParenClose = 6,
-    _TokError      = 7,
-    _TokNegate     = 8,
-    _TokRegex      = 9,
-    TokOr         = 10,
-    _TokContent    = 11,
-    _TokLang       = 12,
-    _TokSym        = 13,
+    Text       = 0,
+    _File      = 1,
+    _Repo      = 2,
+    _Case      = 3,
+    _Branch    = 4,
+    _ParenOpen = 5,
+    ParenClose = 6,
+    _Error     = 7,
+    _Negate    = 8,
+    _Regex     = 9,
+    Or         = 10,
+    _Content   = 11,
+    _Lang      = 12,
+    _Sym       = 13,
 }
 
-use Tok::{*};
+//use Tok::{*};
 
 /*var tokNames = map[int]string{
     tokBranch:     "Branch",
@@ -473,9 +476,9 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     let left = &r#in[..];
     let _paren_count = 0;
     let cur = Token {
-        r#type: TokText as usize,
+        r#type: Tok::Text as usize,
         text: String::from("text"),
-        input:  String::from("input"),
+        input:  b"input",
     };
     if left.len() == 0 {
 
