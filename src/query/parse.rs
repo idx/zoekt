@@ -75,6 +75,10 @@ loop:
 func (o *orOperator) String() string {
     return "orOp"
 }*/
+#[allow(non_snake_case)]
+fn orOperator() -> String {
+    "orOp".to_string()
+}
 
 
 //func isSpace(c byte) bool {
@@ -279,7 +283,7 @@ impl Parse {
     //func parseExprList(in []byte) ([]Q, int, error) {
     //fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
     fn parse_expr_list(r#in: &[u8]) -> Result<(String, i32), String> {
-            /*b := in[:]
+        /*b := in[:]
         var qs []Q*/
         let mut b = &r#in[..];
         //let _qs: &Q;
@@ -304,8 +308,9 @@ impl Parse {
             if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
                 break;
             } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
+//                qs.push("orOperator");
+                qs.push(orOperator);
                 b = &b[tok.input.len()..];
-                qs.push("orOperator");
                 continue;
             }
 
