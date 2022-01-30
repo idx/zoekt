@@ -80,7 +80,6 @@ fn orOperator() -> String {
     "orOp".to_string()
 }
 
-
 //func isSpace(c byte) bool {
 fn is_space(c: char) -> bool {
     //    return c == ' ' || c == '\t'
@@ -92,27 +91,27 @@ fn is_space(c: char) -> bool {
 pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
     /*b := []byte(qStr)
 
-	qs, _, err := parseExprList(b)
-	if err != nil {
-		return nil, err
-	}
+    qs, _, err := parseExprList(b)
+    if err != nil {
+        return nil, err
+    }
 
-	q, err := parseOperators(qs)
-	if err != nil {
-		return nil, err
-	}
+    q, err := parseOperators(qs)
+    if err != nil {
+        return nil, err
+    }
 
-	return Simplify(q), nil*/
+    return Simplify(q), nil*/
     let b = q_str.unwrap().as_bytes();
 
     let qs = Parse::parse_expr_list(b);
     if let Err(e) = qs {
-        return Err(e.to_string())
+        return Err(e.to_string());
     };
 
     let q = Parse::parse_operators();
     if let Err(e) = q {
-        return Err(e.to_string())
+        return Err(e.to_string());
     };
 
     let _dummy = simplify("Q".to_string());
@@ -121,8 +120,9 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 
 // parseExpr parses a single expression, returning the result, and the
 // number of bytes consumed.pa
-/*func parseExpr(in []byte) (Q, int, error) {
-    b := in[:]
+//func parseExpr(in []byte) (Q, int, error) {
+fn parse_expr(r#_in: &[u8]) -> Result<Q, String> {
+    /*b := in[:]
     var expr Q
     for len(b) > 0 && isSpace(b[0]) {
         b = b[1:]
@@ -217,12 +217,13 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 
     }
 
-    return expr, len(in) - len(b), nil
+    return expr, len(in) - len(b), nil*/
+    Ok("Dummy".to_string())
 }
 
 // regexpQuery parses an atom into either a regular expression, or a
 // simple substring atom.
-func regexpQuery(text string, content, file bool) (Q, error) {
+/*func regexpQuery(text string, content, file bool) (Q, error) {
     var expr Q
 
     r, err := syntax.Parse(text, syntax.ClassNL|syntax.PerlX|syntax.UnicodeGroups)
@@ -253,7 +254,7 @@ impl Parse {
     //fn parse_operators(&mut self) -> Result<Q, String> {
     //fn parse_operators(r#_in: &[Q]) -> Result<Q, String> {
     fn parse_operators() -> Result<Q, String> {
-            /*    top := &Or{}
+        /*    top := &Or{}
         cur := &And{}
 
         seenOr := false
@@ -308,7 +309,7 @@ impl Parse {
             if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
                 break;
             } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
-//                qs.push("orOperator");
+                //                qs.push("orOperator");
                 qs.push(orOperator);
                 b = &b[tok.input.len()..];
                 continue;
@@ -325,6 +326,7 @@ impl Parse {
             }
             qs = append(qs, q)
             b = b[n:]*/
+            let _q = parse_expr(b);
         }
 
         /*        setCase := "auto"
@@ -362,7 +364,7 @@ struct Token<'a> {
     text: String,
 
     // The input that we consumed to form the token.
-    input: &'a[u8],
+    input: &'a [u8],
 }
 
 /*func (t *token) String() string {
@@ -387,20 +389,20 @@ struct Token<'a> {
     tokSym        = 13
 )*/
 enum Tok {
-    Text       = 0,
-    _File      = 1,
-    _Repo      = 2,
-    _Case      = 3,
-    _Branch    = 4,
+    Text = 0,
+    _File = 1,
+    _Repo = 2,
+    _Case = 3,
+    _Branch = 4,
     _ParenOpen = 5,
     ParenClose = 6,
-    _Error     = 7,
-    _Negate    = 8,
-    _Regex     = 9,
-    Or         = 10,
-    _Content   = 11,
-    _Lang      = 12,
-    _Sym       = 13,
+    _Error = 7,
+    _Negate = 8,
+    _Regex = 9,
+    Or = 10,
+    _Content = 11,
+    _Lang = 12,
+    _Sym = 13,
 }
 
 //use Tok::{*};
@@ -483,11 +485,9 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     let cur = Token {
         r#type: Tok::Text as usize,
         text: String::from("text"),
-        input:  b"input",
+        input: b"input",
     };
-    if left.len() == 0 {
-
-    }
+    if left.len() == 0 {}
 
     /*if left[0] == '-' {
             return &token{
