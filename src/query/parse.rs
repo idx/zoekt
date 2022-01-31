@@ -121,7 +121,7 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 // parseExpr parses a single expression, returning the result, and the
 // number of bytes consumed.pa
 //func parseExpr(in []byte) (Q, int, error) {
-fn parse_expr(r#_in: &[u8]) -> Result<Q, String> {
+fn parse_expr(r#_in: &[u8]) -> Result<(Q, isize), String> {
     /*b := in[:]
     var expr Q
     for len(b) > 0 && isSpace(b[0]) {
@@ -218,7 +218,8 @@ fn parse_expr(r#_in: &[u8]) -> Result<Q, String> {
     }
 
     return expr, len(in) - len(b), nil*/
-    Ok("Dummy".to_string())
+    //Ok("Dummy".to_string())
+    Ok(("Q".to_string(), 0))
 }
 
 // regexpQuery parses an atom into either a regular expression, or a
@@ -283,7 +284,7 @@ impl Parse {
     // workhorse of the Parse function.
     //func parseExprList(in []byte) ([]Q, int, error) {
     //fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
-    fn parse_expr_list(r#in: &[u8]) -> Result<(String, i32), String> {
+    fn parse_expr_list(r#in: &[u8]) -> Result<(Q, isize), String> {
         /*b := in[:]
         var qs []Q*/
         let mut b = &r#in[..];
@@ -326,7 +327,10 @@ impl Parse {
             }
             qs = append(qs, q)
             b = b[n:]*/
-            let _q = parse_expr(b);
+            let q = parse_expr(b);
+            if let Err(err) = q {
+                return Err(err.to_string());
+            };
         }
 
         /*        setCase := "auto"
@@ -346,7 +350,7 @@ impl Parse {
         })
         return qs, len(in) - len(b), nil*/
         //self
-        Ok(("Q".to_string(), 0))
+        Ok(("qs".to_string(), 0))
     }
 }
 
