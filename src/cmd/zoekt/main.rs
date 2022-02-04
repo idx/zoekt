@@ -121,10 +121,13 @@ fn main() {
 	}
 
 	//query, err := query.Parse(pat)
-	let _query = query::parse::parse(pat);
 	/*if err != nil {
 		log.Fatal(err)
 	}*/	
+	let query = query::parse::parse(pat);
+	if let Err(e) = query {
+		error!("{}", e);
+	}	
 	if verbose {
 		info!("query: {}", "query");
 	}
