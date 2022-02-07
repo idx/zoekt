@@ -109,13 +109,9 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
         return Err(e.to_string());
     };
 
-    let q = Parse::parse_operators();
-    if let Err(e) = q {
-        return Err(e.to_string());
-    };
+    let q = Parse::parse_operators()?;
 
-    let _dummy = simplify("Q".to_string());
-    Ok("simplify(q)".to_string())
+    Ok(simplify(q))
 }
 
 // parseExpr parses a single expression, returning the result, and the

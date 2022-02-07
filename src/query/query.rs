@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package query
+//package query
+use String as Q;
 
-import (
+/*import (
     "fmt"
     "log"
     "reflect"
@@ -330,7 +331,7 @@ func evalConstants(q Q) Q {
 }*/
 
 //func Simplify(q Q) Q {
-pub fn simplify(_q: String) -> String {
+pub fn simplify(_q: Q) -> Q {
     /*q = evalConstants(q)
     for {
         var changed bool
