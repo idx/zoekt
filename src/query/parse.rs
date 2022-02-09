@@ -117,7 +117,7 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 // parseExpr parses a single expression, returning the result, and the
 // number of bytes consumed.pa
 //func parseExpr(in []byte) (Q, int, error) {
-fn parse_expr(r#_in: &[u8]) -> Result<(Q, isize), String> {
+fn parse_expr(r#_in: &[u8]) -> Result<(Q, usize), String> {
     /*b := in[:]
     var expr Q
     for len(b) > 0 && isSpace(b[0]) {
@@ -280,16 +280,12 @@ impl Parse {
     // workhorse of the Parse function.
     //func parseExprList(in []byte) ([]Q, int, error) {
     //fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
-    fn parse_expr_list(r#in: &[u8]) -> Result<(Q, isize), String> {
+    fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
         /*b := in[:]
-        var qs []Q*/
-        let mut b = &r#in[..];
-        //let _qs: &Q;
-        let mut qs = Vec::new();
-        //for len(b) > 0 {
-        while b.len() > 0 {
-            /*for len(b) > 0 && isSpace(b[0]) {
-            b = b[1:]
+        var qs []Q
+        for len(b) > 0 {
+            for len(b) > 0 && isSpace(b[0]) {
+                b = b[1:]
             }
             tok, _ := nextToken(b)
             if tok != nil && tok.Type == tokParenClose {
@@ -298,21 +294,9 @@ impl Parse {
                 qs = append(qs, &orOperator{})
                 b = b[len(tok.Input):]
                 continue
-            }*/
-            while b.len() > 0 && is_space(b[0] as char) {
-                b = &b[1..];
-            }
-            let tok = next_token(b).unwrap();
-            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
-                break;
-            } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
-                //                qs.push("orOperator");
-                qs.push(orOperator);
-                b = &b[tok.input.len()..];
-                continue;
             }
 
-            /*q, n, err := parseExpr(b)
+            q, n, err := parseExpr(b)
             if err != nil {
                 return nil, 0, err
             }
@@ -322,14 +306,41 @@ impl Parse {
                 break
             }
             qs = append(qs, q)
-            b = b[n:]*/
-            let q = parse_expr(b);
-            if let Err(err) = q {
-                return Err(err.to_string());
+            b = b[n:]
+        }*/
+        let mut b = &r#in[..];
+        let mut qs: Vec<Q> = Vec::<Q>::new();
+        while b.len() > 0 {
+            while b.len() > 0 && is_space(b[0] as char) {
+                b = &b[1..];
+            }
+            let tok = next_token(b).unwrap();
+            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
+                break;
+            } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
+                qs.push(orOperator());
+                b = &b[tok.input.len()..];
+                continue;
+            }
+
+            match parse_expr(b) {
+                Ok(q) => {
+                    if q.0.is_empty() {
+                        // eof or a ')'
+                        break;
+                    } else {
+                        qs.push(q.0);
+                        b = &b[q.1..];
+                    }
+                },
+                Err(err) => {
+                    return Err(err.to_string());
+                }
             };
         }
+        
 
-        /*        setCase := "auto"
+        /*setCase := "auto"
         newQS := qs[:0]
         for _, q := range qs {
             if sc, ok := q.(*caseQ); ok {
@@ -345,8 +356,8 @@ impl Parse {
             return q
         })
         return qs, len(in) - len(b), nil*/
+        Ok((qs, r#in.len() - b.len()))
         //self
-        Ok(("qs".to_string(), 0))
     }
 }
 
