@@ -117,7 +117,7 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
 // parseExpr parses a single expression, returning the result, and the
 // number of bytes consumed.pa
 //func parseExpr(in []byte) (Q, int, error) {
-fn parse_expr(r#_in: &[u8]) -> Result<(Q, usize), String> {
+fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
     /*b := in[:]
     var expr Q
     for len(b) > 0 && isSpace(b[0]) {
@@ -131,9 +131,14 @@ fn parse_expr(r#_in: &[u8]) -> Result<(Q, usize), String> {
     if tok == nil {
         return nil, 0, nil
     }
-    b = b[len(tok.Input):]
+    b = b[len(tok.Input):]*/
+    let mut b = &r#in[..];
 
-    text := string(tok.Text)
+    while b.len() > 0 && is_space(b[0] as char) {
+        b = &b[1..];
+    }
+
+    /*text := string(tok.Text)
     switch tok.Type {
     case tokCase:
         switch text {
