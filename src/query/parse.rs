@@ -131,15 +131,29 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
     if tok == nil {
         return nil, 0, nil
     }
-    b = b[len(tok.Input):]*/
-    let mut b = &r#in[..];
+    b = b[len(tok.Input):]
 
+    text := string(tok.Text)*/
+    let mut b = &r#in[..];
+    let _expr: Q;
     while b.len() > 0 && is_space(b[0] as char) {
         b = &b[1..];
     }
 
-    /*text := string(tok.Text)
-    switch tok.Type {
+    let _tok = match next_token(b) {
+        Ok(q) => {
+            if q.text.is_empty() {
+                return Ok((q.text, 0));
+            }
+
+            let _text = q.r#type;
+        }
+        Err(err) => {
+            return Err(err);
+        }
+    };
+
+    /*switch tok.Type {
     case tokCase:
         switch text {
         case "yes":
@@ -337,13 +351,12 @@ impl Parse {
                         qs.push(q.0);
                         b = &b[q.1..];
                     }
-                },
+                }
                 Err(err) => {
                     return Err(err.to_string());
                 }
             };
         }
-        
 
         /*setCase := "auto"
         newQS := qs[:0]
