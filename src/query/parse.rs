@@ -16,6 +16,7 @@
 struct Parse {}
 use crate::query::query::simplify;
 use String as Q;
+use strum::{EnumString};
 
 /*import (
     "bytes"
@@ -417,6 +418,7 @@ struct Token<'a> {
     tokLang       = 12
     tokSym        = 13
 )*/
+#[derive(EnumString)]
 enum Tok {
     Text = 0,
     _File = 1,
