@@ -15,8 +15,9 @@
 //package query
 struct Parse {}
 use crate::query::query::simplify;
+use strum::{EnumString, EnumVariantNames, IntoStaticStr};
+use std::string::ToString;
 use String as Q;
-use strum::{EnumString};
 
 /*import (
     "bytes"
@@ -141,21 +142,24 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         b = &b[1..];
     }
 
-    let _tok = match next_token(b) {
+    let text;
+    let tok = match next_token(b) {
         Ok(q) => {
             if q.text.is_empty() {
                 return Ok((q.text, 0));
             }
 
-            let _text = q.r#type;
+            text = "q.r#type".to_string();
+            q
         }
         Err(err) => {
             return Err(err);
         }
     };
 
-    /*switch tok.Type {
-    case tokCase:
+    //switch tok.Type {
+    match tok.r#type {
+    /*case tokCase:
         switch text {
         case "yes":
         case "no":
@@ -163,8 +167,15 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         default:
             return nil, 0, fmt.Errorf("query: unknown case argument %q, want {yes,no,auto}", text)
         }
-        expr = &caseQ{text}
-    case tokRepo:
+        expr = &caseQ{text}*/
+    _case => {
+            match &*text {
+                "yes" => {println!("{:?}", "tokCase");},
+                _ =>  {println!("{:?}", "_");},
+            }
+        },
+    }
+    /*case tokRepo:
         expr = &Repo{Pattern: text}
     case tokBranch:
         expr = &Branch{Pattern: text}
@@ -418,25 +429,24 @@ struct Token<'a> {
     tokLang       = 12
     tokSym        = 13
 )*/
-#[derive(EnumString)]
+#[derive(EnumString, EnumVariantNames, IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
 enum Tok {
     Text = 0,
-    _File = 1,
-    _Repo = 2,
-    _Case = 3,
-    _Branch = 4,
-    _ParenOpen = 5,
+    File = 1,
+    Repo = 2,
+    Case = 3,
+    Branch = 4,
+    ParenOpen = 5,
     ParenClose = 6,
-    _Error = 7,
-    _Negate = 8,
-    _Regex = 9,
+    Error = 7,
+    Negate = 8,
+    Regex = 9,
     Or = 10,
-    _Content = 11,
-    _Lang = 12,
-    _Sym = 13,
+    Content = 11,
+    Lang = 12,
+    Sym = 13,
 }
-
-//use Tok::{*};
 
 /*var tokNames = map[int]string{
     tokBranch:     "Branch",
