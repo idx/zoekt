@@ -15,8 +15,8 @@
 //package query
 struct Parse {}
 use crate::query::query::simplify;
-use strum::{EnumString, EnumVariantNames, IntoStaticStr};
 use std::string::ToString;
+use strum::{EnumString, EnumVariantNames, IntoStaticStr};
 use String as Q;
 
 /*import (
@@ -137,7 +137,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
 
     text := string(tok.Text)*/
     let mut b = &r#in[..];
-    let _expr: Q;
+    let expr: Q;
     while b.len() > 0 && is_space(b[0] as char) {
         b = &b[1..];
     }
@@ -159,7 +159,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
 
     //switch tok.Type {
     match tok.r#type {
-    /*case tokCase:
+        /*case tokCase:
         switch text {
         case "yes":
         case "no":
@@ -168,85 +168,96 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
             return nil, 0, fmt.Errorf("query: unknown case argument %q, want {yes,no,auto}", text)
         }
         expr = &caseQ{text}*/
-    _case => {
+        3 => {
             match &*text {
-                "yes" => {println!("{:?}", "tokCase");},
-                _ =>  {println!("{:?}", "_");},
+                "yes" => {}
+                "no" => {}
+                "auto" => {}
+                _ => {
+                    return Err(format!(
+                        "query: unknown case argument {}, want {{yes,no,auto}}",
+                        text
+                    ))
+                }
             }
+            expr = "&caseQ{text}".to_string();
         },
+        /*case tokRepo:
+            expr = &Repo{Pattern: text}*/
+        2 => {
+            expr = "&Repo{Pattern: text}".to_string();
+        },
+        _ => {
+            expr = "dummy".to_string();
+        }
+        /*case tokBranch:
+              expr = &Branch{Pattern: text}
+          case tokText, tokRegex:
+              q, err := regexpQuery(text, false, false)
+              if err != nil {
+                  return nil, 0, err
+              }
+              expr = q
+          case tokFile:
+              q, err := regexpQuery(text, false, true)
+              if err != nil {
+                  return nil, 0, err
+              }
+              expr = q
+
+          case tokContent:
+              q, err := regexpQuery(text, true, false)
+              if err != nil {
+                  return nil, 0, err
+              }
+              expr = q
+          case tokLang:
+              expr = &Language{Language: text}
+
+          case tokSym:
+              if text == "" {
+                  return nil, 0, fmt.Errorf("the sym: atom must have an argument")
+              }
+              expr = &Symbol{&Substring{Pattern: text}}
+
+          case tokParenClose:
+              // Caller must consume paren.
+              expr = nil
+
+          case tokParenOpen:
+              qs, n, err := parseExprList(b)
+              b = b[n:]
+              if err != nil {
+                  return nil, 0, err
+              }
+
+              pTok, err := nextToken(b)
+              if err != nil {
+                  return nil, 0, err
+              }
+              if pTok == nil || pTok.Type != tokParenClose {
+                  return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
+              }
+
+              b = b[len(pTok.Input):]
+              expr, err = parseOperators(qs)
+              if err != nil {
+                  return nil, 0, err
+              }
+          case tokNegate:
+              subQ, n, err := parseExpr(b)
+              if err != nil {
+                  return nil, 0, err
+              }
+              if subQ == nil {
+                  return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
+              }
+              b = b[n:]
+              expr = &Not{subQ}*/
     }
-    /*case tokRepo:
-        expr = &Repo{Pattern: text}
-    case tokBranch:
-        expr = &Branch{Pattern: text}
-    case tokText, tokRegex:
-        q, err := regexpQuery(text, false, false)
-        if err != nil {
-            return nil, 0, err
-        }
-        expr = q
-    case tokFile:
-        q, err := regexpQuery(text, false, true)
-        if err != nil {
-            return nil, 0, err
-        }
-        expr = q
 
-    case tokContent:
-        q, err := regexpQuery(text, true, false)
-        if err != nil {
-            return nil, 0, err
-        }
-        expr = q
-    case tokLang:
-        expr = &Language{Language: text}
-
-    case tokSym:
-        if text == "" {
-            return nil, 0, fmt.Errorf("the sym: atom must have an argument")
-        }
-        expr = &Symbol{&Substring{Pattern: text}}
-
-    case tokParenClose:
-        // Caller must consume paren.
-        expr = nil
-
-    case tokParenOpen:
-        qs, n, err := parseExprList(b)
-        b = b[n:]
-        if err != nil {
-            return nil, 0, err
-        }
-
-        pTok, err := nextToken(b)
-        if err != nil {
-            return nil, 0, err
-        }
-        if pTok == nil || pTok.Type != tokParenClose {
-            return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
-        }
-
-        b = b[len(pTok.Input):]
-        expr, err = parseOperators(qs)
-        if err != nil {
-            return nil, 0, err
-        }
-    case tokNegate:
-        subQ, n, err := parseExpr(b)
-        if err != nil {
-            return nil, 0, err
-        }
-        if subQ == nil {
-            return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
-        }
-        b = b[n:]
-        expr = &Not{subQ}
-
-    }
-
-    return expr, len(in) - len(b), nil*/
-    //Ok("Dummy".to_string())
-    Ok(("Q".to_string(), 0))
+    //return expr, len(in) - len(b), nil
+    Ok((expr, 0))
 }
 
 // regexpQuery parses an atom into either a regular expression, or a
