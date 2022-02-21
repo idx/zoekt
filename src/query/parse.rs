@@ -168,7 +168,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
             return nil, 0, fmt.Errorf("query: unknown case argument %q, want {yes,no,auto}", text)
         }
         expr = &caseQ{text}*/
-        3 => {
+        Tok::Case => {
             match &*text {
                 "yes" => {}
                 "no" => {}
@@ -181,79 +181,82 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
                 }
             }
             expr = "&caseQ{text}".to_string();
-        },
+        }
         /*case tokRepo:
-            expr = &Repo{Pattern: text}*/
-        2 => {
+        expr = &Repo{Pattern: text}*/
+        Tok::Repo => {
             expr = "&Repo{Pattern: text}".to_string();
-        },
+        }
+        /*case tokBranch:
+        expr = &Branch{Pattern: text}*/
+        Tok::Branch => {
+            expr = "&Repo{Pattern: text}".to_string();
+        }
         _ => {
             expr = "dummy".to_string();
         }
-        /*case tokBranch:
-              expr = &Branch{Pattern: text}
-          case tokText, tokRegex:
-              q, err := regexpQuery(text, false, false)
-              if err != nil {
-                  return nil, 0, err
-              }
-              expr = q
-          case tokFile:
-              q, err := regexpQuery(text, false, true)
-              if err != nil {
-                  return nil, 0, err
-              }
-              expr = q
+        /*case tokText, tokRegex:
+            q, err := regexpQuery(text, false, false)
+            if err != nil {
+                return nil, 0, err
+            }
+            expr = q
+        case tokFile:
+            q, err := regexpQuery(text, false, true)
+            if err != nil {
+                return nil, 0, err
+            }
+            expr = q
 
-          case tokContent:
-              q, err := regexpQuery(text, true, false)
-              if err != nil {
-                  return nil, 0, err
-              }
-              expr = q
-          case tokLang:
-              expr = &Language{Language: text}
+        case tokContent:
+            q, err := regexpQuery(text, true, false)
+            if err != nil {
+                return nil, 0, err
+            }
+            expr = q
+        case tokLang:
+            expr = &Language{Language: text}
 
-          case tokSym:
-              if text == "" {
-                  return nil, 0, fmt.Errorf("the sym: atom must have an argument")
-              }
-              expr = &Symbol{&Substring{Pattern: text}}
+        case tokSym:
+            if text == "" {
+                return nil, 0, fmt.Errorf("the sym: atom must have an argument")
+            }
+            expr = &Symbol{&Substring{Pattern: text}}
 
-          case tokParenClose:
-              // Caller must consume paren.
-              expr = nil
+        case tokParenClose:
+            // Caller must consume paren.
+            expr = nil
 
-          case tokParenOpen:
-              qs, n, err := parseExprList(b)
-              b = b[n:]
-              if err != nil {
-                  return nil, 0, err
-              }
+        case tokParenOpen:
+            qs, n, err := parseExprList(b)
+            b = b[n:]
+            if err != nil {
+                return nil, 0, err
+            }
 
-              pTok, err := nextToken(b)
-              if err != nil {
-                  return nil, 0, err
-              }
-              if pTok == nil || pTok.Type != tokParenClose {
-                  return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
-              }
+            pTok, err := nextToken(b)
+            if err != nil {
+                return nil, 0, err
+            }
+            if pTok == nil || pTok.Type != tokParenClose {
+                return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
+            }
 
-              b = b[len(pTok.Input):]
-              expr, err = parseOperators(qs)
-              if err != nil {
-                  return nil, 0, err
-              }
-          case tokNegate:
-              subQ, n, err := parseExpr(b)
-              if err != nil {
-                  return nil, 0, err
-              }
-              if subQ == nil {
-                  return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
-              }
-              b = b[n:]
-              expr = &Not{subQ}*/
+            b = b[len(pTok.Input):]
+            expr, err = parseOperators(qs)
+            if err != nil {
+                return nil, 0, err
+            }
+        case tokNegate:
+            subQ, n, err := parseExpr(b)
+            if err != nil {
+                return nil, 0, err
+            }
+            if subQ == nil {
+                return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
+            }
+            b = b[n:]
+            expr = &Not{subQ}*/
     }
 
     //return expr, len(in) - len(b), nil
@@ -357,9 +360,11 @@ impl Parse {
                 b = &b[1..];
             }
             let tok = next_token(b).unwrap();
-            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose as usize {
+            //            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose {
+            if !tok.text.is_empty() {
                 break;
-            } else if !tok.text.is_empty() && tok.r#type == Tok::Or as usize {
+            //            } else if !tok.text.is_empty() && tok.r#type == Tok::Or {
+            } else if !tok.text.is_empty() {
                 qs.push(orOperator());
                 b = &b[tok.input.len()..];
                 continue;
@@ -411,7 +416,7 @@ impl Parse {
     Input []byte
 }*/
 struct Token<'a> {
-    r#type: usize,
+    r#type: Tok,
     // The value of the token
     text: String,
 
@@ -535,7 +540,7 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     let left = &r#in[..];
     let _paren_count = 0;
     let cur = Token {
-        r#type: Tok::Text as usize,
+        r#type: Tok::Text,
         text: String::from("text"),
         input: b"input",
     };
