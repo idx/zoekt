@@ -190,7 +190,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         /*case tokBranch:
         expr = &Branch{Pattern: text}*/
         Tok::Branch => {
-            expr = "&Repo{Pattern: text}".to_string();
+            expr = "&Branch{Pattern: text}".to_string();
         }
         /*case tokText, tokRegex:
             q, err := regexpQuery(text, false, false)

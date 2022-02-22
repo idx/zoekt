@@ -13,7 +13,6 @@
 // limitations under the License.
 
 //package query
-use String as Q;
 
 /*import (
     "fmt"
@@ -28,10 +27,11 @@ var _ = log.Println
 // Q is a representation for a possibly hierarchical search query.
 type Q interface {
     String() string
-}
+}*/
+use String as Q;
 
 // RegexpQuery is a query looking for regular expressions matches.
-type Regexp struct {
+/*type Regexp struct {
     Regexp        *syntax.Regexp
     FileName      bool
     Content       bool
