@@ -13,10 +13,10 @@
 // limitations under the License.
 
 //package query
-struct Parse {}
 use crate::query::query::simplify;
 use std::string::ToString;
-use strum::{EnumString, EnumVariantNames, IntoStaticStr};
+//use strum::{EnumString, EnumVariantNames, IntoStaticStr};
+use strum::EnumString;
 use String as Q;
 
 /*import (
@@ -106,12 +106,12 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
     return Simplify(q), nil*/
     let b = q_str.unwrap().as_bytes();
 
-    let qs = Parse::parse_expr_list(b);
+    let qs = parse_expr_list(b);
     if let Err(e) = qs {
         return Err(e.to_string());
     };
 
-    let q = Parse::parse_operators()?;
+    let q = parse_operators()?;
 
     Ok(simplify(q))
 }
@@ -192,9 +192,6 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         Tok::Branch => {
             expr = "&Repo{Pattern: text}".to_string();
         }
-        _ => {
-            expr = "dummy".to_string();
-        }
         /*case tokText, tokRegex:
             q, err := regexpQuery(text, false, false)
             if err != nil {
@@ -213,50 +210,86 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
             if err != nil {
                 return nil, 0, err
             }
-            expr = q
-        case tokLang:
-            expr = &Language{Language: text}
+            expr = q*/
+        Tok::Text | Tok::Regex => {
+            let q = regexp_query(text, false, false)?;
+            expr = q;
+        }
+        Tok::File => {
+            let q = regexp_query(text, false, true)?;
+            expr = q;
+        }
 
-        case tokSym:
-            if text == "" {
-                return nil, 0, fmt.Errorf("the sym: atom must have an argument")
-            }
-            expr = &Symbol{&Substring{Pattern: text}}
+        Tok::Content => {
+            let q = regexp_query(text, true, false)?;
+            expr = q;
+        }
+        /*case tokLang:
+        expr = &Language{Language: text}*/
+        Tok::Lang => {
+            expr = "&Language{Language: text}".to_string();
+        }
 
-        case tokParenClose:
-            // Caller must consume paren.
-            expr = nil
+        /*case tokSym:
+        if text == "" {
+            return nil, 0, fmt.Errorf("the sym: atom must have an argument")
+        }
+        expr = &Symbol{&Substring{Pattern: text}}*/
+        Tok::Sym => {
+            if text.is_empty() {
+                return Err("the sym: atom must have an argument".to_string());
+            }
+            expr = "&Symbol{&Substring{Pattern: text}}".to_string();
+        }
 
-        case tokParenOpen:
-            qs, n, err := parseExprList(b)
-            b = b[n:]
-            if err != nil {
-                return nil, 0, err
-            }
+        /*case tokParenClose:
+          // Caller must consume paren.
+        expr = nil*/
+        Tok::ParenClose => {
+            expr = "&Repo{Pattern: text}".to_string();
+        }
 
-            pTok, err := nextToken(b)
-            if err != nil {
-                return nil, 0, err
-            }
-            if pTok == nil || pTok.Type != tokParenClose {
-                return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
-            }
+        /*case tokParenOpen:
+        qs, n, err := parseExprList(b)
+        b = b[n:]
+        if err != nil {
+            return nil, 0, err
+        }
 
-            b = b[len(pTok.Input):]
-            expr, err = parseOperators(qs)
-            if err != nil {
-                return nil, 0, err
-            }
-        case tokNegate:
-            subQ, n, err := parseExpr(b)
-            if err != nil {
-                return nil, 0, err
-            }
-            if subQ == nil {
-                return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
-            }
-            b = b[n:]
-            expr = &Not{subQ}*/
+        pTok, err := nextToken(b)
+        if err != nil {
+            return nil, 0, err
+        }
+        if pTok == nil || pTok.Type != tokParenClose {
+            return nil, 0, fmt.Errorf("query: missing close paren, got token %v", pTok)
+        }
+
+        b = b[len(pTok.Input):]
+        expr, err = parseOperators(qs)
+        if err != nil {
+            return nil, 0, err
+        }*/
+        Tok::ParenOpen => {
+            expr = "&Repo{Pattern: text}".to_string();
+        }
+
+        /*case tokNegate:
+        subQ, n, err := parseExpr(b)
+        if err != nil {
+            return nil, 0, err
+        }
+        if subQ == nil {
+            return nil, 0, fmt.Errorf("query: '-' operator needs an argument")
+        }
+        b = b[n:]
+        expr = &Not{subQ}*/
+        Tok::Negate => {
+            expr = "&Repo{Pattern: text}".to_string();
+        }
+
+        _ => {
+            expr = "dummy".to_string();
+        }
     }
 
     //return expr, len(in) - len(b), nil
@@ -265,8 +298,9 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
 
 // regexpQuery parses an atom into either a regular expression, or a
 // simple substring atom.
-/*func regexpQuery(text string, content, file bool) (Q, error) {
-    var expr Q
+//func regexpQuery(text string, content, file bool) (Q, error) {
+fn regexp_query(_text: String, _content: bool, _file: bool) -> Result<Q, String> {
+    /*    var expr Q
 
     r, err := syntax.Parse(text, syntax.ClassNL|syntax.PerlX|syntax.UnicodeGroups)
     if err != nil {
@@ -287,124 +321,121 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         }
     }
 
-    return expr, nil
-}*/
+    return expr, nil*/
+    Ok("Dummy".to_string())
+}
 
-impl Parse {
-    // parseOperators interprets the orOperator in a list of queries.
-    //func parseOperators(in []Q) (Q, error) {
-    //fn parse_operators(&mut self) -> Result<Q, String> {
-    //fn parse_operators(r#_in: &[Q]) -> Result<Q, String> {
-    fn parse_operators() -> Result<Q, String> {
-        /*    top := &Or{}
-        cur := &And{}
+// parseOperators interprets the orOperator in a list of queries.
+//func parseOperators(in []Q) (Q, error) {
+//fn parse_operators(&mut self) -> Result<Q, String> {
+//fn parse_operators(r#_in: &[Q]) -> Result<Q, String> {
+fn parse_operators() -> Result<Q, String> {
+    /*top := &Or{}
+    cur := &And{}
 
-        seenOr := false
-        for _, q := range in {
-            if _, ok := q.(*orOperator); ok {
-                seenOr = true
-                if len(cur.Children) == 0 {
-                    return nil, fmt.Errorf("query: OR operator should have operand")
-                }
-                top.Children = append(top.Children, cur)
-                cur = &And{}
-            } else {
-                cur.Children = append(cur.Children, q)
+    seenOr := false
+    for _, q := range in {
+        if _, ok := q.(*orOperator); ok {
+            seenOr = true
+            if len(cur.Children) == 0 {
+                return nil, fmt.Errorf("query: OR operator should have operand")
             }
+            top.Children = append(top.Children, cur)
+            cur = &And{}
+        } else {
+            cur.Children = append(cur.Children, q)
         }
-
-        if seenOr && len(cur.Children) == 0 {
-            return nil, fmt.Errorf("query: OR operator should have operand")
-        }
-        top.Children = append(top.Children, cur)
-        return top, nil*/
-        Ok("Dummy".to_string())
     }
 
-    // parseExprList parses a list of query expressions. It is the
-    // workhorse of the Parse function.
-    //func parseExprList(in []byte) ([]Q, int, error) {
-    //fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
-    fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
-        /*b := in[:]
-        var qs []Q
-        for len(b) > 0 {
-            for len(b) > 0 && isSpace(b[0]) {
-                b = b[1:]
-            }
-            tok, _ := nextToken(b)
-            if tok != nil && tok.Type == tokParenClose {
-                break
-            } else if tok != nil && tok.Type == tokOr {
-                qs = append(qs, &orOperator{})
-                b = b[len(tok.Input):]
-                continue
-            }
-
-            q, n, err := parseExpr(b)
-            if err != nil {
-                return nil, 0, err
-            }
-
-            if q == nil {
-                // eof or a ')'
-                break
-            }
-            qs = append(qs, q)
-            b = b[n:]
-        }*/
-        let mut b = &r#in[..];
-        let mut qs: Vec<Q> = Vec::<Q>::new();
-        while b.len() > 0 {
-            while b.len() > 0 && is_space(b[0] as char) {
-                b = &b[1..];
-            }
-            let tok = next_token(b).unwrap();
-            //            if !tok.text.is_empty() && tok.r#type == Tok::ParenClose {
-            if !tok.text.is_empty() {
-                break;
-            //            } else if !tok.text.is_empty() && tok.r#type == Tok::Or {
-            } else if !tok.text.is_empty() {
-                qs.push(orOperator());
-                b = &b[tok.input.len()..];
-                continue;
-            }
-
-            match parse_expr(b) {
-                Ok(q) => {
-                    if q.0.is_empty() {
-                        // eof or a ')'
-                        break;
-                    } else {
-                        qs.push(q.0);
-                        b = &b[q.1..];
-                    }
-                }
-                Err(err) => {
-                    return Err(err.to_string());
-                }
-            };
-        }
-
-        /*setCase := "auto"
-        newQS := qs[:0]
-        for _, q := range qs {
-            if sc, ok := q.(*caseQ); ok {
-                setCase = sc.Flavor
-            } else {
-                newQS = append(newQS, q)
-            }
-        }
-        qs = mapQueryList(newQS, func(q Q) Q {
-            if sc, ok := q.(setCaser); ok {
-                sc.setCase(setCase)
-            }
-            return q
-        })
-        return qs, len(in) - len(b), nil*/
-        Ok((qs, r#in.len() - b.len()))
-        //self
+    if seenOr && len(cur.Children) == 0 {
+        return nil, fmt.Errorf("query: OR operator should have operand")
     }
+    top.Children = append(top.Children, cur)
+    return top, nil*/
+    Ok("Dummy".to_string())
+}
+
+// parseExprList parses a list of query expressions. It is the
+// workhorse of the Parse function.
+//func parseExprList(in []byte) ([]Q, int, error) {
+//fn parse_expr_list(&mut self, r#in: &[u8]) -> &mut Parse {
+fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
+    /*b := in[:]
+    var qs []Q
+    for len(b) > 0 {
+        for len(b) > 0 && isSpace(b[0]) {
+            b = b[1:]
+        }
+        tok, _ := nextToken(b)
+        if tok != nil && tok.Type == tokParenClose {
+            break
+        } else if tok != nil && tok.Type == tokOr {
+            qs = append(qs, &orOperator{})
+            b = b[len(tok.Input):]
+            continue
+        }
+
+        q, n, err := parseExpr(b)
+        if err != nil {
+            return nil, 0, err
+        }
+
+        if q == nil {
+            // eof or a ')'
+            break
+        }
+        qs = append(qs, q)
+        b = b[n:]
+    }*/
+    let mut b = &r#in[..];
+    let mut qs: Vec<Q> = Vec::<Q>::new();
+    while b.len() > 0 {
+        while b.len() > 0 && is_space(b[0] as char) {
+            b = &b[1..];
+        }
+        let tok = next_token(b).unwrap();
+        if !tok.text.is_empty() && tok.r#type == Tok::ParenClose {
+            break;
+        } else if !tok.text.is_empty() && tok.r#type == Tok::Or {
+            qs.push(orOperator());
+            b = &b[tok.input.len()..];
+            continue;
+        }
+
+        match parse_expr(b) {
+            Ok(q) => {
+                if q.0.is_empty() {
+                    // eof or a ')'
+                    break;
+                } else {
+                    qs.push(q.0);
+                    b = &b[q.1..];
+                }
+            }
+            Err(err) => {
+                return Err(err.to_string());
+            }
+        };
+    }
+
+    /*setCase := "auto"
+    newQS := qs[:0]
+    for _, q := range qs {
+        if sc, ok := q.(*caseQ); ok {
+            setCase = sc.Flavor
+        } else {
+            newQS = append(newQS, q)
+        }
+    }
+    qs = mapQueryList(newQS, func(q Q) Q {
+        if sc, ok := q.(setCaser); ok {
+            sc.setCase(setCase)
+        }
+        return q
+    })
+    return qs, len(in) - len(b), nil*/
+    Ok((qs, r#in.len() - b.len()))
+    //self
 }
 
 /*type token struct {
@@ -445,7 +476,8 @@ struct Token<'a> {
     tokLang       = 12
     tokSym        = 13
 )*/
-#[derive(EnumString, EnumVariantNames, IntoStaticStr)]
+//#[derive(EnumString, EnumVariantNames, IntoStaticStr)]
+#[derive(EnumString, PartialEq)]
 #[strum(serialize_all = "kebab-case")]
 enum Tok {
     Text = 0,
