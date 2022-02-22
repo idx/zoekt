@@ -149,13 +149,15 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
                 return Ok((q.text, 0));
             }
 
-            text = "q.r#type".to_string();
             q
         }
         Err(err) => {
             return Err(err);
         }
     };
+    // b
+
+    text = tok.text;
 
     //switch tok.Type {
     match tok.r#type {
