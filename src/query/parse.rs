@@ -13,11 +13,10 @@
 // limitations under the License.
 
 //package query
-use crate::query::query::simplify;
+use crate::query::query::*;
 use std::string::ToString;
 //use strum::{EnumString, EnumVariantNames, IntoStaticStr};
 use strum::EnumString;
-use String as Q;
 
 /*import (
     "bytes"
@@ -230,6 +229,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         expr = &Language{Language: text}*/
         Tok::Lang => {
             expr = "&Language{Language: text}".to_string();
+            //expr = Language { language: text };
         }
 
         /*case tokSym:

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//package query
+/*package query
 
-/*import (
+import (
     "fmt"
     "log"
     "reflect"
@@ -28,7 +28,7 @@ var _ = log.Println
 type Q interface {
     String() string
 }*/
-use String as Q;
+pub use String as Q;
 
 // RegexpQuery is a query looking for regular expressions matches.
 /*type Regexp struct {
@@ -59,7 +59,7 @@ func (q *Regexp) String() string {
 }
 
 type caseQ struct {
-    Flavor string
+    Flavor string3
 }
 
 func (c *caseQ) String() string {
@@ -68,9 +68,12 @@ func (c *caseQ) String() string {
 
 type Language struct {
     Language string
+}*/
+pub struct Language {
+    pub language: String,
 }
 
-func (l *Language) String() string {
+/*func (l *Language) String() string {
     return "lang:" + l.Language
 }
 
