@@ -307,9 +307,10 @@ fn regexp_query(_text: String, _content: bool, _file: bool) -> Result<Q, String>
     r, err := syntax.Parse(text, syntax.ClassNL|syntax.PerlX|syntax.UnicodeGroups)
     if err != nil {
         return nil, err
-    }
+    }*/
+    let _expr: Q;
 
-    if r.Op == syntax.OpLiteral {
+    /*if r.Op == syntax.OpLiteral {
         expr = &Substring{
             Pattern:  string(r.Rune),
             FileName: file,
@@ -571,9 +572,9 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     if len(left) == 0 {
         return nil, nil
     }*/
-    let left = &r#in[..];
-    let _paren_count = 0;
-    let cur = Token {
+    let mut left = &r#in[..];
+    let mut paren_count = 0;
+    let mut cur = Token {
         r#type: Tok::Text,
         text: String::from("text"),
         input: b"input",
@@ -581,74 +582,121 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     if left.len() == 0 {}
 
     /*if left[0] == '-' {
-            return &token{
-                Type:  tokNegate,
-                Text:  []byte{'-'},
-                Input: in[:1],
-            }, nil
-        }
+        return &token{
+            Type:  tokNegate,
+            Text:  []byte{'-'},
+            Input: in[:1],
+        }, nil
+    }
 
-        foundSpace := false
+    foundSpace := false*/
+    if left[0] == '-' as u8 {
+        return Ok(Token {
+            r#type: Tok::Negate,
+            text: '-'.to_string(),
+            input: b"input",
+        });
+    }
 
-    loop:
-        for len(left) > 0 {
-            c := left[0]
-            switch c {
-            case '(':
-                parenCount++
-                cur.Text = append(cur.Text, c)
-                left = left[1:]
-            case ')':
-                if parenCount == 0 {
-                    if len(cur.Text) == 0 {
-                        cur.Text = []byte{')'}
-                        left = left[1:]
-                    }
-                    break loop
-                }
+    let mut found_space = false;
 
-                cur.Text = append(cur.Text, c)
-                left = left[1:]
-                parenCount--
-
-            case '"':
-                t, n, err := parseStringLiteral(left)
-                if err != nil {
-                    return nil, err
-                }
-                cur.Text = append(cur.Text, t...)
-                left = left[n:]
-            case '\\':
-                left = left[1:]
-                if len(left) == 0 {
-                    return nil, fmt.Errorf("query: lone \\ at end")
-                }
-                c := left[0]
-                cur.Text = append(cur.Text, '\\', c)
-                left = left[1:]
-
-            case ' ', '\n', '\t':
-                if parenCount > 0 {
-                    foundSpace = true
+    /*loop:
+    for len(left) > 0 {
+        c := left[0]
+        switch c {*/
+    while left.len() > 0 {
+        let c = left[0] as char;
+        match c {
+            /*case '(':[]
+            parenCount++
+            cur.Text = append(cur.Text, c)
+            left = left[1:]*/
+            '(' => {
+                paren_count += 1;
+                cur.text.push(c);
+                left = &left[1..];
+            }
+            /*case ')':
+            if parenCount == 0 {
+                if len(cur.Text) == 0 {
+                    cur.Text = []byte{')'}
+                    left = left[1:]
                 }
                 break loop
-            default:
-                cur.Text = append(cur.Text, c)
-                left = left[1:]
+            }
+
+            cur.Text = append(cur.Text, c)
+            left = left[1:]
+            parenCount--
+            case '"':
+            t, n, err := parseStringLiteral(left)
+            if err != nil {
+                return nil, err
+            }
+            cur.Text = append(cur.Text, t...)
+            left = left[n:]*/
+            ')' => {
+                if paren_count == 0 {
+                    if cur.text.len() == 0 {
+                        cur.text = ')'.to_string();
+                    }
+                    break;
+                }
+                left = &left[1..];
+                paren_count -= 1;
+            }
+            '"' => {}
+            /*case '\\':
+            left = left[1:]
+            if len(left) == 0 {
+                return nil, fmt.Errorf("query: lone \\ at end")
+            }
+            c := left[0]
+            cur.Text = append(cur.Text, '\\', c)
+            left = left[1:]
+            case ' ', '\n', '\t':
+            if parenCount > 0 {
+                foundSpace = true
+            }
+            break loop
+            Sdefault:
+            cur.Text = append(cur.Text, c)
+            left = left[1:]*/
+            '\\' => {
+                left = &left[1..];
+                if left.len() == 0 {
+                    return Err(format!("query: lone \\ at en"));
+                }
+                let c = left[0] as char;
+                cur.text.push('\\');
+                cur.text.push(c);
+                left = &left[1..];
+            }
+            ' ' | '\n' | '\t' => {
+                if paren_count > 0 {
+                    found_space = true;
+                }
+                break;
+            }
+            _ => {
+                cur.text.push(c);
+                left = &left[1..];
             }
         }
+    }
 
-        if len(cur.Text) == 0 {
-            return nil, nil
-        }
+    /*if len(cur.Text) == 0 {
+        return nil, nil
+    }
 
-        if foundSpace && cur.Text[0] == '(' {
-            cur.Text = cur.Text[:1]
-            cur.Input = in[:1]
-        } else {
-            cur.Input = in[:len(in)-len(left)]
-        }
-        cur.setType()
-        return &cur, nil*/
+    if foundSpace && cur.Text[0] == '(' {
+        cur.Text = cur.Text[:1]
+        cur.Input = in[:1]
+    } else {
+        cur.Input = in[:len(in)-len(left)]
+    }
+    cur.setType()
+    return &cur, nil*/
+    if found_space {}
     Ok(cur)
 }
