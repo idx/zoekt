@@ -34,15 +34,18 @@ type SuggestQueryError struct {
 
 func (e *SuggestQueryError) Error() string {
     return fmt.Sprintf("%s. Suggestion: %s", e.Message, e.Suggestion)
-}
+}*/
 
 // parseStringLiteral parses a string literal, consumes the starting
 // quote too.
-func parseStringLiteral(in []byte) (lit []byte, n int, err error) {
-    left := in[1:]
-    found := false
+//func parseStringLiteral(in []byte) (lit []byte, n int, err error) {
+fn parse_string_literal(r#in: &[u8]) -> Result<(&[u8], usize), String> {
+    /*left := in[1:]
+    found := false*/
+    let mut left = &r#in[1..];
+    let mut found = false;
 
-loop:
+    /*loop:
     for len(left) > 0 {
         c := left[0]
         left = left[1:]
@@ -66,8 +69,39 @@ loop:
     if !found {
         return nil, 0, fmt.Errorf("query: unterminated quoted string")
     }
-    return lit, len(in) - len(left), nil
-}*/
+    return lit, len(in) - len(left), nil*/
+    let mut lit: Vec<u8> = Vec::<u8>::new();
+    //let mut qs: Vec<Q> = Vec::<Q>::new();
+    while left.len() > 0 {
+        let mut c = left[0];
+        left = &left[1..];
+        match c as char {
+            '"' => {
+                found = true;
+                break;
+            },
+            '\\' => {
+                // TODO - other escape sequences.
+                if left.len() == 0 {
+                    return Err(format!("query: missing char after \\"));
+                }
+                c = left[0];
+                left = &left[1..];
+
+                lit.push(c);
+            },
+            _ => {
+                lit.push(c);
+            },
+        }
+    }
+
+    if !found {
+        return Err(format!("query: unterminated quoted string"));
+    }
+    let lit = b"lit";
+    Ok((lit, r#in.len() - left.len()))
+}
 
 // orOperator is a placeholder intermediate so we can represent [A,
 // or, B] before we convert it to Or{A, B}
@@ -644,6 +678,7 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
                 }
                 left = &left[1..];
                 paren_count -= 1;
+                let _t = parse_string_literal(left);
             }
             '"' => {}
             /*case '\\':
