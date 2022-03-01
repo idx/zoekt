@@ -39,7 +39,7 @@ func (e *SuggestQueryError) Error() string {
 // parseStringLiteral parses a string literal, consumes the starting
 // quote too.
 //func parseStringLiteral(in []byte) (lit []byte, n int, err error) {
-fn parse_string_literal(r#in: &[u8]) -> Result<(&[u8], usize), String> {
+fn parse_string_literal(r#in: &[u8]) -> Result<(String, usize), String> {
     /*left := in[1:]
     found := false*/
     let mut left = &r#in[1..];
@@ -70,8 +70,7 @@ fn parse_string_literal(r#in: &[u8]) -> Result<(&[u8], usize), String> {
         return nil, 0, fmt.Errorf("query: unterminated quoted string")
     }
     return lit, len(in) - len(left), nil*/
-    let mut lit: Vec<u8> = Vec::<u8>::new();
-    //let mut qs: Vec<Q> = Vec::<Q>::new();
+    let mut lit = String::new();
     while left.len() > 0 {
         let mut c = left[0];
         left = &left[1..];
@@ -88,18 +87,16 @@ fn parse_string_literal(r#in: &[u8]) -> Result<(&[u8], usize), String> {
                 c = left[0];
                 left = &left[1..];
 
-                lit.push(c);
+                lit = format!("{}{}", lit, c);
             },
             _ => {
-                lit.push(c);
+                lit = format!("{}{}", lit, c);
             },
         }
     }
-
     if !found {
         return Err(format!("query: unterminated quoted string"));
     }
-    let lit = b"lit";
     Ok((lit, r#in.len() - left.len()))
 }
 
