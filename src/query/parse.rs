@@ -16,6 +16,7 @@
 use crate::query::query::*;
 use std::string::ToString;
 //use strum::{EnumString, EnumVariantNames, IntoStaticStr};
+use phf::phf_map;
 use strum::EnumString;
 
 /*import (
@@ -78,7 +79,7 @@ fn parse_string_literal(r#in: &[u8]) -> Result<(String, usize), String> {
             '"' => {
                 found = true;
                 break;
-            },
+            }
             '\\' => {
                 // TODO - other escape sequences.
                 if left.len() == 0 {
@@ -88,10 +89,10 @@ fn parse_string_literal(r#in: &[u8]) -> Result<(String, usize), String> {
                 left = &left[1..];
 
                 lit = format!("{}{}", lit, c);
-            },
+            }
             _ => {
                 lit = format!("{}{}", lit, c);
-            },
+            }
         }
     }
     if !found {
@@ -544,9 +545,9 @@ enum Tok {
     tokText:       "Text",
     tokLang:       "Language",
     tokSym:        "Symbol",
-}
+}*/
 
-var prefixes = map[string]int{
+/*var prefixes = map[string]int{
     "b:":       tokBranch,
     "branch:":  tokBranch,
     "c:":       tokContent,
@@ -559,17 +560,35 @@ var prefixes = map[string]int{
     "repo:":    tokRepo,
     "lang:":    tokLang,
     "sym:":     tokSym,
-}
+}*/
+static PREFIXES: phf::Map<&'static str, Tok> = phf_map! {
+    "b:"       => Tok::Branch,
+    "branch:"  => Tok::Branch,
+    "c:"       => Tok::Content,
+    "case:"    => Tok::Case,
+    "content:" => Tok::Content,
+    "f:"       => Tok::File,
+    "file:"    => Tok::File,
+    "r:"       => Tok::Repo,
+    "regexV:"  => Tok::Regex,
+    "repo:"    => Tok::Repo,
+    "lang:"    => Tok::Lang,
+    "sym:"     => Tok::Sym,
+};
 
-var reservedWords = map[string]int{
+/*var reservedWords = map[string]int{
     "or": tokOr,
-}
+}*/
+static RESERVED_WORDS: phf::Map<&'static str, Tok> = phf_map! {
+    "or"       => Tok::Or,
+};
 
-func (t *token) setType() {
+//func (t *token) setType() {
+fn set_type() {
     // After we consumed the input, we have to interpret some of the text,
     // eg. to distinguish between ")" the text and ) the query grouping
     // parenthesis.
-    if len(t.Text) == 1 && t.Text[0] == '(' {
+    /*if len(t.Text) == 1 && t.Text[0] == '(' {
         t.Type = tokParenOpen
     }
     if len(t.Text) == 1 && t.Text[0] == ')' {
@@ -583,6 +602,7 @@ func (t *token) setType() {
         }
     }
 
+
     for pref, typ := range prefixes {
         if !bytes.HasPrefix(t.Input, []byte(pref)) {
             continue
@@ -591,8 +611,11 @@ func (t *token) setType() {
         t.Text = t.Text[len(pref):]
         t.Type = typ
         break
-    }
-}*/
+    }*/
+    for (_w, _typ) in &RESERVED_WORDS {}
+
+    for (_pref, _typ) in &PREFIXES {}
+}
 
 // nextToken returns the next token from the given input.
 //func nextToken(in []byte) (*token, error) {
@@ -730,5 +753,6 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     cur.setType()
     return &cur, nil*/
     if found_space {}
+    set_type();
     Ok(cur)
 }
