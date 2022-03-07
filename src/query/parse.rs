@@ -752,7 +752,12 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
     }
     cur.setType()
     return &cur, nil*/
-    if found_space {}
+    if found_space && cur.text.chars().nth(0) == Some('(') {
+        cur.text = (&cur.text[1..]).to_string();
+        cur.input = &r#in[..1];
+    } else {
+        cur.input = &r#in[..r#in.len()-left.len()];
+    }
     set_type();
     Ok(cur)
 }
