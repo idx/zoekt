@@ -583,38 +583,50 @@ static RESERVED_WORDS: phf::Map<&'static str, Tok> = phf_map! {
     "or"       => Tok::Or,
 };
 
-//func (t *token) setType() {
-fn set_type() {
-    // After we consumed the input, we have to interpret some of the text,
-    // eg. to distinguish between ")" the text and ) the query grouping
-    // parenthesis.
-    /*if len(t.Text) == 1 && t.Text[0] == '(' {
-        t.Type = tokParenOpen
-    }
-    if len(t.Text) == 1 && t.Text[0] == ')' {
-        t.Type = tokParenClose
-    }
+impl Token<'_> {
+    //func (t *token) setType() {
+    fn set_type(t: &mut Token) {
+        // After we consumed the input, we have to interpret some of the text,
+        // eg. to distinguish between ")" the text and ) the query grouping
+        // parenthesis.
+        /*if len(t.Text) == 1 && t.Text[0] == '(' {
+            t.Type = tokParenOpen
+        }
+        if len(t.Text) == 1 && t.Text[0] == ')' {
+            t.Type = tokParenClose
+        }*/
+        if t.text.len() == 1 && t.text.chars().nth(0) == Some('(') {
+            t.r#type = Tok::ParenOpen;
+        }
+        if t.text.len() == 1 && t.text.chars().nth(0) == Some(')') {
+            t.r#type = Tok::ParenClose
+        }
 
-    for w, typ := range reservedWords {
-        if string(t.Text) == w && string(t.Input) == w {
+        /*for w, typ := range reservedWords {
+            if string(t.Text) == w && string(t.Input) == w {
+                t.Type = typ
+                break
+            }
+        }
+
+        for pref, typ := range prefixes {
+            if !bytes.HasPrefix(t.Input, []byte(pref)) {
+                continue
+            }
+
+            t.Text = t.Text[len(pref):]
             t.Type = typ
             break
+        }*/
+        for (w, _typ) in &RESERVED_WORDS {
+            if t.text == w.to_string() { //
+                //
+                break;
+            }
         }
+
+        for (_pref, _typ) in &PREFIXES {}
     }
-
-
-    for pref, typ := range prefixes {
-        if !bytes.HasPrefix(t.Input, []byte(pref)) {
-            continue
-        }
-
-        t.Text = t.Text[len(pref):]
-        t.Type = typ
-        break
-    }*/
-    for (_w, _typ) in &RESERVED_WORDS {}
-
-    for (_pref, _typ) in &PREFIXES {}
 }
 
 // nextToken returns the next token from the given input.
@@ -756,8 +768,8 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
         cur.text = (&cur.text[1..]).to_string();
         cur.input = &r#in[..1];
     } else {
-        cur.input = &r#in[..r#in.len()-left.len()];
+        cur.input = &r#in[..r#in.len() - left.len()];
     }
-    set_type();
+    Token::set_type(&mut cur);
     Ok(cur)
 }
