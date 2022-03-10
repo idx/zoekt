@@ -175,19 +175,16 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
 
     let text;
     let tok = match next_token(b) {
-        Ok(q) => {
-            if q.text.is_empty() {
-                return Ok((q.text, 0));
+        Ok(t) => {
+            if t.is_none() {
+                ()
             }
 
-            q
+            t.unwrap()
         }
-        Err(err) => {
-            return Err(err);
-        }
+        Err(e) => return Err(e),
     };
-    // b
-
+    b = &b[tok.input.len()..];
     text = tok.text;
 
     //switch tok.Type {
@@ -327,7 +324,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
     }
 
     //return expr, len(in) - len(b), nil
-    Ok((expr, 0))
+    Ok((expr, r#in.len() - b.len()))
 }
 
 // regexpQuery parses an atom into either a regular expression, or a
@@ -428,7 +425,10 @@ fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
         while b.len() > 0 && is_space(b[0] as char) {
             b = &b[1..];
         }
-        let tok = next_token(b).unwrap();
+        let tok = match next_token(b) {
+            Ok(tok) => tok.unwrap(),
+            Err(e) => return Err(e),
+        };
         if !tok.text.is_empty() && tok.r#type == Tok::ParenClose {
             break;
         } else if !tok.text.is_empty() && tok.r#type == Tok::Or {
@@ -619,7 +619,8 @@ impl Token<'_> {
             break
         }*/
         for (w, _typ) in &RESERVED_WORDS {
-            if t.text == w.to_string() { //
+            if t.text == w.to_string() {
+                //
                 //
                 break;
             }
@@ -631,7 +632,7 @@ impl Token<'_> {
 
 // nextToken returns the next token from the given input.
 //func nextToken(in []byte) (*token, error) {
-fn next_token(r#in: &[u8]) -> Result<Token, String> {
+fn next_token(r#in: &[u8]) -> Result<Option<Token>, String> {
     /*left := in[:]
     parenCount := 0
     var cur token
@@ -657,11 +658,11 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
 
     foundSpace := false*/
     if left[0] == '-' as u8 {
-        return Ok(Token {
+        return Ok(Some(Token {
             r#type: Tok::Negate,
             text: '-'.to_string(),
             input: b"input",
-        });
+        }));
     }
 
     let mut found_space = false;
@@ -771,5 +772,5 @@ fn next_token(r#in: &[u8]) -> Result<Token, String> {
         cur.input = &r#in[..r#in.len() - left.len()];
     }
     Token::set_type(&mut cur);
-    Ok(cur)
+    Ok(Some(cur))
 }
