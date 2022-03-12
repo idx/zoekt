@@ -154,14 +154,17 @@ func (q *Regexp) setCase(k string) {
     case "auto":
         q.CaseSensitive = (q.Regexp.String() != LowerRegexp(q.Regexp).String())
     }
-}
+}*/
 
 // Or is matched when any of its children is matched.
-type Or struct {
-    Children []Q
+//type Or struct {
+//    Children []Q
+//}
+pub struct Or<'a> {
+    pub children: &'a[Q],
 }
 
-func (q *Or) String() string {
+/*func (q *Or) String() string {
     var sub []string
     for _, ch := range q.Children {
         sub = append(sub, ch.String())
@@ -176,14 +179,17 @@ type Not struct {
 
 func (q *Not) String() string {
     return fmt.Sprintf("(not %s)", q.Child)
-}
+}*/
 
 // And is matched when all its children are.
-type And struct {
-    Children []Q
+//type And struct {
+//    Children []Q
+//}
+pub struct And<'a> {
+    pub children: &'a[Q],
 }
 
-func (q *And) String() string {
+/*func (q *And) String() string {
     var sub []string
     for _, ch := range q.Children {
         sub = append(sub, ch.String())

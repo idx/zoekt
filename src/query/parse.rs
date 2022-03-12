@@ -137,12 +137,9 @@ pub fn parse(q_str: Option<&str>) -> Result<Q, String> {
     return Simplify(q), nil*/
     let b = q_str.unwrap().as_bytes();
 
-    let qs = parse_expr_list(b);
-    if let Err(e) = qs {
-        return Err(e.to_string());
-    };
+    let qs = parse_expr_list(b)?;
 
-    let q = parse_operators()?;
+    let q = parse_operators(&qs.0)?;
 
     Ok(simplify(q))
 }
@@ -361,7 +358,7 @@ fn regexp_query(_text: String, _content: bool, _file: bool) -> Result<Q, String>
 //func parseOperators(in []Q) (Q, error) {
 //fn parse_operators(&mut self) -> Result<Q, String> {
 //fn parse_operators(r#_in: &[Q]) -> Result<Q, String> {
-fn parse_operators() -> Result<Q, String> {
+fn parse_operators(r#in: &[Q]) -> Result<Q, String> {
     /*top := &Or{}
     cur := &And{}
 
@@ -384,6 +381,23 @@ fn parse_operators() -> Result<Q, String> {
     }
     top.Children = append(top.Children, cur)
     return top, nil*/
+    let _top = Or {
+        children: &["".to_string()],
+    };
+    let cur = And {
+        children: &["".to_string()],
+    };
+
+    let mut seen_or = false;
+    for _q in r#in {
+        if true {
+            seen_or = true;
+            if cur.children.len() == 0 {}
+        } else {
+        }
+    }
+
+    if seen_or {}
     Ok("Dummy".to_string())
 }
 
