@@ -381,24 +381,28 @@ fn parse_operators(r#in: &[Q]) -> Result<Q, String> {
     }
     top.Children = append(top.Children, cur)
     return top, nil*/
-    let _top = Or {
-        children: &["".to_string()],
-    };
-    let cur = And {
-        children: &["".to_string()],
-    };
+    let mut top = Or::default();
+    let mut cur = And::default();
 
     let mut seen_or = false;
-    for _q in r#in {
-        if true {
+    for q in r#in {
+        if true { //
             seen_or = true;
-            if cur.children.len() == 0 {}
+            if cur.children.len() == 0 {
+                return Err("query: OR operator should have operand".to_string());
+            }
+            top.children.push(cur.children[0].clone());
+            cur = And::default();
         } else {
+            top.children.push(q.clone());
         }
     }
 
-    if seen_or {}
-    Ok("Dummy".to_string())
+    if seen_or && cur.children.len() == 0 {
+        return Err("query: OR operator should have operand".to_string());
+    }
+    top.children.push(cur.children[0].clone());
+    Ok(top.children[0].clone())
 }
 
 // parseExprList parses a list of query expressions. It is the
@@ -640,7 +644,15 @@ impl Token<'_> {
             }
         }
 
-        for (_pref, _typ) in &PREFIXES {}
+        for (pref, _typ) in &PREFIXES {
+            if false  { //
+                continue;
+            }
+
+            t.text = t.text[pref.len()..].to_string();
+            //
+            break
+        }
     }
 }
 

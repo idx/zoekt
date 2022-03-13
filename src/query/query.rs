@@ -160,8 +160,9 @@ func (q *Regexp) setCase(k string) {
 //type Or struct {
 //    Children []Q
 //}
-pub struct Or<'a> {
-    pub children: &'a[Q],
+#[derive(Default)]
+pub struct Or {
+    pub children: Vec<Q>,
 }
 
 /*func (q *Or) String() string {
@@ -185,8 +186,9 @@ func (q *Not) String() string {
 //type And struct {
 //    Children []Q
 //}
-pub struct And<'a> {
-    pub children: &'a[Q],
+#[derive(Default)]
+pub struct And {
+    pub children: Vec<Q>,
 }
 
 /*func (q *And) String() string {
