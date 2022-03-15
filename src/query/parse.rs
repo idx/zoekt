@@ -791,6 +791,10 @@ fn next_token(r#in: &[u8]) -> Result<Option<Token>, String> {
     }
     cur.setType()
     return &cur, nil*/
+    if cur.text.len() == 0 {
+        return Ok(None);
+    }
+    
     if found_space && cur.text.chars().nth(0) == Some('(') {
         cur.text = (&cur.text[1..]).to_string();
         cur.input = &r#in[..1];
