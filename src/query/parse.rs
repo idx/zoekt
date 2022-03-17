@@ -113,9 +113,10 @@ fn orOperator() -> String {
     "orOp".to_string()
 }
 
-//func isSpace(c byte) bool {
+/*func isSpace(c byte) bool {
+    return c == ' ' || c == '\t'
+}*/
 fn is_space(c: char) -> bool {
-    //    return c == ' ' || c == '\t'
     return c == ' ' || c == '\t';
 }
 
@@ -386,7 +387,8 @@ fn parse_operators(r#in: &[Q]) -> Result<Q, String> {
 
     let mut seen_or = false;
     for q in r#in {
-        if true { //
+        if true {
+            //
             seen_or = true;
             if cur.children.len() == 0 {
                 return Err("query: OR operator should have operand".to_string());
@@ -645,13 +647,14 @@ impl Token<'_> {
         }
 
         for (pref, _typ) in &PREFIXES {
-            if false  { //
+            if false {
+                //
                 continue;
             }
 
             t.text = t.text[pref.len()..].to_string();
             //
-            break
+            break;
         }
     }
 }
@@ -794,7 +797,7 @@ fn next_token(r#in: &[u8]) -> Result<Option<Token>, String> {
     if cur.text.len() == 0 {
         return Ok(None);
     }
-    
+
     if found_space && cur.text.chars().nth(0) == Some('(') {
         cur.text = (&cur.text[1..]).to_string();
         cur.input = &r#in[..1];

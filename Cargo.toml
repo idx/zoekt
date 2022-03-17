@@ -8,6 +8,10 @@ edition = "2021"
 name = "zoekt"
 path = "src/cmd/zoekt/main.rs"
 
+[[bin]]
+name = "zoekt-index"
+path = "src/cmd/zoekt-index/main.rs"
+
 [lib]
 name = "zoekt"
 path = "src/lib.rs"
