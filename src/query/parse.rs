@@ -17,7 +17,6 @@ use crate::query::query::*;
 use std::string::ToString;
 //use strum::{EnumString, EnumVariantNames, IntoStaticStr};
 use phf::phf_map;
-use strum::EnumString;
 
 /*import (
     "bytes"
@@ -196,7 +195,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
             return nil, 0, fmt.Errorf("query: unknown case argument %q, want {yes,no,auto}", text)
         }
         expr = &caseQ{text}*/
-        Tok::Case => {
+        TOK_CASE => {
             match &*text {
                 "yes" => {}
                 "no" => {}
@@ -212,12 +211,12 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         }
         /*case tokRepo:
         expr = &Repo{Pattern: text}*/
-        Tok::Repo => {
+        TOK_REPO => {
             expr = "&Repo{Pattern: text}".to_string();
         }
         /*case tokBranch:
         expr = &Branch{Pattern: text}*/
-        Tok::Branch => {
+        TOK_BRANCH => {
             expr = "&Branch{Pattern: text}".to_string();
         }
         /*case tokText, tokRegex:
@@ -239,22 +238,22 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
                 return nil, 0, err
             }
             expr = q*/
-        Tok::Text | Tok::Regex => {
+        TOK_TEXT | TOK_REGEX => {
             let q = regexp_query(text, false, false)?;
             expr = q;
         }
-        Tok::File => {
+        TOK_FILE => {
             let q = regexp_query(text, false, true)?;
             expr = q;
         }
 
-        Tok::Content => {
+        TOK_CONTENT => {
             let q = regexp_query(text, true, false)?;
             expr = q;
         }
         /*case tokLang:
         expr = &Language{Language: text}*/
-        Tok::Lang => {
+        TOK_LANG => {
             expr = "&Language{Language: text}".to_string();
             //expr = Language { language: text };
         }
@@ -264,7 +263,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
             return nil, 0, fmt.Errorf("the sym: atom must have an argument")
         }
         expr = &Symbol{&Substring{Pattern: text}}*/
-        Tok::Sym => {
+        TOK_SYM => {
             if text.is_empty() {
                 return Err("the sym: atom must have an argument".to_string());
             }
@@ -274,7 +273,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         /*case tokParenClose:
           // Caller must consume paren.
         expr = nil*/
-        Tok::ParenClose => {
+        TOK_PAREN_CLOSE => {
             expr = "&Repo{Pattern: text}".to_string();
         }
 
@@ -298,7 +297,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         if err != nil {
             return nil, 0, err
         }*/
-        Tok::ParenOpen => {
+        TOK_PAREN_OPEN => {
             expr = "&Repo{Pattern: text}".to_string();
         }
 
@@ -312,7 +311,7 @@ fn parse_expr(r#in: &[u8]) -> Result<(Q, usize), String> {
         }
         b = b[n:]
         expr = &Not{subQ}*/
-        Tok::Negate => {
+        TOK_NEGATE => {
             expr = "&Repo{Pattern: text}".to_string();
         }
 
@@ -449,9 +448,9 @@ fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
             Ok(tok) => tok.unwrap(),
             Err(e) => return Err(e),
         };
-        if !tok.text.is_empty() && tok.r#type == Tok::ParenClose {
+        if !tok.text.is_empty() && tok.r#type == TOK_PAREN_CLOSE {
             break;
-        } else if !tok.text.is_empty() && tok.r#type == Tok::Or {
+        } else if !tok.text.is_empty() && tok.r#type == TOK_OR {
             qs.push(orOperator());
             b = &b[tok.input.len()..];
             continue;
@@ -502,7 +501,7 @@ fn parse_expr_list(r#in: &[u8]) -> Result<(Vec<Q>, usize), String> {
     Input []byte
 }*/
 struct Token<'a> {
-    r#type: Tok,
+    r#type: i32,
     // The value of the token
     text: String,
 
@@ -531,25 +530,21 @@ struct Token<'a> {
     tokLang       = 12
     tokSym        = 13
 )*/
-//#[derive(EnumString, EnumVariantNames, IntoStaticStr)]
-#[derive(EnumString, PartialEq)]
-#[strum(serialize_all = "kebab-case")]
-enum Tok {
-    Text = 0,
-    File = 1,
-    Repo = 2,
-    Case = 3,
-    Branch = 4,
-    ParenOpen = 5,
-    ParenClose = 6,
-    Error = 7,
-    Negate = 8,
-    Regex = 9,
-    Or = 10,
-    Content = 11,
-    Lang = 12,
-    Sym = 13,
-}
+const TOK_TEXT: i32        = 0;
+const TOK_FILE: i32        = 1;
+const TOK_REPO: i32        = 2;
+const TOK_CASE: i32        = 3;
+const TOK_BRANCH: i32      = 4;
+const TOK_PAREN_OPEN: i32  = 5;
+const TOK_PAREN_CLOSE: i32 = 6;
+#[allow(dead_code)]
+const TOK_ERROR: i32       = 7;
+const TOK_NEGATE: i32      = 8;
+const TOK_REGEX: i32       = 9;
+const TOK_OR: i32          = 10;
+const TOK_CONTENT: i32     = 11;
+const TOK_LANG: i32        = 12;
+const TOK_SYM: i32         = 13;
 
 /*var tokNames = map[int]string{
     tokBranch:     "Branch",
@@ -566,6 +561,25 @@ enum Tok {
     tokLang:       "Language",
     tokSym:        "Symbol",
 }*/
+#[allow(dead_code)]
+static TOK_NAMES: phf::Map<i32, &'static str> = phf_map! {
+};
+/*
+    return fmt.Sprintf("%s:%q", tokNames[t.Type], t.Text)
+  "branch" => TOK_BRANCH,
+    "case" => TOK_CASE,
+    "error" => TOK_ERROR,
+    "file" => TOK_FILE,
+    "negate" => TOK_NEGATE,
+    "or" => TOK_OR,
+    "parenclose" => TOK_PAREN_CLOSE,
+    "parenopen" => TOK_PAREN_OPEN,
+    "regex" => TOK_REGEX,
+    "repo" => TOK_REPO,
+    "text" => TOK_TEXT,
+    "lang" => TOK_LANG,
+    "sym" => TOK_SYM,
+};*/
 
 /*var prefixes = map[string]int{
     "b:":       tokBranch,
@@ -581,29 +595,33 @@ enum Tok {
     "lang:":    tokLang,
     "sym:":     tokSym,
 }*/
-static PREFIXES: phf::Map<&'static str, Tok> = phf_map! {
-    "b:"       => Tok::Branch,
-    "branch:"  => Tok::Branch,
-    "c:"       => Tok::Content,
-    "case:"    => Tok::Case,
-    "content:" => Tok::Content,
-    "f:"       => Tok::File,
-    "file:"    => Tok::File,
-    "r:"       => Tok::Repo,
-    "regexV:"  => Tok::Regex,
-    "repo:"    => Tok::Repo,
-    "lang:"    => Tok::Lang,
-    "sym:"     => Tok::Sym,
+static PREFIXES: phf::Map<&'static str, i32> = phf_map! {
+    "b:"       => TOK_BRANCH,
+    "branch:"  => TOK_BRANCH,
+    "c:"       => TOK_CONTENT,
+    "case:"    => TOK_CASE,
+    "content:" => TOK_CONTENT,
+    "f:"       => TOK_CONTENT,
+    "file:"    => TOK_CONTENT,
+    "r:"       => TOK_REPO,
+    "regexV:"  => TOK_REGEX,
+    "repo:"    => TOK_REPO,
+    "lang:"    => TOK_LANG,
+    "sym:"     => TOK_SYM,
 };
 
 /*var reservedWords = map[string]int{
     "or": tokOr,
 }*/
-static RESERVED_WORDS: phf::Map<&'static str, Tok> = phf_map! {
-    "or"       => Tok::Or,
+static RESERVED_WORDS: phf::Map<&'static str, i32> = phf_map! {
+    "or"       => TOK_OR,
 };
 
 impl Token<'_> {
+    fn _string(&self) -> String {
+        return format!("{}:{}", TOK_NAMES[&self.r#type], self.text);
+    }
+
     //func (t *token) setType() {
     fn set_type(t: &mut Token) {
         // After we consumed the input, we have to interpret some of the text,
@@ -616,10 +634,10 @@ impl Token<'_> {
             t.Type = tokParenClose
         }*/
         if t.text.len() == 1 && t.text.chars().nth(0) == Some('(') {
-            t.r#type = Tok::ParenOpen;
+            t.r#type = TOK_PAREN_OPEN;
         }
         if t.text.len() == 1 && t.text.chars().nth(0) == Some(')') {
-            t.r#type = Tok::ParenClose
+            t.r#type = TOK_PAREN_CLOSE;
         }
 
         /*for w, typ := range reservedWords {
@@ -671,7 +689,7 @@ fn next_token(r#in: &[u8]) -> Result<Option<Token>, String> {
     let mut left = &r#in[..];
     let mut paren_count = 0;
     let mut cur = Token {
-        r#type: Tok::Text,
+        r#type: 0,
         text: String::from("text"),
         input: b"input",
     };
@@ -688,7 +706,7 @@ fn next_token(r#in: &[u8]) -> Result<Option<Token>, String> {
     foundSpace := false*/
     if left[0] == '-' as u8 {
         return Ok(Some(Token {
-            r#type: Tok::Negate,
+            r#type: TOK_NEGATE,
             text: '-'.to_string(),
             input: b"input",
         }));
