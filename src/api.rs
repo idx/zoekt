@@ -264,16 +264,18 @@ type RepoList struct {
 	Crashes int
 }*/
 
+#[derive(Default)]
 pub struct Searcher {
 	/*Search(ctx context.Context, q query.Q, opts *SearchOptions) (*SearchResult, error)
 
 	// List lists repositories. The query `q` can only contain
 	// query.Repo atoms.
 	List(ctx context.Context, q query.Q) (*RepoList, error)
-	Close()
+	Close()*/
 
 	// Describe the searcher for debug messages.
-	String() string*/
+	//String() string
+	pub string: String,
 }
 
 /*type SearchOptions struct {

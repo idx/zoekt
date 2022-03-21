@@ -109,7 +109,7 @@ fn main() {
 
 	let pat: Option<&str>  = matches.value_of("QUERY");
 
-	let _searcher = zoekt::api::Searcher {};
+	let _searcher = zoekt::api::Searcher::default();
 	if let Some(_shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)
 		match load_shard(verbose) {
