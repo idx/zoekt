@@ -20,10 +20,11 @@ import (
     "time"
 
     "github.com/google/zoekt/query"
-)
+)*/
+use crate::query::query::*;
 
 // FileMatch contains all the matches within a file.
-type FileMatch struct {
+/*type FileMatch struct {
     // Ranking; the higher, the better.
     Score float64 // TODO - hide this field?
 
@@ -280,8 +281,8 @@ pub struct Searcher {
 }
 
 impl Searcher {
-	pub fn search(&self)  {}
-	pub fn list(&self)  {}
+	pub fn search(&self, _q: Q)  {}
+	pub fn list(&self, _q: Q)  {}
 	pub fn close(&self)  {}
 }
 
