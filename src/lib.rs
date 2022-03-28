@@ -9,7 +9,9 @@ pub mod hititer;
 pub mod index_test;
 pub mod indexbuilder;
 pub mod indexdata;
+#[cfg(not(target_family = "unix"))]
 pub mod indexfile_other;
+#[cfg(target_family = "unix")]
 pub mod indexfile_unix;
 pub mod matchiter;
 pub mod matchtree_test;

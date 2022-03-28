@@ -45,12 +45,13 @@ func (f *mmapedIndexFile) Size() (uint32, error) {
 
 func (f *mmapedIndexFile) Close() {
 	syscall.Munmap(f.data)
-}
+}*/
 
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
-func NewIndexFile(f *os.File) (IndexFile, error) {
-	defer f.Close()
+//func NewIndexFile(f *os.File) (IndexFile, error) {
+pub fn new_index_file() {
+	/*defer f.Close()
 
 	fi, err := f.Stat()
 	if err != nil {
@@ -72,5 +73,5 @@ func NewIndexFile(f *os.File) (IndexFile, error) {
 		return nil, err
 	}
 
-	return r, err
-}*/
+	return r, err*/
+}

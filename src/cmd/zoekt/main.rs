@@ -62,9 +62,11 @@ fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
 	iFile, err := zoekt.NewIndexFile(f)
 	if err != nil {
 		return nil, err
-	}
+	}*/
+	#[cfg(target_family = "unix")]
+	zoekt::indexfile_unix::new_index_file();
 
-	s, err := zoekt.NewSearcher(iFile)
+	/*s, err := zoekt.NewSearcher(iFile)
 	if err != nil {
 		iFile.Close()
 		return nil, fmt.Errorf("NewSearcher(%s): %v", fn, err)
@@ -109,6 +111,17 @@ fn main() {
 
 	let pat: Option<&str>  = matches.value_of("QUERY");
 
+	/*var searcher zoekt.Searcher
+	var err error
+	if *shard != "" {
+		searcher, err = loadShard(*shard, *verbose)
+	} else {
+		searcher, err = shards.NewDirectorySearcher(*index)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}*/
 	let _searcher = zoekt::api::Searcher::default();
 	if let Some(_shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)
@@ -120,10 +133,13 @@ fn main() {
 		//searcher, err = shards.NewDirectorySearcher(*index)
 	}
 
-	//query, err := query.Parse(pat)
-	/*if err != nil {
+	/*query, err := query.Parse(pat)
+	if err != nil {
 		log.Fatal(err)
-	}*/	
+	}
+	if *verbose {
+		log.Println("query:", query)
+	}*/
 	let query = query::parse::parse(pat);
 	if let Err(e) = query {
 		error!("{}", e);
