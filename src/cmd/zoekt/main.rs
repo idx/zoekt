@@ -33,16 +33,17 @@ use std::env;
 	"github.com/google/zoekt"
 	"github.com/google/zoekt/query"
 	"github.com/google/zoekt/shards"
-)
+)*/
+use std::path::Path;
 
-func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
+/*func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
 	for _, f := range files {
 		r := ""
 		if withRepo {
 			r = f.Repository + "/"
 		}
 		if list {
-			fmt.Printf("%s%s\n", r, f.FileName)
+			fmt.Printf("%s%s\n", r, f.FileName)N
 			continue
 		}
 
@@ -89,6 +90,7 @@ fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
 fn main() {
 //	let args: Vec<_> = env::args().collect();
 //	let s: String = args[0];
+	let mut _filepath = Path::new(".");
 	env::set_var("RUST_LOG", "info");
 	env_logger::init();
 	let matches = App::new("zoekt")
