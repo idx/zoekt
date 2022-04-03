@@ -19,6 +19,7 @@ use clap::{App, Arg};
 use env_logger;
 use log::{error, info};
 use std::env;
+use std::path::PathBuf;
 
 /*import (
 	"context"
@@ -33,10 +34,9 @@ use std::env;
 	"github.com/google/zoekt"
 	"github.com/google/zoekt/query"
 	"github.com/google/zoekt/shards"
-)*/
-use std::path::Path;
+)
 
-/*func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
+func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
 	for _, f := range files {
 		r := ""
 		if withRepo {
@@ -88,16 +88,15 @@ fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
 }
 
 fn main() {
-//	let args: Vec<_> = env::args().collect();
-//	let s: String = args[0];
-	let mut _filepath = Path::new(".");
 	env::set_var("RUST_LOG", "info");
 	env_logger::init();
+
 	let matches = App::new("zoekt")
 	.version("0.1.0")
 	.arg(Arg::from_usage("-s, --shard [shard] 'Search in a specific shard'"))
 	//index := flag.String("index_dir",
 	//filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
+	.arg(Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`"))
 	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
 	//profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
 	.arg(Arg::from_usage("-v, --verbose 'Print some background data'"))
@@ -107,6 +106,12 @@ fn main() {
 	.get_matches();
 	
 	let _cpu_profile = matches.is_present("cpu_profile");
+	let mut _index: PathBuf; 
+	if let Some(index) = matches.value_of("index_dir") {
+		_index = PathBuf::from(index);
+	} else {
+		_index = PathBuf::from(dirs::home_dir().unwrap());
+	}
 	let verbose = matches.is_present("verbose");
 	let _with_repo = matches.is_present("repo");
 	let _list = matches.is_present("list");
@@ -126,7 +131,7 @@ fn main() {
 	}*/
 	let _searcher = zoekt::api::Searcher::default();
 	if let Some(_shard) = matches.value_of("shard") {
-		//searcher, err = loadShard(*shard, *verbose)
+		//searcher, err = loadShard(*shard, *verbose)w
 		match load_shard(verbose) {
 			Ok(_s) => {println!("OK")}
 			Err(e) => {error!("{}", e)}
