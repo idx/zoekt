@@ -94,8 +94,6 @@ fn main() {
 	let matches = App::new("zoekt")
 	.version("0.1.0")
 	.arg(Arg::from_usage("-s, --shard [shard] 'Search in a specific shard'"))
-	//index := flag.String("index_dir",
-	//filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
 	.arg(Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`"))
 	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
 	//profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
@@ -106,12 +104,11 @@ fn main() {
 	.get_matches();
 	
 	let _cpu_profile = matches.is_present("cpu_profile");
-	let mut _index: PathBuf; 
-	if let Some(index) = matches.value_of("index_dir") {
-		_index = PathBuf::from(index);
+	let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
+		PathBuf::from(index)
 	} else {
-		_index = PathBuf::from(dirs::home_dir().unwrap());
-	}
+		PathBuf::from(dirs::home_dir().unwrap().join(".zoekt"))
+	};
 	let verbose = matches.is_present("verbose");
 	let _with_repo = matches.is_present("repo");
 	let _list = matches.is_present("list");
