@@ -20,6 +20,7 @@ use env_logger;
 use log::{error, info};
 use std::env;
 use std::path::PathBuf;
+use std::time::Duration;
 
 /*import (
 	"context"
@@ -96,7 +97,7 @@ fn main() {
 	.arg(Arg::from_usage("-s, --shard [shard] 'Search in a specific shard'"))
 	.arg(Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`"))
 	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
-	//profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")*/
+	.arg(Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'"))
 	.arg(Arg::from_usage("-v, --verbose 'Print some background data'"))
 	.arg(Arg::from_usage("-r, --repo 'Print the repo before the file name'"))
 	.arg(Arg::from_usage("-l, --list 'Print matching filenames only'"))
@@ -104,6 +105,11 @@ fn main() {
 	.get_matches();
 	
 	let _cpu_profile = matches.is_present("cpu_profile");
+	let _profile_time = if let Some(time) = matches.value_of("duration") {
+		Duration::from_secs(time.parse().unwrap())
+	} else {
+		Duration::from_secs(0)
+	};
 	let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
 		PathBuf::from(index)
 	} else {
