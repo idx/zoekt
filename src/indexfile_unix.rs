@@ -14,15 +14,16 @@
 
 // +build linux darwin
 
-/*package zoekt
+//package zoekt
 
-import (
+/*import (
 	"fmt"
 	"os"
 	"syscall"
-)
+)*/
+use std::path::Path;
 
-type mmapedIndexFile struct {
+/*type mmapedIndexFile struct {
 	name string
 	size uint32
 	data []byte
@@ -50,7 +51,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file() {
+pub fn new_index_file(_f: &Path) -> Result<String, String> {
 	/*defer f.Close()
 
 	fi, err := f.Stat()
@@ -74,4 +75,5 @@ pub fn new_index_file() {
 	}
 
 	return r, err*/
+	Ok("r".to_string())
 }

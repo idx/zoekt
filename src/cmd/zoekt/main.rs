@@ -21,6 +21,7 @@ use log::{error, info};
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
+use std::path::Path;
 
 /*import (
 	"context"
@@ -55,7 +56,7 @@ func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list boo
 }*/
 
 //func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
-fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
+fn load_shard(r#fn: &str, verbose: bool) -> Result<String, std::num::ParseIntError> {
 	/*f, err := os.Open(fn)
 	if err != nil {
 		return nil, err
@@ -65,8 +66,12 @@ fn load_shard(verbose: bool) -> Result<String, std::num::ParseIntError> {
 	if err != nil {
 		return nil, err
 	}*/
+	let f = Path::new(r#fn);
 	#[cfg(target_family = "unix")]
-	zoekt::indexfile_unix::new_index_file();
+	let i_file = zoekt::indexfile_unix::new_index_file(f);
+	if let Err(e) = i_file {
+		error!("{}", e);
+	}
 
 	/*s, err := zoekt.NewSearcher(iFile)
 	if err != nil {
@@ -133,9 +138,9 @@ fn main() {
 		log.Fatal(err)
 	}*/
 	let _searcher = zoekt::api::Searcher::default();
-	if let Some(_shard) = matches.value_of("shard") {
+	if let Some(shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)w
-		match load_shard(verbose) {
+		match load_shard(shard, verbose) {
 			Ok(_s) => {println!("OK")}
 			Err(e) => {error!("{}", e)}
 		}
