@@ -69,6 +69,7 @@ func main() {
 	excludeTopics := topicsFlag{}
 	flag.Var(&excludeTopics, "exclude_topic", "don't clone repos whose have one of given topics. You can add multiple topics by setting this more than once.")
 
+	
 	flag.Parse()
 
 	if *dest == "" {

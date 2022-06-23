@@ -15,6 +15,7 @@
 // +build linux darwin
 
 //package zoekt
+use crate::read::IndexFile;
 
 /*import (
 	"fmt"
@@ -27,9 +28,15 @@ use std::path::Path;
 	name string
 	size uint32
 	data []byte
+}*/
+
+pub struct MmapedIndexFile {
+	pub string: String,
+	//pub size: i32,
+	//pub data: Vec<u8>
 }
 
-func (f *mmapedIndexFile) Read(off, sz uint32) ([]byte, error) {
+/*func (f *mmapedIndexFile) Read(off, sz uint32) ([]byte, error) {
 	if off+sz > uint32(len(f.data)) {
 		return nil, fmt.Errorf("out of bounds: %d, len %d", off+sz, len(f.data))
 	}
@@ -51,7 +58,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file(_f: &Path) -> Result<String, String> {
+pub fn new_index_file(_f: &Path) -> Result<IndexFile, String> {
 	/*defer f.Close()
 
 	fi, err := f.Stat()
@@ -75,5 +82,10 @@ pub fn new_index_file(_f: &Path) -> Result<String, String> {
 	}
 
 	return r, err*/
-	Ok("r".to_string())
+	//let r = MmapedIndexFile {
+	//	string: String("string"),
+	//};
+	let r = IndexFile{};
+
+	Ok(r)
 }

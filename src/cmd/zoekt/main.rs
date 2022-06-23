@@ -19,9 +19,9 @@ use clap::{App, Arg};
 use env_logger;
 use log::{error, info};
 use std::env;
+use std::path::Path;
 use std::path::PathBuf;
 use std::time::Duration;
-use std::path::Path;
 
 /*import (
 	"context"
@@ -65,19 +65,34 @@ fn load_shard(r#fn: &str, verbose: bool) -> Result<String, std::num::ParseIntErr
 	iFile, err := zoekt.NewIndexFile(f)
 	if err != nil {
 		return nil, err
-	}*/
-	let f = Path::new(r#fn);
-	#[cfg(target_family = "unix")]
-	let i_file = zoekt::indexfile_unix::new_index_file(f);
-	if let Err(e) = i_file {
-		error!("{}", e);
 	}
 
-	/*s, err := zoekt.NewSearcher(iFile)
+	s, err := zoekt.NewSearcher(iFile)
 	if err != nil {
 		iFile.Close()
 		return nil, fmt.Errorf("NewSearcher(%s): %v", fn, err)
-	}*/
+	}
+
+	if verbose {
+		repo, index, err := zoekt.ReadMetadata(iFile)
+		if err != nil {
+			iFile.Close()
+			return nil, fmt.Errorf("ReadMetadata(%s): %v", fn, err)
+		}
+		log.Printf("repo metadata: %#v", repo)
+		log.Printf("index metadata: %#v", index)
+	}
+
+	return s, nil*/
+
+	let f = Path::new(r#fn);
+	#[cfg(target_family = "unix")]
+	let _i_file = match zoekt::indexfile_unix::new_index_file(f) {
+		Ok(_t) => {}
+		Err(e) => {
+			error!("{}", e)
+		}
+	};
 
 	if verbose {
 		/*repo, index, err := zoekt.ReadMetadata(iFile)
@@ -89,7 +104,6 @@ fn load_shard(r#fn: &str, verbose: bool) -> Result<String, std::num::ParseIntErr
 		log.Printf("index metadata: %#v", index)*/
 	}
 
-	//return s, nil
 	Ok(String::from("zoekt.Searcher"))
 }
 
@@ -98,17 +112,32 @@ fn main() {
 	env_logger::init();
 
 	let matches = App::new("zoekt")
-	.version("0.1.0")
-	.arg(Arg::from_usage("-s, --shard [shard] 'Search in a specific shard'"))
-	.arg(Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`"))
-	.arg(Arg::from_usage("--cpu_profile 'Write cpu profile to `file`"))
-	.arg(Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'"))
-	.arg(Arg::from_usage("-v, --verbose 'Print some background data'"))
-	.arg(Arg::from_usage("-r, --repo 'Print the repo before the file name'"))
-	.arg(Arg::from_usage("-l, --list 'Print matching filenames only'"))
-	.arg(Arg::from_usage("<QUERY> 'for example\n zoekt \'byte file:java -file:test\''"))
-	.get_matches();
-	
+		.version("0.1.0")
+		.arg(Arg::from_usage(
+			"-s, --shard [shard] 'Search in a specific shard'",
+		))
+		.arg(Arg::from_usage(
+			"--index_dir [index_dir] 'search for index files in `directory`",
+		))
+		.arg(Arg::from_usage(
+			"--cpu_profile 'Write cpu profile to `file`",
+		))
+		.arg(Arg::from_usage(
+			"--profile_time [duration] 'run this long to gather stats.'",
+		))
+		.arg(Arg::from_usage(
+			"-v, --verbose 'Print some background data'",
+		))
+		.arg(Arg::from_usage(
+			"-r, --repo 'Print the repo before the file name'",
+		))
+		.arg(Arg::from_usage(
+			"-l, --list 'Print matching filenames only'",
+		))
+		.arg(Arg::from_usage(
+			"<QUERY> 'for example\n zoekt \'byte file:java -file:test\''",
+		))
+		.get_matches();
 	let _cpu_profile = matches.is_present("cpu_profile");
 	let _profile_time = if let Some(time) = matches.value_of("duration") {
 		Duration::from_secs(time.parse().unwrap())
@@ -124,7 +153,7 @@ fn main() {
 	let _with_repo = matches.is_present("repo");
 	let _list = matches.is_present("list");
 
-	let pat: Option<&str>  = matches.value_of("QUERY");
+	let pat: Option<&str> = matches.value_of("QUERY");
 
 	/*var searcher zoekt.Searcher
 	var err error
@@ -141,8 +170,12 @@ fn main() {
 	if let Some(shard) = matches.value_of("shard") {
 		//searcher, err = loadShard(*shard, *verbose)w
 		match load_shard(shard, verbose) {
-			Ok(_s) => {println!("OK")}
-			Err(e) => {error!("{}", e)}
+			Ok(_s) => {
+				println!("OK")
+			}
+			Err(e) => {
+				error!("{}", e)
+			}
 		}
 	} else {
 		//searcher, err = shards.NewDirectorySearcher(*index)
@@ -158,12 +191,12 @@ fn main() {
 	let query = query::parse::parse(pat);
 	if let Err(e) = query {
 		error!("{}", e);
-	}	
+	}
 	if verbose {
 		info!("query: {}", "query");
 	}
 
-/*	var sOpts zoekt.SearchOptions
+	/*	var sOpts zoekt.SearchOptions
 	sres, err := searcher.Search(context.Background(), query, &sOpts)
 	if *cpuProfile != "" {
 		// If profiling, do it another time so we measure with
