@@ -21,6 +21,7 @@ use log::{error, info};
 use std::env;
 use std::path::Path;
 use std::path::PathBuf;
+use std::process;
 use std::time::Duration;
 
 /*import (
@@ -155,7 +156,7 @@ fn main() {
 
 	let pat: Option<&str> = matches.value_of("QUERY");
 
-	/*var searcher zoekt.Searcher
+	/*	var searcher zoekt.Searcher
 	var err error
 	if *shard != "" {
 		searcher, err = loadShard(*shard, *verbose)
@@ -165,6 +166,14 @@ fn main() {
 
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	query, err := query.Parse(pat)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if *verbose {
+		log.Println("query:", query)
 	}*/
 	let _searcher = zoekt::api::Searcher::default();
 	if let Some(shard) = matches.value_of("shard") {
@@ -174,29 +183,27 @@ fn main() {
 				println!("OK")
 			}
 			Err(e) => {
-				error!("{}", e)
+				error!("{}", e);
+				process::exit(1)
 			}
 		}
 	} else {
 		//searcher, err = shards.NewDirectorySearcher(*index)
 	}
 
-	/*query, err := query.Parse(pat)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if *verbose {
-		log.Println("query:", query)
-	}*/
-	let query = query::parse::parse(pat);
-	if let Err(e) = query {
-		error!("{}", e);
-	}
-	if verbose {
-		info!("query: {}", "query");
-	}
+	let _query = match query::parse::parse(pat) {
+		Ok(v) => {
+			if verbose {
+				info!("query: {}", v);
+			}
+		}
+		Err(e) => {
+			error!("{}", e);
+			process::exit(1)
+		}
+	};
 
-	/*	var sOpts zoekt.SearchOptions
+	/*var sOpts zoekt.SearchOptions
 	sres, err := searcher.Search(context.Background(), query, &sOpts)
 	if *cpuProfile != "" {
 		// If profiling, do it another time so we measure with
