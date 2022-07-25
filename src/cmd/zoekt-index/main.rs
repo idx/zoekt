@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package main
+//package main
+use clap::{App, Arg};
 
-import (
+/*import (
     "flag"
     "fmt"
     "io/ioutil"
@@ -36,7 +37,7 @@ import (
 }*/
 pub struct FileInfo {
     pub name: String,
-    pub size: i64
+    pub size: i64,
 }
 
 /*type fileAggregator struct {
@@ -46,8 +47,7 @@ pub struct FileInfo {
 }*/
 pub struct FileAggregator {
     //ignoreDirs map[string]struct{}
-    pub size_max: i64
-    //sink       chan fileInfo
+    pub size_max: i64, //sink       chan fileInfo
 }
 
 /*func (a *fileAggregator) add(path string, info os.FileInfo, err error) error {
@@ -72,10 +72,23 @@ pub struct FileAggregator {
 fn main() {
     /*	cpuProfile := flag.String("cpu_profile", "", "write cpu profile to file")
     ignoreDirs := flag.String("ignore_dirs", ".git,.hg,.svn", "comma separated list of directories to ignore.")
-    flag.Parse()
+    flag.Parse()*/
+    let matches = App::new("zoekt-index")
+        .version("0.1.0")
+        .arg(Arg::from_usage(
+            "--cpu_profile 'Write cpu profile to `file`",
+        ))
+        .arg(
+            Arg::from_usage(
+                "--ignore_dir [ignore_dir] 'comma separated list of directories to ignore.",
+            )
+            .default_value(".git,.hg,.svn"),
+        )
+        .get_matches();
+    let _cpu_profile = matches.is_present("cpu_profile");
 
     // Tune GOMAXPROCS to match Linux container CPU quota.
-    maxprocs.Set()
+    /*maxprocs.Set()
 
     opts := cmd.OptionsFromFlags()
     if *cpuProfile != "" {
