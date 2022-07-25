@@ -109,36 +109,38 @@ fn load_shard(r#fn: &str, verbose: bool) -> Result<String, std::num::ParseIntErr
 }
 
 fn main() {
-	env::set_var("RUST_LOG", "info");
-	env_logger::init();
+    env::set_var("RUST_LOG", "info");
+    env_logger::init();
 
-	let matches = App::new("zoekt")
-		.version("0.1.0")
-		.arg(Arg::from_usage(
-			"-s, --shard [shard] 'Search in a specific shard'",
-		))
-		.arg(Arg::from_usage(
-			"--index_dir [index_dir] 'search for index files in `directory`",
-		))
-		.arg(Arg::from_usage(
-			"--cpu_profile 'Write cpu profile to `file`",
-		))
-		.arg(Arg::from_usage(
-			"--profile_time [duration] 'run this long to gather stats.'",
-		))
-		.arg(Arg::from_usage(
-			"-v, --verbose 'Print some background data'",
-		))
-		.arg(Arg::from_usage(
-			"-r, --repo 'Print the repo before the file name'",
-		))
-		.arg(Arg::from_usage(
-			"-l, --list 'Print matching filenames only'",
-		))
-		.arg(Arg::from_usage(
-			"<QUERY> 'for example\n zoekt \'byte file:java -file:test\''",
-		))
-		.get_matches();
+    let matches = App::new("zoekt")
+        .version("0.1.0")
+        .arg(Arg::from_usage(
+            "-s, --shard [shard] 'Search in a specific shard'",
+        ))
+        .arg(
+            Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`")
+                .default_value("filepath.Join(os.Getenv(\"HOME\"), \".zoekt\")"),
+        )
+        .arg(Arg::from_usage(
+            "--cpu_profile 'Write cpu profile to `file`",
+        ))
+        .arg(
+            Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'")
+                .default_value("time.Second"),
+        )
+        .arg(Arg::from_usage(
+            "-v, --verbose 'Print some background data'",
+        ))
+        .arg(Arg::from_usage(
+            "-r, --repo 'Print the repo before the file name'",
+        ))
+        .arg(Arg::from_usage(
+            "-l, --list 'Print matching filenames only'",
+        ))
+        .arg(Arg::from_usage(
+            "<QUERY> 'for example\n zoekt \'byte file:java -file:test\''",
+        ))
+        .get_matches();
 	let _cpu_profile = matches.is_present("cpu_profile");
 	let _profile_time = if let Some(time) = matches.value_of("duration") {
 		Duration::from_secs(time.parse().unwrap())
