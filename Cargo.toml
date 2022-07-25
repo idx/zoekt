@@ -41,9 +41,9 @@ path = "src/lib.rs"
 #)
 
 [dependencies]
-clap = "2.33.3"
+clap = "3.2.5"
 env_logger = "0.9.0"
 log = "0.4.14"
-strum = { version = "0.23.0", features = ["derive"] }
-phf = { version = "0.9", features = ["macros"] }
+strum = { version = "0.24.1", features = ["derive"] }
+phf = { version = "0.11.0", features = ["macros"] }
 dirs = "4.0.0"

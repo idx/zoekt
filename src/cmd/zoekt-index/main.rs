@@ -28,20 +28,29 @@ import (
     "github.com/google/zoekt/build"
     "github.com/google/zoekt/cmd"
     "go.uber.org/automaxprocs/maxprocs"
-)
+)*/
 
-type fileInfo struct {
+/*type fileInfo struct {
     name string
     size int64
+}*/
+pub struct FileInfo {
+    pub name: String,
+    pub size: i64
 }
 
-type fileAggregator struct {
+/*type fileAggregator struct {
     ignoreDirs map[string]struct{}
     sizeMax    int64
     sink       chan fileInfo
+}*/
+pub struct FileAggregator {
+    //ignoreDirs map[string]struct{}
+    pub size_max: i64
+    //sink       chan fileInfo
 }
 
-func (a *fileAggregator) add(path string, info os.FileInfo, err error) error {
+/*func (a *fileAggregator) add(path string, info os.FileInfo, err error) error {
     if err != nil {
         return err
     }
