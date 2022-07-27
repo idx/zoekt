@@ -13,7 +13,8 @@
 // limitations under the License.
 
 //package main
-use clap::{App, Arg};
+use clap::Parser;
+use std::path::PathBuf;
 
 /*import (
     "flag"
@@ -68,24 +69,25 @@ pub struct FileAggregator {
     return nil
 }*/
 
+#[derive(Parser)]
+//#[clap(author, version, about, long_about = None)]
+#[clap(about, long_about = None)]
+struct Cli {
+    /// write cpu profile to file
+    #[clap(long = "cpu_profile", value_name = "string")]
+    cpu_profile: Option<PathBuf>,
+
+    /// comma separated list of directories to ignore.
+    #[clap(long = "ignore_dirs", value_name = "string")]
+    ignore_dirs: Option<PathBuf>,
+}
+
 //func main() {
 fn main() {
     /*	cpuProfile := flag.String("cpu_profile", "", "write cpu profile to file")
     ignoreDirs := flag.String("ignore_dirs", ".git,.hg,.svn", "comma separated list of directories to ignore.")
     flag.Parse()*/
-    let matches = App::new("zoekt-index")
-        .version("0.1.0")
-        .arg(Arg::from_usage(
-            "--cpu_profile 'Write cpu profile to `file`",
-        ))
-        .arg(
-            Arg::from_usage(
-                "--ignore_dir [ignore_dir] 'comma separated list of directories to ignore.",
-            )
-            .default_value(".git,.hg,.svn"),
-        )
-        .get_matches();
-    let _cpu_profile = matches.is_present("cpu_profile");
+    let cli = Cli::parse();
 
     // Tune GOMAXPROCS to match Linux container CPU quota.
     /*maxprocs.Set()
@@ -98,9 +100,12 @@ fn main() {
         }
         pprof.StartCPUProfile(f)
         defer pprof.StopCPUProfile()
+    }*/
+    if let Some(cpu_profile) = cli.cpu_profile.as_deref() {
+        println!("Value for cpu_profile: {}", cpu_profile.display());
     }
 
-    ignoreDirMap := map[string]struct{}{}
+    /*ignoreDirMap := map[string]struct{}{}
     if *ignoreDirs != "" {
         dirs := strings.Split(*ignoreDirs, ",")
         for _, d := range dirs {
