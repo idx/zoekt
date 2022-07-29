@@ -73,7 +73,11 @@ pub struct FileAggregator {
 //#[clap(author, version, about, long_about = None)]
 #[clap(about, long_about = None)]
 struct Cli {
-    /// write cpu profile to file
+    /// args
+    #[clap(short, long)]
+    args: Vec<String>,
+
+     /// write cpu profile to file
     #[clap(long = "cpu_profile", value_name = "string")]
     cpu_profile: Option<PathBuf>,
 
@@ -121,10 +125,19 @@ fn main() {
             log.Fatal(err)
         }
     }*/
+    match index_arg("arg") {
+        Ok(_v) => {
+            println!("Ok")
+        },
+        Err(_e) => {
+            println!("Err")
+        },
+    }
 }
 
-/*func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
-    dir, err := filepath.Abs(filepath.Clean(arg))
+//func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
+fn index_arg(_arg: &str)  -> Result<String, String> {
+    /*dir, err := filepath.Abs(filepath.Clean(arg))
     if err != nil {
         return err
     }
@@ -167,5 +180,6 @@ fn main() {
         builder.AddFile(displayName, content)
     }
 
-    return builder.Finish()
-}*/
+    return builder.Finish()*/
+	Ok(String::from("builder.Finish()"))
+}
