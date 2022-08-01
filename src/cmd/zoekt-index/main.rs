@@ -15,6 +15,8 @@
 //package main
 use clap::Parser;
 use std::path::PathBuf;
+use crossbeam_channel as channel;
+
 
 /*import (
     "flag"
@@ -48,7 +50,8 @@ pub struct FileInfo {
 }*/
 pub struct FileAggregator {
     //ignoreDirs map[string]struct{}
-    pub size_max: i64, //sink       chan fileInfo
+    pub size_max: i64, 
+    //sink       chan fileInfo
 }
 
 /*func (a *fileAggregator) add(path string, info os.FileInfo, err error) error {
@@ -147,10 +150,12 @@ fn index_arg(_arg: &str)  -> Result<String, String> {
     if err != nil {
         return err
     }
-    defer builder.Finish()
+    defer builder.Finish()*/
 
-    comm := make(chan fileInfo, 100)
-    agg := fileAggregator{
+    //comm := make(chan fileInfo, 100)
+    let (comm, _r) = channel::bounded(100);
+    comm.send(1).unwrap();
+    /*agg := fileAggregator{
         ignoreDirs: ignore,
         sink:       comm,
         sizeMax:    int64(opts.SizeMax),
