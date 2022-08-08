@@ -16,7 +16,8 @@
 use clap::Parser;
 use std::path::PathBuf;
 use crossbeam_channel as channel;
-
+//use itertools::Itertools;
+use std::collections::HashMap;
 
 /*import (
     "flag"
@@ -86,7 +87,7 @@ struct Cli {
 
     /// comma separated list of directories to ignore.
     #[clap(long = "ignore_dirs", value_name = "string")]
-    ignore_dirs: Option<PathBuf>,
+    ignore_dirs: Option<String>,
 }
 
 //func main() {
@@ -128,6 +129,20 @@ fn main() {
             log.Fatal(err)
         }
     }*/
+    let mut ignore_dir_map = HashMap::new();
+    if let Some(ignore_dirs) = cli.ignore_dirs.as_deref() {
+        let dirs: Vec<&str> = ignore_dirs.split(',').collect();
+        for mut d in dirs {
+            d = d.trim();
+            if d != "" {
+                ignore_dir_map.insert(d, String::from("struct"));
+            }
+        }
+    }
+    for (key, val) in ignore_dir_map.iter() {
+        println!("key: {key} val: {val}");
+    }
+
     match index_arg("arg") {
         Ok(_v) => {
             println!("Ok")
