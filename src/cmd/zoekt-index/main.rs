@@ -18,6 +18,8 @@ use std::path::PathBuf;
 use crossbeam_channel as channel;
 //use itertools::Itertools;
 use std::collections::HashMap;
+use std::process;
+use std::error;
 
 /*import (
     "flag"
@@ -78,7 +80,7 @@ pub struct FileAggregator {
 #[clap(about, long_about = None)]
 struct Cli {
     /// args
-    #[clap(short, long)]
+    #[clap( value_name = "FILE")]
     args: Vec<String>,
 
      /// write cpu profile to file
@@ -143,18 +145,16 @@ fn main() {
         println!("key: {key} val: {val}");
     }
 
-    match index_arg("arg") {
-        Ok(_v) => {
-            println!("Ok")
-        },
-        Err(_e) => {
-            println!("Err")
-        },
-    }
+    for arg in cli.args {
+        if let Err(_err) = index_arg(&arg) {
+            process::exit(1)
+        }
+    }    
 }
 
 //func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
-fn index_arg(_arg: &str)  -> Result<String, String> {
+fn index_arg(arg: &str)  -> Result<(), Box<dyn error::Error>> {
+    println!("{}",arg);
     /*dir, err := filepath.Abs(filepath.Clean(arg))
     if err != nil {
         return err
@@ -201,5 +201,5 @@ fn index_arg(_arg: &str)  -> Result<String, String> {
     }
 
     return builder.Finish()*/
-	Ok(String::from("builder.Finish()"))
+	Ok(())
 }
