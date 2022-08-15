@@ -14,12 +14,13 @@
 
 //package main
 use clap::Parser;
-use std::path::PathBuf;
 use crossbeam_channel as channel;
+use std::fs;
+use std::path::PathBuf;
 //use itertools::Itertools;
 use std::collections::HashMap;
-use std::process;
 use std::error;
+use std::process;
 
 /*import (
     "flag"
@@ -53,7 +54,7 @@ pub struct FileInfo {
 }*/
 pub struct FileAggregator {
     //ignoreDirs map[string]struct{}
-    pub size_max: i64, 
+    pub size_max: i64,
     //sink       chan fileInfo
 }
 
@@ -80,10 +81,10 @@ pub struct FileAggregator {
 #[clap(about, long_about = None)]
 struct Cli {
     /// args
-    #[clap( value_name = "FILE")]
+    #[clap(value_name = "FILE")]
     args: Vec<String>,
 
-     /// write cpu profile to file
+    /// write cpu profile to file
     #[clap(long = "cpu_profile", value_name = "string")]
     cpu_profile: Option<PathBuf>,
 
@@ -149,12 +150,11 @@ fn main() {
         if let Err(_err) = index_arg(&arg) {
             process::exit(1)
         }
-    }    
+    }
 }
 
 //func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
-fn index_arg(arg: &str)  -> Result<(), Box<dyn error::Error>> {
-    println!("{}",arg);
+fn index_arg(arg: &str) -> Result<(), Box<dyn error::Error>> {
     /*dir, err := filepath.Abs(filepath.Clean(arg))
     if err != nil {
         return err
@@ -166,6 +166,8 @@ fn index_arg(arg: &str)  -> Result<(), Box<dyn error::Error>> {
         return err
     }
     defer builder.Finish()*/
+    let dir = fs::canonicalize(PathBuf::from(arg));
+    println!("{:?}", dir);
 
     //comm := make(chan fileInfo, 100)
     let (comm, _r) = channel::bounded(100);
@@ -201,5 +203,5 @@ fn index_arg(arg: &str)  -> Result<(), Box<dyn error::Error>> {
     }
 
     return builder.Finish()*/
-	Ok(())
+    Ok(())
 }
