@@ -14,9 +14,10 @@
 
 // package build implements a more convenient interface for building
 // zoekt indices.
-/*package build
+//package build
+use std::error;
 
-import (
+/*import (
 	"crypto/sha1"
 	"flag"
 	"fmt"
@@ -129,14 +130,16 @@ func (o *Options) Flags(fs *flag.FlagSet) {
 	fs.StringVar(&o.IndexDir, "index", x.IndexDir, "directory for search indices")
 	fs.BoolVar(&o.CTagsMustSucceed, "require_ctags", x.CTagsMustSucceed, "If set, ctags calls must succeed.")
 	fs.Var(largeFilesFlag{o}, "large_file", "A glob pattern where matching files are to be index regardless of their size. You can add multiple patterns by setting this more than once.")
-}
+}*/
 
 // Builder manages (parallel) creation of uniformly sized shards. The
 // builder buffers up documents until it collects enough documents and
 // then builds a shard and writes.
-type Builder struct {
-	opts     Options
-	throttle chan int
+//type Builder struct {
+struct Builder {
+//	opts     Options
+	opts: String,
+/*	throttle chan int
 
 	nextShardNum int
 	todo         []*zoekt.Document
@@ -151,10 +154,10 @@ type Builder struct {
 
 	// temp name => final name for finished shards. We only rename
 	// them once all shards succeed to avoid Frankstein corpuses.
-	finishedShards map[string]string
+	finishedShards map[string]string*/
 }
 
-type finishedShard struct {
+/*type finishedShard struct {
 	temp, final string
 }
 
@@ -253,11 +256,12 @@ func (o *Options) IgnoreSizeMax(name string) bool {
 	}
 
 	return false
-}
+}*/
 
 // NewBuilder creates a new Builder instance.
-func NewBuilder(opts Options) (*Builder, error) {
-	opts.SetDefaults()
+//func NewBuilder(opts Options) (*Builder, error) {
+pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
+/*	opts.SetDefaults()
 	if opts.RepositoryDescription.Name == "" {
 		return nil, fmt.Errorf("builder: must set Name")
 	}
@@ -266,9 +270,13 @@ func NewBuilder(opts Options) (*Builder, error) {
 		opts:           opts,
 		throttle:       make(chan int, opts.Parallelism),
 		finishedShards: map[string]string{},
-	}
+	}*/
+	let b = Builder {
+		opts: String::from("opts"),
+	};
+	println!("{}", b.opts);
 
-	if b.opts.CTags == "" && b.opts.CTagsMustSucceed {
+	/*if b.opts.CTags == "" && b.opts.CTagsMustSucceed {
 		return nil, fmt.Errorf("ctags binary not found, but CTagsMustSucceed set")
 	}
 
@@ -284,11 +292,12 @@ func NewBuilder(opts Options) (*Builder, error) {
 		return nil, err
 	}
 
-	return b, nil
+	return b, nil*/
+	Ok(())
 }
 
 // AddFile is a convenience wrapper for the Add method
-func (b *Builder) AddFile(name string, content []byte) error {
+/*func (b *Builder) AddFile(name string, content []byte) error {
 	return b.Add(zoekt.Document{Name: name, Content: content})
 }
 

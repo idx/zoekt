@@ -16,6 +16,7 @@
 use clap::Parser;
 use crossbeam_channel as channel;
 use std::fs;
+//use std::fs::File;
 use std::path::PathBuf;
 //use itertools::Itertools;
 use std::collections::HashMap;
@@ -52,9 +53,9 @@ pub struct FileInfo {
     sizeMax    int64
     sink       chan fileInfo
 }*/
-pub struct FileAggregator {
+struct FileAggregator {
     //ignoreDirs map[string]struct{}
-    pub size_max: i64,
+    size_max: i64,
     //sink       chan fileInfo
 }
 
@@ -160,14 +161,16 @@ fn index_arg(arg: &str) -> Result<(), Box<dyn error::Error>> {
         return err
     }
 
-    opts.RepositoryDescription.Name = filepath.Base(dir)
-    builder, err := build.NewBuilder(opts)
+    opts.RepositoryDescription.Name = filepath.Base(dir)*/
+    let dir = fs::canonicalize(PathBuf::from(arg));
+    println!("{:?}", dir);
+
+    /*builder, err := build.NewBuilder(opts)
     if err != nil {
         return err
     }
     defer builder.Finish()*/
-    let dir = fs::canonicalize(PathBuf::from(arg));
-    println!("{:?}", dir);
+    let _builder = zoekt::build::builder::new_builder();
 
     //comm := make(chan fileInfo, 100)
     let (comm, _r) = channel::bounded(100);
@@ -203,5 +206,10 @@ fn index_arg(arg: &str) -> Result<(), Box<dyn error::Error>> {
     }
 
     return builder.Finish()*/
+    let agg = FileAggregator {
+        size_max: 0
+    };
+    println!("{}", agg.size_max);
+    
     Ok(())
 }
