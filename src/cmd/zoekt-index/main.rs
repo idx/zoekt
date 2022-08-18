@@ -15,6 +15,8 @@
 //package main
 use clap::Parser;
 use crossbeam_channel as channel;
+use zoekt::build::builder::Options;
+//use zoekt::build::builder::Options;
 use std::fs;
 //use std::fs::File;
 use std::path::PathBuf;
@@ -113,6 +115,7 @@ fn main() {
         pprof.StartCPUProfile(f)
         defer pprof.StopCPUProfile()
     }*/
+    let _opts = Options{ index_dir: String::from("index_dir") };
     if let Some(cpu_profile) = cli.cpu_profile.as_deref() {
         println!("Value for cpu_profile: {}", cpu_profile.display());
     }
@@ -165,12 +168,15 @@ fn index_arg(arg: &str) -> Result<(), Box<dyn error::Error>> {
     let dir = fs::canonicalize(PathBuf::from(arg));
     println!("{:?}", dir);
 
+    let _opts = zoekt::build::builder::set_defaults();
+
     /*builder, err := build.NewBuilder(opts)
     if err != nil {
         return err
     }
     defer builder.Finish()*/
     let _builder = zoekt::build::builder::new_builder();
+    //let _builder = zoekt::build::builder::new_builder(opts);
 
     //comm := make(chan fileInfo, 100)
     let (comm, _r) = channel::bounded(100);
