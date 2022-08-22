@@ -14,7 +14,7 @@
 
 // This binary fetches all repos of a Gitiles host.  It does double
 // duty for other "simple" web hosts
-package main
+/*package main
 
 import (
 	"flag"
@@ -33,10 +33,11 @@ type crawlTarget struct {
 	webURLType string
 }
 
-type hostCrawler func(*url.URL, func(string) bool) (map[string]*crawlTarget, error)
+type hostCrawler func(*url.URL, func(string) bool) (map[string]*crawlTarget, error)*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	namePattern := flag.String("name", "", "only clone repos whose name matches the regexp.")
 	excludePattern := flag.String("exclude", "", "don't mirror repos whose names match this regexp.")
 	hostType := flag.String("type", "gitiles", "which webserver to crawl. Choices: gitiles, cgit")
@@ -98,5 +99,5 @@ func main() {
 		if dest != "" {
 			fmt.Println(dest)
 		}
-	}
+	}*/
 }

@@ -13,7 +13,7 @@
 // This binary fetches all repos of a project, and of a specific type, in case
 // these are specified, and clones them. By default it fetches and clones all
 // existing repos.
-package main
+/*package main
 
 import (
 	"context"
@@ -32,10 +32,11 @@ import (
 	"github.com/gfleury/go-bitbucket-v1"
 
 	"github.com/google/zoekt/gitindex"
-)
+)*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	serverUrl := flag.String("url", "", "BitBucket Server url")
 	disableTLS := flag.Bool("disable-tls", false, "disables TLS verification")
 	credentialsFile := flag.String("credentials", ".bitbucket-credentials", "file holding BitBucket Server credentials")
@@ -144,10 +145,10 @@ func main() {
 		if err := deleteStaleRepos(*dest, filter, repos); err != nil {
 			log.Fatalf("deleteStaleRepos: %v", err)
 		}
-	}
+	}*/
 }
 
-func deleteStaleRepos(destDir string, filter *gitindex.Filter, repos []bitbucketv1.Repository) error {
+/*func deleteStaleRepos(destDir string, filter *gitindex.Filter, repos []bitbucketv1.Repository) error {
 	var baseURL string
 	if len(repos) > 0 {
 		baseURL = repos[0].Links.Self[0].Href
@@ -267,4 +268,4 @@ func cloneRepos(destDir string, host string, repos []bitbucketv1.Repository, pas
 	}
 
 	return nil
-}
+}*/

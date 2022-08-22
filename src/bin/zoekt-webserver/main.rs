@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+/*package main
 
 import (
 	"context"
@@ -65,9 +65,9 @@ func divertLogs(dir string, interval time.Duration) {
 
 const templateExtension = ".html.tpl"
 
-func loadTemplates(tpl *template.Template, dir string) error {
-	fs, err := filepath.Glob(dir + "/*" + templateExtension)
-	if err != nil {
+func loadTemplates(tpl *template.Template, dir string) error {*/
+	//fs, err := filepath.Glob(dir + "/*" + templateExtension)
+	/*if err != nil {
 		log.Fatalf("Glob: %v", err)
 	}
 
@@ -99,10 +99,11 @@ func writeTemplates(dir string) error {
 		}
 	}
 	return nil
-}
+}*/
 
-func main() {
-	logDir := flag.String("log_dir", "", "log to this directory rather than stderr.")
+//func main() {
+fn main() {
+	/*logDir := flag.String("log_dir", "", "log to this directory rather than stderr.")
 	logRefresh := flag.Duration("log_refresh", 24*time.Hour, "if using --log_dir, start writing a new file this often.")
 
 	listen := flag.String("listen", ":6070", "listen on this address.")
@@ -215,10 +216,10 @@ func main() {
 		log.Printf("serving HTTP on %s", *listen)
 		err = http.ListenAndServe(*listen, handler)
 	}
-	log.Printf("ListenAndServe: %v", err)
+	log.Printf("ListenAndServe: %v", err)*/
 }
 
-func watchdogOnce(ctx context.Context, client *http.Client, addr string) error {
+/*func watchdogOnce(ctx context.Context, client *http.Client, addr string) error {
 	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(5*time.Second))
 	defer cancel()
 
@@ -261,4 +262,4 @@ func watchdog(dt time.Duration, addr string) {
 			log.Panicf("watchdog: %v", err)
 		}
 	}
-}
+}*/

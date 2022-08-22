@@ -22,7 +22,7 @@
 //   login oauth
 //   password <personal access token>
 //
-package main
+/*package main
 
 import (
 	"flag"
@@ -37,10 +37,11 @@ import (
 
 	"github.com/google/zoekt/gitindex"
 	gitlab "github.com/xanzy/go-gitlab"
-)
+)*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	gitlabURL := flag.String("url", "https://gitlab.com/api/v4/", "Gitlab URL. If not set https://gitlab.com/api/v4/ will be used")
 	token := flag.String("token",
 		filepath.Join(os.Getenv("HOME"), ".gitlab-token"),
@@ -134,10 +135,10 @@ func main() {
 		if err := deleteStaleProjects(*dest, filter, gitlabProjects); err != nil {
 			log.Fatalf("deleteStaleProjects: %v", err)
 		}
-	}
+	}*/
 }
 
-func deleteStaleProjects(destDir string, filter *gitindex.Filter, projects []*gitlab.Project) error {
+/*func deleteStaleProjects(destDir string, filter *gitindex.Filter, projects []*gitlab.Project) error {
 	u, err := url.Parse(projects[0].HTTPURLToRepo)
 	u.Path = ""
 	if err != nil {
@@ -186,4 +187,4 @@ func fetchProjects(destDir, token string, projects []*gitlab.Project) {
 			fmt.Println(dest)
 		}
 	}
-}
+}*/

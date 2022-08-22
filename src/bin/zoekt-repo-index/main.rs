@@ -26,7 +26,7 @@ git repositories should already have been downloaded to the
       -shard_limit 50000000 \
        master:default_unrestricted.xml
 */
-package main
+/*package main
 
 import (
 	"crypto/sha1"
@@ -117,10 +117,11 @@ func parseBranches(manifestRepoURL, revPrefix string, cache *gitindex.RepoCache,
 		}
 	}
 	return branches, nil
-}
+}*/
 
-func main() {
-	sizeMax := flag.Int("file_limit", 128<<10, "maximum file size")
+//func main() {
+fn main() {
+	/*sizeMax := flag.Int("file_limit", 128<<10, "maximum file size")
 	shardLimit := flag.Int("shard_limit", 100<<20, "maximum corpus size for a shard")
 	parallelism := flag.Int("parallelism", 1, "maximum number of parallel indexing processes")
 
@@ -283,11 +284,11 @@ func main() {
 	}
 	if err := builder.Finish(); err != nil {
 		log.Fatalf("Finish: %v", err)
-	}
+	}*/
 }
 
 // getManifest parses the manifest XML at the given branch/path inside a Git repository.
-func getManifest(repo *git.Repository, branch, path string) (*manifest.Manifest, error) {
+/*func getManifest(repo *git.Repository, branch, path string) (*manifest.Manifest, error) {
 	ref, err := repo.Reference(plumbing.ReferenceName("refs/heads/"+branch), true)
 	if err != nil {
 		return nil, err
@@ -378,4 +379,4 @@ func iterateManifest(mf *manifest.Manifest,
 	}
 
 	return allFiles, allVersions, nil
-}
+}*/

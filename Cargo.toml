@@ -4,14 +4,6 @@ version = "0.1.0"
 edition = "2021"
 #module github.com/google/zoekt
 
-[[bin]]
-name = "zoekt"
-path = "src/cmd/zoekt/main.rs"
-
-[[bin]]
-name = "zoekt-index"
-path = "src/cmd/zoekt-index/main.rs"
-
 [lib]
 name = "zoekt"
 path = "src/lib.rs"

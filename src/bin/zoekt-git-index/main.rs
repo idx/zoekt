@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+/*package main
 
 import (
 	"flag"
@@ -24,10 +24,11 @@ import (
 	"github.com/google/zoekt/cmd"
 	"github.com/google/zoekt/gitindex"
 	"go.uber.org/automaxprocs/maxprocs"
-)
+)*/
 
-func main() {
-	allowMissing := flag.Bool("allow_missing_branches", false, "allow missing branches.")
+//func main() {
+fn main() {
+	/*allowMissing := flag.Bool("allow_missing_branches", false, "allow missing branches.")
 	submodules := flag.Bool("submodules", true, "if set to false, do not recurse into submodules")
 	branchesStr := flag.String("branches", "HEAD", "git branches to index.")
 	branchPrefix := flag.String("prefix", "refs/heads/", "prefix for branch names")
@@ -92,5 +93,5 @@ func main() {
 			exitStatus = 1
 		}
 	}
-	os.Exit(exitStatus)
+	os.Exit(exitStatus)*/
 }

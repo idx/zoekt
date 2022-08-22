@@ -17,7 +17,7 @@
 // * periodically fetching new data.
 // * periodically reindexing all git repos.
 
-package main
+/*package main
 
 import (
 	"bytes"
@@ -232,10 +232,10 @@ func deleteIfOrphan(repoDir string, fn string) error {
 }
 
 func deleteOrphanIndexes(indexDir, repoDir string, watchInterval time.Duration) {
-	t := time.NewTicker(watchInterval)
+	t := time.NewTicker(watchInterval)*/
 
-	expr := indexDir + "/*"
-	for {
+	//expr := indexDir + "/*"
+	/*for {
 		fs, err := filepath.Glob(expr)
 		if err != nil {
 			log.Printf("Glob(%q): %v", expr, err)
@@ -248,10 +248,11 @@ func deleteOrphanIndexes(indexDir, repoDir string, watchInterval time.Duration) 
 		}
 		<-t.C
 	}
-}
+}*/
 
-func main() {
-	var opts Options
+//func main() {
+fn main() {
+	/*var opts Options
 	opts.defineFlags()
 	dataDir := flag.String("data_dir",
 		filepath.Join(os.Getenv("HOME"), "zoekt-serving"), "directory holding all data.")
@@ -294,5 +295,5 @@ func main() {
 	go deleteLogsLoop(logDir, opts.maxLogAge)
 	go deleteOrphanIndexes(*indexDir, repoDir, opts.fetchInterval)
 	go indexPendingRepos(*indexDir, repoDir, &opts, pendingRepos)
-	periodicFetch(repoDir, *indexDir, &opts, pendingRepos)
+	periodicFetch(repoDir, *indexDir, &opts, pendingRepos)*/
 }

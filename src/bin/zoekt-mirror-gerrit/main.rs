@@ -14,7 +14,7 @@
 
 // This binary fetches all repos of a Gerrit host.
 
-package main
+/*package main
 
 import (
 	"bytes"
@@ -70,10 +70,11 @@ func newLoggingClient() *http.Client {
 			RoundTripper: http.DefaultTransport,
 		},
 	}
-}
+}*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	namePattern := flag.String("name", "", "only clone repos whose name matches the regexp.")
 	excludePattern := flag.String("exclude", "", "don't mirror repos whose names match this regexp.")
 	httpCrendentialsPath := flag.String("http-credentials", "", "path to a file containing http credentials stored like 'user:password'.")
@@ -178,5 +179,5 @@ func main() {
 		} else {
 			fmt.Println(dest)
 		}
-	}
+	}*/
 }

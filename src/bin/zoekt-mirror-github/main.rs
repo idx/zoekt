@@ -16,7 +16,7 @@
 // them.  It is strongly recommended to get a personal API token from
 // https://github.com/settings/tokens, save the token in a file, and
 // point the --token option to it.
-package main
+/*package main
 
 import (
 	"context"
@@ -50,10 +50,11 @@ func (f *topicsFlag) Set(value string) error {
 type reposFilters struct {
 	topics        []string
 	excludeTopics []string
-}
+}*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	githubURL := flag.String("url", "", "GitHub Enterprise url. If not set github.com will be used as the host.")
 	org := flag.String("org", "", "organization to mirror")
 	user := flag.String("user", "", "user to mirror")
@@ -180,10 +181,10 @@ func main() {
 		if err := deleteStaleRepos(*dest, filter, repos, *org+*user); err != nil {
 			log.Fatalf("deleteStaleRepos: %v", err)
 		}
-	}
+	}*/
 }
 
-func deleteStaleRepos(destDir string, filter *gitindex.Filter, repos []*github.Repository, user string) error {
+/*func deleteStaleRepos(destDir string, filter *gitindex.Filter, repos []*github.Repository, user string) error {
 	var baseURL string
 	if len(repos) > 0 {
 		baseURL = *repos[0].HTMLURL
@@ -312,4 +313,4 @@ func cloneRepos(destDir string, repos []*github.Repository) error {
 	}
 
 	return nil
-}
+}*/

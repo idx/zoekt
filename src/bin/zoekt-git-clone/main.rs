@@ -16,7 +16,7 @@
 // them.  It is strongly recommended to get a personal API token from
 // https://github.com/settings/tokens, save the token in a file, and
 // point the --token option to it.
-package main
+/*package main
 
 import (
 	"flag"
@@ -28,10 +28,11 @@ import (
 	"strings"
 
 	"github.com/google/zoekt/gitindex"
-)
+)*/
 
-func main() {
-	dest := flag.String("dest", "", "destination directory")
+//func main() {
+fn main() {
+	/*dest := flag.String("dest", "", "destination directory")
 	flag.Parse()
 
 	if *dest == "" {
@@ -63,5 +64,5 @@ func main() {
 	}
 	if destRepo != "" {
 		fmt.Println(destRepo)
-	}
+	}*/
 }

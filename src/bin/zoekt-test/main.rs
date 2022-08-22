@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // zoekt-test compares the search engine results with raw substring search
-package main
+/*package main
 
 import (
 	"bufio"
@@ -163,10 +163,11 @@ func compare(dir, patfile string, caseSensitive bool) error {
 		}
 	}
 	return nil
-}
+}*/
 
-func main() {
-	repo := flag.String("repo", "", "repository to search")
+//func main() {
+fn main() {
+	/*repo := flag.String("repo", "", "repository to search")
 	caseSensitive := flag.Bool("case", false, "case sensitive")
 	flag.Parse()
 
@@ -179,10 +180,10 @@ func main() {
 
 	if err := compare(*repo, input, *caseSensitive); err != nil {
 		log.Fatal(err)
-	}
+	}*/
 }
 
-func toLower(in []byte) []byte {
+/*func toLower(in []byte) []byte {
 	out := make([]byte, len(in))
 	for i, c := range in {
 		if c >= 'A' && c <= 'Z' {
@@ -191,4 +192,4 @@ func toLower(in []byte) []byte {
 		out[i] = c
 	}
 	return out
-}
+}*/

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // zoekt-hg-index provides bare-bones Mercurial indexing
-package main
+/*package main
 
 import (
 	"flag"
@@ -27,10 +27,11 @@ import (
 
 	"go.uber.org/automaxprocs/maxprocs"
 	"humungus.tedunangst.com/r/gerc"
-)
+)*/
 
-func main() {
-	revisionStr := flag.String("revision", "", "hg revision to index")
+//func main() {
+fn main() {
+	/*revisionStr := flag.String("revision", "", "hg revision to index")
 	flag.Parse()
 	maxprocs.Set()
 	opts := cmd.OptionsFromFlags()
@@ -46,10 +47,10 @@ func main() {
 
 	if err := indexHg(dir, *revisionStr, opts); err != nil {
 		log.Fatal(err)
-	}
+	}*/
 }
 
-func indexHg(dir, rev string, opts *build.Options) error {
+/*func indexHg(dir, rev string, opts *build.Options) error {
 	r, err := gerc.Open(dir)
 	if err != nil {
 		log.Fatal(err)
@@ -86,4 +87,4 @@ func indexHg(dir, rev string, opts *build.Options) error {
 		}
 	}
 	return builder.Finish()
-}
+}*/
