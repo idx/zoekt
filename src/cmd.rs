@@ -22,9 +22,10 @@ import (
 
 	"github.com/google/zoekt"
 	"github.com/google/zoekt/build"
-)
+)*/
+use crate::build;
 
-var (
+/*var (
 	version = flag.Bool("version", false, "Print version number")
 	opts    = &build.Options{}
 )
@@ -34,13 +35,16 @@ func init() {
 }*/
 
 //func OptionsFromFlags() *build.Options {
-pub fn options_from_flags() {
+pub fn options_from_flags() -> build::builder::Options {
 	/*if *version {
 		name := filepath.Base(os.Args[0])
 		fmt.Printf("%s version %q\n", name, zoekt.Version)
-		os.Exit(0)
+		os.Exit(0)[]
 	}
 
 	opts.SetDefaults()
 	return opts*/
+	build::builder::Options {
+		index_dir: String::from("index_dir"),
+    }
 }
