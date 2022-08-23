@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+/*package cmd
 
 import (
 	"flag"
@@ -31,15 +31,16 @@ var (
 
 func init() {
 	opts.Flags(flag.CommandLine)
-}
+}*/
 
-func OptionsFromFlags() *build.Options {
-	if *version {
+//func OptionsFromFlags() *build.Options {
+pub fn options_from_flags() {
+	/*if *version {
 		name := filepath.Base(os.Args[0])
 		fmt.Printf("%s version %q\n", name, zoekt.Version)
 		os.Exit(0)
 	}
 
 	opts.SetDefaults()
-	return opts
+	return opts*/
 }

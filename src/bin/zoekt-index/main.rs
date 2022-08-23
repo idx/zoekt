@@ -15,8 +15,6 @@
 //package main
 use clap::Parser;
 use crossbeam_channel as channel;
-use zoekt::build::builder::Options;
-//use zoekt::build::builder::Options;
 use std::fs;
 //use std::fs::File;
 use std::path::PathBuf;
@@ -24,6 +22,7 @@ use std::path::PathBuf;
 use std::collections::HashMap;
 use std::error;
 use std::process;
+use zoekt::cmd;
 
 /*import (
     "flag"
@@ -115,7 +114,7 @@ fn main() {
         pprof.StartCPUProfile(f)
         defer pprof.StopCPUProfile()
     }*/
-    let _opts = Options{ index_dir: String::from("index_dir") };
+    let _opts = cmd::options_from_flags();
     if let Some(cpu_profile) = cli.cpu_profile.as_deref() {
         println!("Value for cpu_profile: {}", cpu_profile.display());
     }

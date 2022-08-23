@@ -29,3 +29,4 @@ pub mod gitindex;
 pub mod query;
 pub mod shards;
 pub mod web;
+pub mod cmd;
