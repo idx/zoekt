@@ -13,16 +13,17 @@
 // limitations under the License.
 
 //package main
-//use zoekt::query;
+use zoekt::query;
 
-use clap::Parser;
+//use clap::Parser;
+use clap::{App, Arg};
 use env_logger;
-use log::error;
+use log::{error, info};
 use std::env;
 use std::path::Path;
 use std::path::PathBuf;
-//use std::process;
-//use std::time::Duration;
+use std::process;
+use std::time::Duration;
 
 /*import (
     "context"
@@ -108,102 +109,95 @@ fn load_shard(r#fn: &str, verbose: bool) -> Result<String, std::num::ParseIntErr
     Ok(String::from("zoekt.Searcher"))
 }
 
-#[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
-struct Cli {
-    /// Search in a specific shardSearch in a specific shard
-    #[clap(long, value_name = "string")]
-    shard: Option<String>,
-
-    // index := flag.String("index_dir", filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
-    /// search for index files in directory (default "~/.zoekt")
-    #[clap(long, value_name = "file")]
-    index_dir: Option<PathBuf>,
-    
-    // 	profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")
-    /// write cpu profile to file
-    #[clap(long, value_name = "file")]
-    cpu_profile: Option<String>,
-
-    /// run this long to gather stats. (default 1s)
-    #[clap(long, value_name = "duration")]
-    profile_time: Option<String>,
-
-    /// Print some background data
-    #[clap(short, long)]
-    verbose: bool,
-
-    /// Print the repo before the file name
-    #[clap(short = 'r')]
-    repo: bool,
-
-    /// Print matching filenames only
-    #[clap(short)]
-    list: bool,
-
-    /// for example
-    /// 
-    /// zoekt 'byte file:java -file:test'
-    #[clap()]
-    query: String,
-    
-}
-
 fn main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
-    let cli = Cli::parse();
 
-    /*let profile_time = if let Some(time) = matches.value_of("duration") {
+    let matches = App::new("zoekt")
+        .version("0.1.0")
+        .arg(Arg::from_usage(
+            "-s, --shard [shard] 'Search in a specific shard'",
+        ))
+        .arg(
+            Arg::from_usage("--index_dir [index_dir] 'search for index files in `directory`")
+                .default_value(&(dirs::home_dir().unwrap().display().to_string() + "/.zoekt")),
+        )
+        .arg(Arg::from_usage(
+            "--cpu_profile 'Write cpu profile to `file`",
+        ))
+        .arg(
+            Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'")
+                .default_value("time.Second"),
+        )
+        .arg(Arg::from_usage(
+            "-v, --verbose 'Print some background data'",
+        ))
+        .arg(Arg::from_usage(
+            "-r, --repo 'Print the repo before the file name'",
+        ))
+        .arg(Arg::from_usage(
+            "-l, --list 'Print matching filenames only'",
+        ))
+        .arg(Arg::from_usage(
+            "<QUERY> 'for example\n zoekt \'byte file:java -file:test\''",
+        ))
+        .get_matches();
+
+    let _cpu_profile = matches.is_present("cpu_profile");
+    let _profile_time = if let Some(time) = matches.value_of("duration") {
         Duration::from_secs(time.parse().unwrap())
     } else {
         Duration::from_secs(0)
-    };*/
-    /*let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
+    };
+    let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
         PathBuf::from(index)
     } else {
         PathBuf::from(dirs::home_dir().unwrap().join(".zoekt"))
-    };*/
+    };
 
-    /*let pat: Option<&str> = matches.value_of("QUERY");*/
+    let verbose = matches.is_present("verbose");
+    let _with_repo = matches.is_present("repo");
+    let _list = matches.is_present("list");
+
+    let pat: Option<&str> = matches.value_of("QUERY");
 
     /*var searcher zoekt.Searcher
-	var err error
-	if *shard != "" {
-		searcher, err = loadShard(*shard, *verbose)
-	} else {
-		searcher, err = shards.NewDirectorySearcher(*index)
-	}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	query, err := query.Parse(pat)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if *verbose {
-		log.Println("query:", query)
-	}*/
-    let _searcher = zoekt::api::Searcher::default();
-    if let Some(shard) = cli.shard {
-        //searcher, err = loadShard(*shard, *verbose)*/
-		println!{"{}", shard}
-    	let _ret = load_shard("shard", cli.verbose);
-    /*Ok(_s) => {
-                println!("OK")[]
-            }
-            Err(e) => {
-                error!("{}", e);
-                process::exit(1)
-            }
-        }*/
+    var err error
+    if *shard != "" {
+        searcher, err = loadShard(*shard, *verbose)
     } else {
-        //searcher, err = shards.NewDirectorySearcher(*index)
+        searcher, err = shards.NewDirectorySearcher(*index)
     }
 
-    /*let _query = match query::parse::parse(pat) {
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    query, err := query.Parse(pat)
+    if err != nil {
+        log.Fatal(err)
+    }
+    if *verbose {
+        log.Println("query:", query)
+    }*/
+    /*let _searcher = zoekt::api::Searcher::default();
+    if let Some(shard) = cli.shard {
+        //searcher, err = loadShard(*shard, *verbose)*/
+    //println!{"{}", shard}
+    let _ret = load_shard("shard", verbose);
+    /*Ok(_s) => {
+            println!("OK")[]
+        }
+        Err(e) => {
+            error!("{}", e);
+            process::exit(1)
+        }
+    }*/
+    //} else {
+    //searcher, err = shards.NewDirectorySearcher(*index)
+    //}
+
+    let _query = match query::parse::parse(pat) {
         Ok(v) => {
             if verbose {
                 info!("query: {}", v);
@@ -213,42 +207,42 @@ fn main() {
             error!("{}", e);
             process::exit(1)
         }
-    };*/
-    if cli.verbose {
-        println!{"query:{}", cli.query};
-    }
+    };
+    //if cli.verbose {
+    //    println!{"query:{}", cli.query};
+    //}
 
     /*var sOpts zoekt.SearchOptions
-	sres, err := searcher.Search(context.Background(), query, &sOpts)
-	if *cpuProfile != "" {
-		// If profiling, do it another time so we measure with
-		// warm caches.
-		f, err := os.Create(*cpuProfile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		if *verbose {
-			log.Println("Displaying matches...")
-		}
+    sres, err := searcher.Search(context.Background(), query, &sOpts)
+    if *cpuProfile != "" {
+        // If profiling, do it another time so we measure with
+        // warm caches.
+        f, err := os.Create(*cpuProfile)
+        if err != nil {
+            log.Fatal(err)
+        }
+        defer f.Close()
+        if *verbose {
+            log.Println("Displaying matches...")
+        }
 
-		t := time.Now()
-		pprof.StartCPUProfile(f)
-		for {
-			sres, _ = searcher.Search(context.Background(), query, &sOpts)
-			if time.Since(t) > *profileTime {
-				break
-			}
-		}
-		pprof.StopCPUProfile()
-	}
+        t := time.Now()
+        pprof.StartCPUProfile(f)
+        for {
+            sres, _ = searcher.Search(context.Background(), query, &sOpts)
+            if time.Since(t) > *profileTime {
+                break
+            }
+        }
+        pprof.StopCPUProfile()
+    }
 
-	if err != nil {
-		log.Fatal(err)
-	}
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	displayMatches(sres.Files, pat, *withRepo, *list)
-	if *verbose {
-		log.Printf("stats: %#v", sres.Stats)
-	}*/
+    displayMatches(sres.Files, pat, *withRepo, *list)
+    if *verbose {
+        log.Printf("stats: %#v", sres.Stats)
+    }*/
 }
