@@ -41,3 +41,4 @@ phf = { version = "0.11.0", features = ["macros"] }
 dirs = "4.0.0"
 itertools = "0.10.3"
 crossbeam-channel = "0.5.6"
+pprof = { version = "0.10.1", features = ["flamegraph"] }

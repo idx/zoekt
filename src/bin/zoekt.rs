@@ -23,7 +23,10 @@ use std::env;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process;
+use std::fs::File;
 use std::time::Duration;
+//use std::thread;
+use pprof;
 
 /*import (
     "context"
@@ -123,7 +126,7 @@ fn main() {
                 .default_value(&(dirs::home_dir().unwrap().display().to_string() + "/.zoekt")),
         )
         .arg(Arg::from_usage(
-            "--cpu_profile 'Write cpu profile to `file`",
+            "--cpu_profile [file] 'Write cpu profile to file`",
         ))
         .arg(
             Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'")
@@ -143,7 +146,6 @@ fn main() {
         ))
         .get_matches();
 
-    let _cpu_profile = matches.is_present("cpu_profile");
     let _profile_time = if let Some(time) = matches.value_of("duration") {
         Duration::from_secs(time.parse().unwrap())
     } else {
@@ -208,9 +210,6 @@ fn main() {
             process::exit(1)
         }
     };
-    //if cli.verbose {
-    //    println!{"query:{}", cli.query};
-    //}
 
     /*var sOpts zoekt.SearchOptions
     sres, err := searcher.Search(context.Background(), query, &sOpts)
@@ -245,4 +244,23 @@ fn main() {
     if *verbose {
         log.Printf("stats: %#v", sres.Stats)
     }*/
+    if let Some(cpu_profile) = matches.value_of("cpu_profile") {
+        let guard = pprof::ProfilerGuardBuilder::default().frequency(1000).blocklist(&["libc", "libgcc", "pthread", "vdso"]).build().unwrap();
+
+        if let Ok(report) = guard.report().build() {
+            let file = match File::create(cpu_profile) {
+                Ok(file) => file,
+                Err(_) => {
+                    process::exit(1)
+                },
+           };
+            let mut options = pprof::flamegraph::Options::default();
+            options.image_width = Some(2500);
+            report.flamegraph_with_options(file, &mut options).unwrap();
+        }
+    }
+
+    if verbose {
+
+    }
 }
