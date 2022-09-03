@@ -20,10 +20,10 @@ use clap::{App, Arg};
 use env_logger;
 use log::{error, info};
 use std::env;
+use std::fs::File;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process;
-use std::fs::File;
 use std::time::Duration;
 //use std::thread;
 use pprof;
@@ -146,11 +146,11 @@ fn main() {
         ))
         .get_matches();
 
-    let _profile_time = if let Some(time) = matches.value_of("duration") {
+    /*let _profile_time = if let Some(time) = matches.value_of("duration") {
         Duration::from_secs(time.parse().unwrap())
     } else {
         Duration::from_secs(0)
-    };
+    };*/
     let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
         PathBuf::from(index)
     } else {
@@ -245,15 +245,17 @@ fn main() {
         log.Printf("stats: %#v", sres.Stats)
     }*/
     if let Some(cpu_profile) = matches.value_of("cpu_profile") {
-        let guard = pprof::ProfilerGuardBuilder::default().frequency(1000).blocklist(&["libc", "libgcc", "pthread", "vdso"]).build().unwrap();
+        let guard = pprof::ProfilerGuardBuilder::default()
+            .frequency(1000)
+            .blocklist(&["libc", "libgcc", "pthread", "vdso"])
+            .build()
+            .unwrap();
 
         if let Ok(report) = guard.report().build() {
             let file = match File::create(cpu_profile) {
                 Ok(file) => file,
-                Err(_) => {
-                    process::exit(1)
-                },
-           };
+                Err(_) => process::exit(1),
+            };
             let mut options = pprof::flamegraph::Options::default();
             options.image_width = Some(2500);
             report.flamegraph_with_options(file, &mut options).unwrap();
@@ -261,6 +263,6 @@ fn main() {
     }
 
     if verbose {
-
+        info!("stats: {:?}", "sres.Stats");
     }
 }
