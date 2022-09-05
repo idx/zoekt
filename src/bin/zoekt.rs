@@ -130,27 +130,28 @@ fn main() {
         ))
         .arg(
             Arg::from_usage("--profile_time [duration] 'run this long to gather stats.'")
-                .default_value("time.Second"),
+                .default_value("1"),
         )
         .arg(Arg::from_usage(
-            "-v, --verbose 'Print some background data'",
+            "-v, --verbose 'print some background data",
         ))
         .arg(Arg::from_usage(
-            "-r, --repo 'Print the repo before the file name'",
+            "-r, --repo 'print the repo before the file name'",
         ))
         .arg(Arg::from_usage(
-            "-l, --list 'Print matching filenames only'",
+            "-l, --list 'print matching filenames only'",
         ))
         .arg(Arg::from_usage(
             "<QUERY> 'for example\n zoekt \'byte file:java -file:test\''",
         ))
         .get_matches();
 
-    /*let _profile_time = if let Some(time) = matches.value_of("duration") {
+    let _profile_time = if let Some(time) = matches.value_of("profile_time") {
         Duration::from_secs(time.parse().unwrap())
-    } else {
-        Duration::from_secs(0)
-    };*/
+    }  else {
+        Duration::from_secs(1)
+    };
+
     let mut _index: PathBuf = if let Some(index) = matches.value_of("index_dir") {
         PathBuf::from(index)
     } else {
@@ -163,25 +164,25 @@ fn main() {
 
     let pat: Option<&str> = matches.value_of("QUERY");
 
-    /*var searcher zoekt.Searcher
-    var err error
-    if *shard != "" {
-        searcher, err = loadShard(*shard, *verbose)
-    } else {
-        searcher, err = shards.NewDirectorySearcher(*index)
-    }
+    /*	var searcher zoekt.Searcher
+	var err error
+	if *shard != "" {
+		searcher, err = loadShard(*shard, *verbose)
+	} else {
+		searcher, err = shards.NewDirectorySearcher(*index)
+	}
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    query, err := query.Parse(pat)
-    if err != nil {
-        log.Fatal(err)
-    }
-    if *verbose {
-        log.Println("query:", query)
-    }*/
+	query, err := query.Parse(pat)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if *verbose {
+		log.Println("query:", query)
+	}*/
     /*let _searcher = zoekt::api::Searcher::default();
     if let Some(shard) = cli.shard {
         //searcher, err = loadShard(*shard, *verbose)*/
