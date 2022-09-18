@@ -139,7 +139,7 @@ func (o *Options) Flags(fs *flag.FlagSet) {
 // builder buffers up documents until it collects enough documents and
 // then builds a shard and writes.
 //type Builder struct {
-struct Builder {
+pub struct Builder {
     //	opts     Options
     opts: Options,
     /*	throttle chan int
@@ -264,7 +264,9 @@ func (o *Options) IgnoreSizeMax(name string) bool {
 
 // NewBuilder creates a new Builder instance.
 //func NewBuilder(opts Options) (*Builder, error) {
-pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
+//pub fn new_builder() -> Result<Builder, Box<dyn error::Error>> {
+pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn error::Error>> {
+//pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
 //pub fn new_builder(opts: Options) -> Result<(), Box<dyn error::Error>> {
 		/*	opts.SetDefaults()
     if opts.RepositoryDescription.Name == "" {
@@ -301,7 +303,8 @@ pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
     }
 
     return b, nil*/
-    Ok(())
+    //Ok(())
+    Ok(b)
 }
 
 // AddFile is a convenience wrapper for the Add method

@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 #module github.com/google/zoekt
 
-[lib]
-name = "zoekt"
-path = "src/lib.rs"
+#[lib]
+#name = "zoekt"
+#path = "src/lib.rs"
 
 #require (
 #	github.com/andygrunwald/go-gerrit v0.0.0-20191101112536-3f5e365ccf57

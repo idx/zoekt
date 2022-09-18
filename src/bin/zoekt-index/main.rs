@@ -22,7 +22,8 @@ use std::path::PathBuf;
 use std::collections::HashMap;
 use std::error;
 use std::process;
-use zoekt::cmd;
+//use zoekt::cmd;
+use zoekt::build::builder as build;
 
 /*import (
     "flag"
@@ -114,7 +115,7 @@ fn main() {
         pprof.StartCPUProfile(f)
         defer pprof.StopCPUProfile()
     }*/
-    let _opts = cmd::options_from_flags();
+    //let _opts = cmd::options_from_flags();
     if let Some(cpu_profile) = cli.cpu_profile.as_deref() {
         println!("Value for cpu_profile: {}", cpu_profile.display());
     }
@@ -149,44 +150,46 @@ fn main() {
         println!("key: {key} val: {val}");
     }
 
+    let opts = build::Options {
+        index_dir: String::from("index_dir"),
+    }; 
+
     for arg in cli.args {
-        if let Err(_err) = index_arg(&arg) {
+        if let Err(_err) = index_arg(&arg, &opts) {
             process::exit(1)
         }
     }
 }
 
 //func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
-fn index_arg(arg: &str) -> Result<(), Box<dyn error::Error>> {
+fn index_arg(arg: &str, opts: &build::Options) -> Result<(), Box<dyn error::Error>> {
     /*dir, err := filepath.Abs(filepath.Clean(arg))
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    opts.RepositoryDescription.Name = filepath.Base(dir)*/
+	opts.RepositoryDescription.Name = filepath.Base(dir)
+	builder, err := build.NewBuilder(opts)
+	if err != nil {
+		return err
+	}
+	defer builder.Finish()
+
+	comm := make(chan fileInfo, 100)
+	agg := fileAggregator{
+		ignoreDirs: ignore,
+		sink:       comm,
+		sizeMax:    int64(opts.SizeMax),
+	}*/
     let dir = fs::canonicalize(PathBuf::from(arg));
     println!("{:?}", dir);
 
-    let _opts = zoekt::build::builder::set_defaults();
+    let _builder = build::new_builder(opts);
 
-    /*builder, err := build.NewBuilder(opts)
-    if err != nil {
-        return err
-    }
-    defer builder.Finish()*/
-    let _builder = zoekt::build::builder::new_builder();
-    //let _builder = zoekt::build::builder::new_builder(opts);
-
-    //comm := make(chan fileInfo, 100)
     let (comm, _r) = channel::bounded(100);
     comm.send(1).unwrap();
-    /*agg := fileAggregator{
-        ignoreDirs: ignore,
-        sink:       comm,
-        sizeMax:    int64(opts.SizeMax),
-    }
 
-    go func() {
+    /*go func() {
         if err := filepath.Walk(dir, agg.add); err != nil {
             log.Fatal(err)
         }
