@@ -331,13 +331,15 @@ func (b *Builder) Add(doc zoekt.Document) error {
     }
 
     return nil
-}
+}*/
 
+impl Drop for Builder {
 // Finish creates a last shard from the buffered documents, and clears
 // stale shards from previous runs. This should always be called, also
 // in failure cases, to ensure cleanup.
-func (b *Builder) Finish() error {
-    b.flush()
+//func (b *Builder) Finish() error {
+fn drop(&mut self) {
+    /*b.flush()
     b.building.Wait()
 
     if b.buildError != nil {
@@ -358,10 +360,12 @@ func (b *Builder) Finish() error {
     if b.nextShardNum > 0 {
         b.deleteRemainingShards()
     }
-    return b.buildError
+    return b.buildError*/
+    self.flush();
+}
 }
 
-func (b *Builder) deleteRemainingShards() {
+/*func (b *Builder) deleteRemainingShards() {
     for {
         shard := b.nextShardNum
         b.nextShardNum++
@@ -370,10 +374,12 @@ func (b *Builder) deleteRemainingShards() {
             break
         }
     }
-}
+}*/
 
-func (b *Builder) flush() error {
-    todo := b.todo
+impl Builder {
+ //func (b *Builder) flush() error {
+    fn flush(&self) {
+    /*todo := b.todo
     b.todo = nil
     b.size = 0
     b.errMu.Lock()
@@ -406,7 +412,7 @@ func (b *Builder) flush() error {
                 b.finishedShards[done.temp] = done.final
             }
             b.building.Done()
-        }()
+        }()'
     } else {
         // No goroutines when we're not parallel. This
         // simplifies memory profiling.
@@ -424,13 +430,16 @@ func (b *Builder) flush() error {
         return b.buildError
     }
 
-    return nil
+    return nil*/
+    self.build_shard();
+    self.write_mem_profile("name".to_string());
 }
 
-var profileNumber int
+//var profileNumber int
 
-func (b *Builder) writeMemProfile(name string) {
-    nm := fmt.Sprintf("%s.%d", name, profileNumber)
+//func (b *Builder) writeMemProfile(name string) {
+fn write_mem_profile(&self, _name: String) {
+    /*nm := fmt.Sprintf("%s.%d", name, profileNumber)
     profileNumber++
     f, err := os.Create(nm)
     if err != nil {
@@ -441,11 +450,11 @@ func (b *Builder) writeMemProfile(name string) {
         log.Fatal("could not write memory profile: ", err)
     }
     f.Close()
-    log.Printf("wrote mem profile %q", nm)
+    log.Printf("wrote mem profile %q", nm)*/
 }
 
 // map [0,inf) to [0,1) monotonically
-func squashRange(j int) float64 {
+/*func squashRange(j int) float64 {
     x := float64(j)
     return x / (1 + x)
 }
@@ -508,10 +517,11 @@ func sortDocuments(todo []*zoekt.Document) {
     for i := range todo {
         todo[i] = rs[i].Document
     }
-}
+}*/
 
-func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishedShard, error) {
-    if b.opts.CTags != "" {
+//func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishedShard, error) {
+fn build_shard(&self) {
+    /*if b.opts.CTags != "" {
         err := ctagsAddSymbols(todo, b.parser, b.opts.CTags)
         if b.opts.CTagsMustSucceed && err != nil {
             return nil, err
@@ -534,11 +544,14 @@ func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishe
         }
     }
 
-    return b.writeShard(name, shardBuilder)
+    return b.writeShard(name, shardBuilder)*/
+    self.new_shard_builder();
+    self.write_shard();
 }
 
-func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
-    desc := b.opts.RepositoryDescription
+//func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
+fn new_shard_builder(&self) {
+    /*desc := b.opts.RepositoryDescription
     desc.SubRepoMap = b.opts.SubRepositories
     desc.IndexOptions = b.opts.HashOptions()
 
@@ -546,11 +559,12 @@ func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
     if err != nil {
         return nil, err
     }
-    return shardBuilder, nil
+    return shardBuilder, nil*/
 }
 
-func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
-    dir := filepath.Dir(fn)
+//func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
+fn write_shard(&self) {
+    /*dir := filepath.Dir(fn)
     if err := os.MkdirAll(dir, 0o700); err != nil {
         return nil, err
     }
@@ -580,8 +594,9 @@ func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard,
     log.Printf("finished %s: %d index bytes (overhead %3.1f)", fn, fi.Size(),
         float64(fi.Size())/float64(ib.ContentSize()+1))
 
-    return &finishedShard{f.Name(), fn}, nil
+    return &finishedShard{f.Name(), fn}, nil*/
+}
 }
 
 // umask holds the Umask of the current process
-var umask os.FileMode*/
+//var umask os.FileMode

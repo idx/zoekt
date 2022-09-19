@@ -184,7 +184,7 @@ fn index_arg(arg: &str, opts: &build::Options) -> Result<(), Box<dyn error::Erro
     let dir = fs::canonicalize(PathBuf::from(arg));
     println!("{:?}", dir);
 
-    let _builder = build::new_builder(opts);
+    let _builder = build::new_builder(opts)?;
 
     let (comm, _r) = channel::bounded(100);
     comm.send(1).unwrap();
@@ -218,6 +218,6 @@ fn index_arg(arg: &str, opts: &build::Options) -> Result<(), Box<dyn error::Erro
         size_max: 0
     };
     println!("{}", agg.size_max);
-    
+
     Ok(())
 }
