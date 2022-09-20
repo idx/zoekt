@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package zoekt
+//package zoekt
+use std::error::Error;
 
-import (
+/*import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
@@ -143,11 +144,12 @@ func (s *postingsBuilder) newSearchableString(data []byte, byteSections []Docume
 	s.endRunes = append(s.endRunes, s.runeCount)
 	s.endByte += dataSz
 	return &dest, runeSecs, nil
-}
+}*/
 
 // IndexBuilder builds a single index shard.
-type IndexBuilder struct {
-	contentStrings  []*searchableString
+//type IndexBuilder struct {
+pub struct IndexBuilder {
+	/*contentStrings  []*searchableString
 	nameStrings     []*searchableString
 	docSections     [][]DocumentSection
 	runeDocSections []DocumentSection
@@ -170,10 +172,10 @@ type IndexBuilder struct {
 	languageMap map[string]byte
 
 	// languages codes
-	languages []byte
+	languages []byte*/
 }
 
-func (d *Repository) verify() error {
+/*func (d *Repository) verify() error {
 	for _, t := range []string{d.FileURLTemplate, d.LineFragmentTemplate, d.CommitURLTemplate} {
 		if _, err := template.New("").Parse(t); err != nil {
 			return err
@@ -187,12 +189,13 @@ func (b *IndexBuilder) ContentSize() uint32 {
 	// Add the name too so we don't skip building index if we have
 	// lots of empty files.
 	return b.contentPostings.endByte + b.namePostings.endByte
-}
+}*/
 
 // NewIndexBuilder creates a fresh IndexBuilder. The passed in
 // Repository contains repo metadata, and may be set to nil.
-func NewIndexBuilder(r *Repository) (*IndexBuilder, error) {
-	b := &IndexBuilder{
+//func NewIndexBuilder(r *Repository) (*IndexBuilder, error) {
+pub fn new_index_builder() -> Result<IndexBuilder, Box<dyn Error>> {
+	/*b := &IndexBuilder{
 		contentPostings: newPostingsBuilder(),
 		namePostings:    newPostingsBuilder(),
 		languageMap:     map[string]byte{},
@@ -204,10 +207,14 @@ func NewIndexBuilder(r *Repository) (*IndexBuilder, error) {
 	if err := b.setRepository(r); err != nil {
 		return nil, err
 	}
-	return b, nil
+	return b, nil*/
+    let b = IndexBuilder {
+    };
+
+	Ok(b)
 }
 
-func (b *IndexBuilder) setRepository(desc *Repository) error {
+/*func (b *IndexBuilder) setRepository(desc *Repository) error {
 	if len(b.contentStrings) > 0 {
 		return fmt.Errorf("setRepository called after adding files")
 	}

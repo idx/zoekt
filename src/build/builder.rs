@@ -15,7 +15,11 @@
 // package build implements a more convenient interface for building
 // zoekt indices.
 //package build
-use std::error;
+//use std::{error, fs, io::Write};
+use std::fs;
+use std::io::Write;
+use std::error::Error;
+use crate::indexbuilder::new_index_builder;
 
 /*import (
     "crypto/sha1"
@@ -265,7 +269,7 @@ func (o *Options) IgnoreSizeMax(name string) bool {
 // NewBuilder creates a new Builder instance.
 //func NewBuilder(opts Options) (*Builder, error) {
 //pub fn new_builder() -> Result<Builder, Box<dyn error::Error>> {
-pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn error::Error>> {
+pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn Error>> {
 //pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
 //pub fn new_builder(opts: Options) -> Result<(), Box<dyn error::Error>> {
 		/*	opts.SetDefaults()
@@ -303,7 +307,6 @@ pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn error::Error>> {
     }
 
     return b, nil*/
-    //Ok(())
     Ok(b)
 }
 
@@ -545,12 +548,13 @@ fn build_shard(&self) {
     }
 
     return b.writeShard(name, shardBuilder)*/
-    self.new_shard_builder();
-    self.write_shard();
+    let name = "shardName".to_string();
+    let _shard_builder = self.new_shard_builder();
+    let _ret = self.write_shard(name);
 }
 
 //func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
-fn new_shard_builder(&self) {
+fn new_shard_builder(&self) -> Result<(), Box<dyn Error>>{
     /*desc := b.opts.RepositoryDescription
     desc.SubRepoMap = b.opts.SubRepositories
     desc.IndexOptions = b.opts.HashOptions()
@@ -560,11 +564,13 @@ fn new_shard_builder(&self) {
         return nil, err
     }
     return shardBuilder, nil*/
+    let _shard_builder = new_index_builder();
+    Ok(())
 }
 
 //func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
-fn write_shard(&self) {
-    /*dir := filepath.Dir(fn)
+fn write_shard(&self, _fn: String) -> Result<(), Box<dyn Error>> {
+    /*dir := filepath.Dir(fn)[]
     if err := os.MkdirAll(dir, 0o700); err != nil {
         return nil, err
     }
@@ -595,6 +601,12 @@ fn write_shard(&self) {
         float64(fi.Size())/float64(ib.ContentSize()+1))
 
     return &finishedShard{f.Name(), fn}, nil*/
+    let content = fs::read_to_string("../../zoekt_test/main.c");
+    println!("{:?}",content);
+    let mut file = fs::File::create("zoekt_test_v15.00000.zoekt")?;
+    write!(file, "{:?}", content)?;
+    file.flush()?;
+    Ok(())
 }
 }
 
