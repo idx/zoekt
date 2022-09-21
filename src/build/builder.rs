@@ -19,7 +19,7 @@
 use std::fs;
 use std::io::Write;
 use std::error::Error;
-use crate::indexbuilder::new_index_builder;
+use crate::indexbuilder;
 
 /*import (
     "crypto/sha1"
@@ -434,7 +434,7 @@ impl Builder {
     }
 
     return nil*/
-    self.build_shard();
+    let _done = self.build_shard();
     self.write_mem_profile("name".to_string());
 }
 
@@ -523,7 +523,7 @@ func sortDocuments(todo []*zoekt.Document) {
 }*/
 
 //func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishedShard, error) {
-fn build_shard(&self) {
+fn build_shard(&self) -> Result<(), Box<dyn Error>> {
     /*if b.opts.CTags != "" {
         err := ctagsAddSymbols(todo, b.parser, b.opts.CTags)
         if b.opts.CTagsMustSucceed && err != nil {
@@ -549,12 +549,14 @@ fn build_shard(&self) {
 
     return b.writeShard(name, shardBuilder)*/
     let name = "shardName".to_string();
-    let _shard_builder = self.new_shard_builder();
-    let _ret = self.write_shard(name);
+    let shard_builder = self.new_shard_builder()?;
+    let _ret = self.write_shard(name, shard_builder);
+
+    Ok(())
 }
 
 //func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
-fn new_shard_builder(&self) -> Result<(), Box<dyn Error>>{
+fn new_shard_builder(&self) -> Result<indexbuilder::IndexBuilder, Box<dyn Error>>{
     /*desc := b.opts.RepositoryDescription
     desc.SubRepoMap = b.opts.SubRepositories
     desc.IndexOptions = b.opts.HashOptions()
@@ -564,12 +566,12 @@ fn new_shard_builder(&self) -> Result<(), Box<dyn Error>>{
         return nil, err
     }
     return shardBuilder, nil*/
-    let _shard_builder = new_index_builder();
-    Ok(())
+    let _shard_builder = indexbuilder::new_index_builder()?;
+    Ok(_shard_builder)
 }
 
 //func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
-fn write_shard(&self, _fn: String) -> Result<(), Box<dyn Error>> {
+fn write_shard(&self, _fn: String, _ib: indexbuilder::IndexBuilder) -> Result<(), Box<dyn Error>> {
     /*dir := filepath.Dir(fn)[]
     if err := os.MkdirAll(dir, 0o700); err != nil {
         return nil, err
