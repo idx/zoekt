@@ -20,10 +20,10 @@ use std::fs;
 use std::path::PathBuf;
 //use itertools::Itertools;
 use std::collections::HashMap;
-use std::error;
 use std::process;
 //use zoekt::cmd;
 use zoekt::build::builder as build;
+use anyhow::Result;
 
 /*import (
     "flag"
@@ -152,6 +152,7 @@ fn main() {
 
     let opts = build::Options {
         index_dir: String::from("index_dir"),
+        repository_description: String::from(""),
     }; 
 
     for arg in cli.args {
@@ -162,7 +163,7 @@ fn main() {
 }
 
 //func indexArg(arg string, opts build.Options, ignore map[string]struct{}) error {
-fn index_arg(arg: &str, opts: &build::Options) -> Result<(), Box<dyn error::Error>> {
+fn index_arg(arg: &str, opts: &build::Options) -> Result<()> {
     /*dir, err := filepath.Abs(filepath.Clean(arg))
 	if err != nil {
 		return err

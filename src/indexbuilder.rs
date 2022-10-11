@@ -13,7 +13,7 @@
 // limitations under the License.
 
 //package zoekt
-use std::error::Error;
+use anyhow::{Result};
 
 /*import (
 	"bytes"
@@ -194,7 +194,7 @@ func (b *IndexBuilder) ContentSize() uint32 {
 // NewIndexBuilder creates a fresh IndexBuilder. The passed in
 // Repository contains repo metadata, and may be set to nil.
 //func NewIndexBuilder(r *Repository) (*IndexBuilder, error) {
-pub fn new_index_builder() -> Result<IndexBuilder, Box<dyn Error>> {
+pub fn new_index_builder() -> Result<IndexBuilder> {
 	/*b := &IndexBuilder{
 		contentPostings: newPostingsBuilder(),
 		namePostings:    newPostingsBuilder(),

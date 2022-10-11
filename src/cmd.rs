@@ -46,5 +46,6 @@ pub fn options_from_flags() -> build::builder::Options {
 	return opts*/
 	build::builder::Options {
 		index_dir: String::from("index_dir"),
+		repository_description: String::from(""),
     }
 }

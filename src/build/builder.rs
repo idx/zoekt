@@ -18,8 +18,9 @@
 //use std::{error, fs, io::Write};
 use std::fs;
 use std::io::Write;
-use std::error::Error;
 use crate::indexbuilder;
+use anyhow::Result;
+use thiserror::Error;
 
 /*import (
     "crypto/sha1"
@@ -74,7 +75,7 @@ pub struct Options {
 
     // RepositoryDescription holds names and URLs for the repository.
     //	RepositoryDescription zoekt.Repository
-    //	repository_description: String,
+    pub repository_description: String,
 
     // SubRepositories is a path => sub repository map.
     //	SubRepositories map[string]*zoekt.Repository
@@ -266,13 +267,16 @@ func (o *Options) IgnoreSizeMax(name string) bool {
     return false
 }*/
 
+#[derive(Debug, Error)]
+enum Error {
+    #[error("builder: must set Name")]
+    BuilderMustSetName,
+}
+
 // NewBuilder creates a new Builder instance.
 //func NewBuilder(opts Options) (*Builder, error) {
-//pub fn new_builder() -> Result<Builder, Box<dyn error::Error>> {
-pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn Error>> {
-//pub fn new_builder() -> Result<(), Box<dyn error::Error>> {
-//pub fn new_builder(opts: Options) -> Result<(), Box<dyn error::Error>> {
-		/*	opts.SetDefaults()
+pub fn new_builder(opts: &Options) -> Result<Builder> {
+    /*opts.SetDefaults()
     if opts.RepositoryDescription.Name == "" {
         return nil, fmt.Errorf("builder: must set Name")
     }
@@ -282,10 +286,14 @@ pub fn new_builder(_opts: &Options) -> Result<Builder, Box<dyn Error>> {
         throttle:       make(chan int, opts.Parallelism),
         finishedShards: map[string]string{},
     }*/
+    if opts.repository_description == "" {
+        Err(Error::BuilderMustSetName)?;
+    }
     let b = Builder {
         //opts: String::from("opts"),
         opts: Options {
             index_dir: String::from("index_dir"),
+            repository_description: String::from(""),
         },
     };
     println!("{}", b.opts.index_dir);
@@ -337,35 +345,35 @@ func (b *Builder) Add(doc zoekt.Document) error {
 }*/
 
 impl Drop for Builder {
-// Finish creates a last shard from the buffered documents, and clears
-// stale shards from previous runs. This should always be called, also
-// in failure cases, to ensure cleanup.
-//func (b *Builder) Finish() error {
-fn drop(&mut self) {
-    /*b.flush()
-    b.building.Wait()
+    // Finish creates a last shard from the buffered documents, and clears
+    // stale shards from previous runs. This should always be called, also
+    // in failure cases, to ensure cleanup.
+    //func (b *Builder) Finish() error {
+    fn drop(&mut self) {
+        /*b.flush()
+        b.building.Wait()
 
-    if b.buildError != nil {
-        for tmp := range b.finishedShards {
-            os.Remove(tmp)
+        if b.buildError != nil {
+            for tmp := range b.finishedShards {
+                os.Remove(tmp)
+            }
+            b.finishedShards = map[string]string{}
+            return b.buildError
+        }
+
+        for tmp, final := range b.finishedShards {
+            if err := os.Rename(tmp, final); err != nil {
+                b.buildError = err
+            }
         }
         b.finishedShards = map[string]string{}
-        return b.buildError
-    }
 
-    for tmp, final := range b.finishedShards {
-        if err := os.Rename(tmp, final); err != nil {
-            b.buildError = err
+        if b.nextShardNum > 0 {
+            b.deleteRemainingShards()
         }
+        return b.buildError*/
+        self.flush();
     }
-    b.finishedShards = map[string]string{}
-
-    if b.nextShardNum > 0 {
-        b.deleteRemainingShards()
-    }
-    return b.buildError*/
-    self.flush();
-}
 }
 
 /*func (b *Builder) deleteRemainingShards() {
@@ -380,236 +388,236 @@ fn drop(&mut self) {
 }*/
 
 impl Builder {
- //func (b *Builder) flush() error {
+    //func (b *Builder) flush() error {
     fn flush(&self) {
-    /*todo := b.todo
-    b.todo = nil
-    b.size = 0
-    b.errMu.Lock()
-    defer b.errMu.Unlock()
-    if b.buildError != nil {
-        return b.buildError
-    }
+        /*todo := b.todo
+        b.todo = nil
+        b.size = 0
+        b.errMu.Lock()
+        defer b.errMu.Unlock()
+        if b.buildError != nil {
+            return b.buildError
+        }
 
-    hasShard := b.nextShardNum > 0
-    if len(todo) == 0 && hasShard {
-        return nil
-    }
+        hasShard := b.nextShardNum > 0
+        if len(todo) == 0 && hasShard {
+            return nil
+        }
 
-    shard := b.nextShardNum
-    b.nextShardNum++
+        shard := b.nextShardNum
+        b.nextShardNum++
 
-    if b.opts.Parallelism > 1 {
-        b.building.Add(1)
-        go func() {
-            b.throttle <- 1
+        if b.opts.Parallelism > 1 {
+            b.building.Add(1)
+            go func() {
+                b.throttle <- 1
+                done, err := b.buildShard(todo, shard)
+                <-b.throttle
+
+                b.errMu.Lock()
+                defer b.errMu.Unlock()
+                if err != nil && b.buildError == nil {
+                    b.buildError = err
+                }
+                if err == nil {
+                    b.finishedShards[done.temp] = done.final
+                }
+                b.building.Done()
+            }()'
+        } else {
+            // No goroutines when we're not parallel. This
+            // simplifies memory profiling.
             done, err := b.buildShard(todo, shard)
-            <-b.throttle
-
-            b.errMu.Lock()
-            defer b.errMu.Unlock()
-            if err != nil && b.buildError == nil {
-                b.buildError = err
-            }
+            b.buildError = err
             if err == nil {
                 b.finishedShards[done.temp] = done.final
             }
-            b.building.Done()
-        }()'
-    } else {
-        // No goroutines when we're not parallel. This
-        // simplifies memory profiling.
-        done, err := b.buildShard(todo, shard)
-        b.buildError = err
-        if err == nil {
-            b.finishedShards[done.temp] = done.final
-        }
-        if b.opts.MemProfile != "" {
-            // drop memory, and profile.
-            todo = nil
-            b.writeMemProfile(b.opts.MemProfile)
-        }
-
-        return b.buildError
-    }
-
-    return nil*/
-    let _done = self.build_shard();
-    self.write_mem_profile("name".to_string());
-}
-
-//var profileNumber int
-
-//func (b *Builder) writeMemProfile(name string) {
-fn write_mem_profile(&self, _name: String) {
-    /*nm := fmt.Sprintf("%s.%d", name, profileNumber)
-    profileNumber++
-    f, err := os.Create(nm)
-    if err != nil {
-        log.Fatal("could not create memory profile: ", err)
-    }
-    runtime.GC() // get up-to-date statistics
-    if err := pprof.WriteHeapProfile(f); err != nil {
-        log.Fatal("could not write memory profile: ", err)
-    }
-    f.Close()
-    log.Printf("wrote mem profile %q", nm)*/
-}
-
-// map [0,inf) to [0,1) monotonically
-/*func squashRange(j int) float64 {
-    x := float64(j)
-    return x / (1 + x)
-}
-
-var testRe = regexp.MustCompile("test")
-
-type rankedDoc struct {
-    *zoekt.Document
-    rank []float64
-}
-
-func rank(d *zoekt.Document, origIdx int) []float64 {
-    test := 0.0
-    if testRe.MatchString(d.Name) {
-        test = 1.0
-    }
-
-    // Smaller is earlier (=better).
-    return []float64{
-        // Prefer docs that are not tests
-        test,
-
-        // With many symbols
-        1.0 - squashRange(len(d.Symbols)),
-
-        // With short content
-        squashRange(len(d.Content)),
-
-        // With short names
-        squashRange(len(d.Name)),
-
-        // That is present is as many branches as possible
-        1.0 - squashRange(len(d.Branches)),
-
-        // Preserve original ordering.
-        squashRange(origIdx),
-    }
-}
-
-func sortDocuments(todo []*zoekt.Document) {
-    rs := make([]rankedDoc, 0, len(todo))
-    for i, t := range todo {
-        rd := rankedDoc{t, rank(t, i)}
-        rs = append(rs, rd)
-    }
-    sort.Slice(rs, func(i, j int) bool {
-        r1 := rs[i].rank
-        r2 := rs[j].rank
-        for i := range r1 {
-            if r1[i] < r2[i] {
-                return true
+            if b.opts.MemProfile != "" {
+                // drop memory, and profile.
+                todo = nil
+                b.writeMemProfile(b.opts.MemProfile)
             }
-            if r1[i] > r2[i] {
-                return false
-            }
+
+            return b.buildError
         }
 
-        return false
-    })
-    for i := range todo {
-        todo[i] = rs[i].Document
+        return nil*/
+        let _done = self.build_shard();
+        self.write_mem_profile("name".to_string());
     }
-}*/
 
-//func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishedShard, error) {
-fn build_shard(&self) -> Result<(), Box<dyn Error>> {
-    /*if b.opts.CTags != "" {
-        err := ctagsAddSymbols(todo, b.parser, b.opts.CTags)
-        if b.opts.CTagsMustSucceed && err != nil {
-            return nil, err
-        }
+    //var profileNumber int
+
+    //func (b *Builder) writeMemProfile(name string) {
+    fn write_mem_profile(&self, _name: String) {
+        /*nm := fmt.Sprintf("%s.%d", name, profileNumber)
+        profileNumber++
+        f, err := os.Create(nm)
         if err != nil {
-            log.Printf("ignoring %s error: %v", b.opts.CTags, err)
+            log.Fatal("could not create memory profile: ", err)
+        }
+        runtime.GC() // get up-to-date statistics
+        if err := pprof.WriteHeapProfile(f); err != nil {
+            log.Fatal("could not write memory profile: ", err)
+        }
+        f.Close()
+        log.Printf("wrote mem profile %q", nm)*/
+    }
+
+    // map [0,inf) to [0,1) monotonically
+    /*func squashRange(j int) float64 {
+        x := float64(j)
+        return x / (1 + x)
+    }
+
+    var testRe = regexp.MustCompile("test")
+
+    type rankedDoc struct {
+        *zoekt.Document
+        rank []float64
+    }
+
+    func rank(d *zoekt.Document, origIdx int) []float64 {
+        test := 0.0
+        if testRe.MatchString(d.Name) {
+            test = 1.0
+        }
+
+        // Smaller is earlier (=better).
+        return []float64{
+            // Prefer docs that are not tests
+            test,
+
+            // With many symbols
+            1.0 - squashRange(len(d.Symbols)),
+
+            // With short content
+            squashRange(len(d.Content)),
+
+            // With short names
+            squashRange(len(d.Name)),
+
+            // That is present is as many branches as possible
+            1.0 - squashRange(len(d.Branches)),
+
+            // Preserve original ordering.
+            squashRange(origIdx),
         }
     }
 
-    name := b.opts.shardName(nextShardNum)
+    func sortDocuments(todo []*zoekt.Document) {
+        rs := make([]rankedDoc, 0, len(todo))
+        for i, t := range todo {
+            rd := rankedDoc{t, rank(t, i)}
+            rs = append(rs, rd)
+        }
+        sort.Slice(rs, func(i, j int) bool {
+            r1 := rs[i].rank
+            r2 := rs[j].rank
+            for i := range r1 {
+                if r1[i] < r2[i] {
+                    return true
+                }
+                if r1[i] > r2[i] {
+                    return false
+                }
+            }
 
-    shardBuilder, err := b.newShardBuilder()
-    if err != nil {
-        return nil, err
-    }
-    sortDocuments(todo)
-    for _, t := range todo {
-        if err := shardBuilder.Add(*t); err != nil {
+            return false
+        })
+        for i := range todo {
+            todo[i] = rs[i].Document
+        }
+    }*/
+
+    //func (b *Builder) buildShard(todo []*zoekt.Document, nextShardNum int) (*finishedShard, error) {
+    fn build_shard(&self) -> Result<()> {
+        /*if b.opts.CTags != "" {
+            err := ctagsAddSymbols(todo, b.parser, b.opts.CTags)
+            if b.opts.CTagsMustSucceed && err != nil {
+                return nil, err
+            }
+            if err != nil {
+                log.Printf("ignoring %s error: %v", b.opts.CTags, err)
+            }
+        }
+
+        name := b.opts.shardName(nextShardNum)
+
+        shardBuilder, err := b.newShardBuilder()
+        if err != nil {
             return nil, err
         }
+        sortDocuments(todo)
+        for _, t := range todo {
+            if err := shardBuilder.Add(*t); err != nil {
+                return nil, err
+            }
+        }
+
+        return b.writeShard(name, shardBuilder)*/
+        let name = "shardName".to_string();
+        let shard_builder = self.new_shard_builder()?;
+        let _ret = self.write_shard(name, shard_builder);
+
+        Ok(())
     }
 
-    return b.writeShard(name, shardBuilder)*/
-    let name = "shardName".to_string();
-    let shard_builder = self.new_shard_builder()?;
-    let _ret = self.write_shard(name, shard_builder);
+    //func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
+    fn new_shard_builder(&self) -> Result<indexbuilder::IndexBuilder> {
+        /*desc := b.opts.RepositoryDescription
+        desc.SubRepoMap = b.opts.SubRepositories
+        desc.IndexOptions = b.opts.HashOptions()
 
-    Ok(())
-}
-
-//func (b *Builder) newShardBuilder() (*zoekt.IndexBuilder, error) {
-fn new_shard_builder(&self) -> Result<indexbuilder::IndexBuilder, Box<dyn Error>>{
-    /*desc := b.opts.RepositoryDescription
-    desc.SubRepoMap = b.opts.SubRepositories
-    desc.IndexOptions = b.opts.HashOptions()
-
-    shardBuilder, err := zoekt.NewIndexBuilder(&desc)
-    if err != nil {
-        return nil, err
-    }
-    return shardBuilder, nil*/
-    let _shard_builder = indexbuilder::new_index_builder()?;
-    Ok(_shard_builder)
-}
-
-//func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
-fn write_shard(&self, _fn: String, _ib: indexbuilder::IndexBuilder) -> Result<(), Box<dyn Error>> {
-    /*dir := filepath.Dir(fn)[]
-    if err := os.MkdirAll(dir, 0o700); err != nil {
-        return nil, err
-    }
-
-    f, err := ioutil.TempFile(dir, filepath.Base(fn)+".*.tmp")
-    if err != nil {
-        return nil, err
-    }
-    if runtime.GOOS != "windows" {
-        if err := f.Chmod(0o666 &^ umask); err != nil {
+        shardBuilder, err := zoekt.NewIndexBuilder(&desc)
+        if err != nil {
             return nil, err
         }
+        return shardBuilder, nil*/
+        let _shard_builder = indexbuilder::new_index_builder()?;
+        Ok(_shard_builder)
     }
 
-    defer f.Close()
-    if err := ib.Write(f); err != nil {
-        return nil, err
-    }
-    fi, err := f.Stat()
-    if err != nil {
-        return nil, err
-    }
-    if err := f.Close(); err != nil {
-        return nil, err
-    }
+    //func (b *Builder) writeShard(fn string, ib *zoekt.IndexBuilder) (*finishedShard, error) {
+    fn write_shard(&self, _fn: String, _ib: indexbuilder::IndexBuilder) -> Result<()> {
+        /*dir := filepath.Dir(fn)[]
+        if err := os.MkdirAll(dir, 0o700); err != nil {
+            return nil, err
+        }
 
-    log.Printf("finished %s: %d index bytes (overhead %3.1f)", fn, fi.Size(),
-        float64(fi.Size())/float64(ib.ContentSize()+1))
+        f, err := ioutil.TempFile(dir, filepath.Base(fn)+".*.tmp")
+        if err != nil {
+            return nil, err
+        }
+        if runtime.GOOS != "windows" {
+            if err := f.Chmod(0o666 &^ umask); err != nil {
+                return nil, err
+            }
+        }
 
-    return &finishedShard{f.Name(), fn}, nil*/
-    let content = fs::read_to_string("../../zoekt_test/main.c");
-    println!("{:?}",content);
-    let mut file = fs::File::create("zoekt_test_v15.00000.zoekt")?;
-    write!(file, "{:?}", content)?;
-    file.flush()?;
-    Ok(())
-}
+        defer f.Close()
+        if err := ib.Write(f); err != nil {
+            return nil, err
+        }
+        fi, err := f.Stat()
+        if err != nil {
+            return nil, err
+        }
+        if err := f.Close(); err != nil {
+            return nil, err
+        }
+
+        log.Printf("finished %s: %d index bytes (overhead %3.1f)", fn, fi.Size(),
+            float64(fi.Size())/float64(ib.ContentSize()+1))
+
+        return &finishedShard{f.Name(), fn}, nil*/
+        let content = fs::read_to_string("../../zoekt_test/main.c");
+        println!("{:?}", content);
+        let mut file = fs::File::create("zoekt_test_v15.00000.zoekt")?;
+        write!(file, "{:?}", content)?;
+        file.flush()?;
+        Ok(())
+    }
 }
 
 // umask holds the Umask of the current process
