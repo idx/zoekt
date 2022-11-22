@@ -29,3 +29,4 @@ default-run = "zoekt"
 #)
 
 [dependencies]
+clap = { version = "4.0.26", features = ["derive"] }

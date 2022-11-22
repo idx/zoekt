@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+/*package cmd
 
 import (
 	"flag"
@@ -42,4 +42,4 @@ func OptionsFromFlags() *build.Options {
 
 	opts.SetDefaults()
 	return opts
-}
+}*/

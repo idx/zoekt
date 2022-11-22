@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package main
+//package main
+use clap::Parser;
 
-import (
+/*import (
 	"context"
 	"flag"
 	"fmt"
@@ -76,6 +77,26 @@ func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
 	return s, nil
 }*/
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+   query: String,
+
+   #[clap(short, long)]
+   shard: Option<String>,
+
+   #[clap(short, long, default_value = "~/.zoekt")]
+   index: String,
+
+   #[clap(short, long)]
+   verbose: bool,
+
+   #[clap(short, long)]
+   with_repo: bool,
+
+   #[clap(short, long)]
+   list: bool,
+}
 //func main() {
 fn main() {
 	/*shard := flag.String("shard", "", "search in a specific shard")
@@ -95,15 +116,16 @@ fn main() {
 		fmt.Fprintf(os.Stderr, "\n")
 	}
 	flag.Parse()
-
+	
 	if len(flag.Args()) == 0 {
 		fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
 		flag.Usage()
 		os.Exit(2)
 	}
-	pat := flag.Arg(0)
+	pat := flag.Arg(0)*/
+	let args = Args::parse();
 
-	var searcher zoekt.Searcher
+	/*var searcher zoekt.Searcher
 	var err error
 	if *shard != "" {
 		searcher, err = loadShard(*shard, *verbose)
@@ -121,9 +143,12 @@ fn main() {
 	}
 	if *verbose {
 		log.Println("query:", query)
-	}
+	}*/
+    if args.verbose {
+        println!("query: {}", args.query);
+    }
 
-	var sOpts zoekt.SearchOptions
+	/*var sOpts zoekt.SearchOptions
 	sres, err := searcher.Search(context.Background(), query, &sOpts)
 	if *cpuProfile != "" {
 		// If profiling, do it another time so we measure with
