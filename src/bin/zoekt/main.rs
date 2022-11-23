@@ -28,9 +28,10 @@ use clap::Parser;
 	"github.com/google/zoekt"
 	"github.com/google/zoekt/query"
 	"github.com/google/zoekt/shards"
-)
+)*/
+use zoekt::query;
 
-func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
+/*func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
 	for _, f := range files {
 		r := ""
 		if withRepo {
@@ -144,8 +145,14 @@ fn main() {
 	if *verbose {
 		log.Println("query:", query)
 	}*/
+	let query = match query::parse(args.query) {
+		Ok(v) => v, 
+		//Err(e) => error!("{:?}", e),
+		Err(e) => e,
+	};
+ 
     if args.verbose {
-        println!("query: {}", args.query);
+        println!("query: {}", query);
     }
 
 	/*var sOpts zoekt.SearchOptions

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package query
+/*package query
 
 import (
 	"bytes"
@@ -75,11 +75,12 @@ func (o *orOperator) String() string {
 
 func isSpace(c byte) bool {
 	return c == ' ' || c == '\t'
-}
+}*/
 
 // Parse parses a string into a query.
-func Parse(qStr string) (Q, error) {
-	b := []byte(qStr)
+//func Parse(qStr string) (Q, error) {
+pub fn parse(q_str: String) -> Result<String, String> {
+	/*b := []byte(qStr)
 
 	qs, _, err := parseExprList(b)
 	if err != nil {
@@ -91,12 +92,15 @@ func Parse(qStr string) (Q, error) {
 		return nil, err
 	}
 
-	return Simplify(q), nil
+	return Simplify(q), nil*/
+	let _b = q_str.as_bytes();
+
+	Ok(q_str)
 }
 
 // parseExpr parses a single expression, returning the result, and the
 // number of bytes consumed.
-func parseExpr(in []byte) (Q, int, error) {
+/*func parseExpr(in []byte) (Q, int, error) {
 	b := in[:]
 	var expr Q
 	for len(b) > 0 && isSpace(b[0]) {
@@ -105,7 +109,7 @@ func parseExpr(in []byte) (Q, int, error) {
 
 	tok, err := nextToken(b)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, errｓｓｓｓｓｓｓ
 	}
 	if tok == nil {
 		return nil, 0, nil
@@ -471,4 +475,4 @@ loop:
 	}
 	cur.setType()
 	return &cur, nil
-}
+}*/
