@@ -109,7 +109,7 @@ pub fn parse(q_str: String) -> Result<String, String> {
 
 	tok, err := nextToken(b)
 	if err != nil {
-		return nil, 0, errｓｓｓｓｓｓｓ
+		return nil, 0, err
 	}
 	if tok == nil {
 		return nil, 0, nil

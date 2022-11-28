@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"encoding/binary"
@@ -440,14 +440,15 @@ func (d *indexData) readDocSections(i uint32, buf []DocumentSection) ([]Document
 	}
 
 	return unmarshalDocSections(blob, buf), sec.sz, nil
-}
+}*/
 
 // NewSearcher creates a Searcher for a single index file.  Search
 // results coming from this searcher are valid only for the lifetime
 // of the Searcher itself, ie. []byte members should be copied into
 // fresh buffers if the result is to survive closing the shard.
-func NewSearcher(r IndexFile) (Searcher, error) {
-	rd := &reader{r: r}
+//func NewSearcher(r IndexFile) (Searcher, error) {
+pub fn new_searcher() {
+	/*rd := &reader{r: r}
 
 	var toc indexTOC
 	if err := rd.readTOC(&toc); err != nil {
@@ -458,13 +459,14 @@ func NewSearcher(r IndexFile) (Searcher, error) {
 		return nil, err
 	}
 	indexData.file = r
-	return indexData, nil
+	return indexData, nil*/
 }
 
 // ReadMetadata returns the metadata of index shard without reading
 // the index data. The IndexFile is not closed.
-func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
-	rd := &reader{r: inf}
+//func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
+pub fn read_metadata() {
+	/*rd := &reader{r: inf}
 	var toc indexTOC
 	if err := rd.readTOC(&toc); err != nil {
 		return nil, nil, err
@@ -480,5 +482,5 @@ func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
 		return nil, nil, err
 	}
 
-	return &repo, &md, nil
+	return &repo, &md, nil*/
 }

@@ -16,87 +16,95 @@
 use clap::Parser;
 
 /*import (
-	"context"
-	"flag"
-	"fmt"
-	"log"
-	"os"
-	"path/filepath"
-	"runtime/pprof"
-	"time"
+    "context"
+    "flag"
+    "fmt"
+    "log"
+    "os"
+    "path/filepath"
+    "runtime/pprof"
+    "time"
 
-	"github.com/google/zoekt"
-	"github.com/google/zoekt/query"
-	"github.com/google/zoekt/shards"
+    "github.com/google/zoekt"
+    "github.com/google/zoekt/query"
+    "github.com/google/zoekt/shards"
 )*/
 use zoekt::query;
 
 /*func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
-	for _, f := range files {
-		r := ""
-		if withRepo {
-			r = f.Repository + "/"
-		}
-		if list {
-			fmt.Printf("%s%s\n", r, f.FileName)
-			continue
-		}
+    for _, f := range files {
+        r := ""
+        if withRepo {
+            r = f.Repository + "/"
+        }
+        if list {
+            fmt.Printf("%s%s\n", r, f.FileName)
+            continue
+        }
 
-		for _, m := range f.LineMatches {
-			fmt.Printf("%s%s:%d:%s\n", r, f.FileName, m.LineNumber, m.Line)
-		}
-	}
-}
-
-func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
-	f, err := os.Open(fn)
-	if err != nil {
-		return nil, err
-	}
-
-	iFile, err := zoekt.NewIndexFile(f)
-	if err != nil {
-		return nil, err
-	}
-
-	s, err := zoekt.NewSearcher(iFile)
-	if err != nil {
-		iFile.Close()
-		return nil, fmt.Errorf("NewSearcher(%s): %v", fn, err)
-	}
-
-	if verbose {
-		repo, index, err := zoekt.ReadMetadata(iFile)
-		if err != nil {
-			iFile.Close()
-			return nil, fmt.Errorf("ReadMetadata(%s): %v", fn, err)
-		}
-		log.Printf("repo metadata: %#v", repo)
-		log.Printf("index metadata: %#v", index)
-	}
-
-	return s, nil
+        for _, m := range f.LineMatches {
+            fmt.Printf("%s%s:%d:%s\n", r, f.FileName, m.LineNumber, m.Line)
+        }
+    }
 }*/
+
+//func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
+fn load_shared(r#fn: String, verbose: bool) {
+    /*f, err := os.Open(fn)
+    if err != nil {
+        return nil, err
+    }
+
+    iFile, err := zoekt.NewIndexFile(f)
+    if err != nil {
+        return nil, err
+    }
+
+    s, err := zoekt.NewSearcher(iFile)
+    if err != nil {
+        iFile.Close()
+        return nil, fmt.Errorf("NewSearcher(%s): %v", fn, err)
+    }
+
+    if verbose {
+        repo, index, err := zoekt.ReadMetadata(iFile)
+        if err != nil {
+            iFile.Close()
+            return nil, fmt.Errorf("ReadMetadata(%s): %v", fn, err)
+        }
+        log.Printf("repo metadata: %#v", repo)
+        log.Printf("index metadata: %#v", index)
+    }
+
+    return s, nil*/
+    zoekt::new_index_file(r#fn);
+
+    zoekt::new_searcher();
+
+    if verbose {
+        zoekt::read_metadata();
+    }
+}
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-   query: String,
+    query: String,
 
-   #[clap(short, long)]
-   shard: Option<String>,
+    #[clap(short, long)]
+    shard: Option<String>,
 
-   #[clap(short, long, default_value = "~/.zoekt")]
-   index: String,
+    #[clap(short, long, default_value = "~/.zoekt")]
+    index: String,
 
-   #[clap(short, long)]
-   verbose: bool,
+    #[clap(short, long)]
+    verbose: bool,
 
-   #[clap(short, long)]
-   with_repo: bool,
+    #[clap(short, long)]
+    with_repo: bool,
 
-   #[clap(short, long)]
-   list: bool,
+    #[clap(short, long)]
+    list: bool,
 }
 //func main() {
 fn main() {
@@ -109,83 +117,90 @@ fn main() {
 	withRepo := flag.Bool("r", false, "print the repo before the file name")
 	list := flag.Bool("l", false, "print matching filenames only")
 
-	flag.Usage = func() {
-		name := os.Args[0]
-		fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [option] QUERY\n"+
-			"for example\n\n  %s 'byte file:java -file:test'\n\n", name, name)
-		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "\n")
-	}
-	flag.Parse()
-	
-	if len(flag.Args()) == 0 {
-		fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
-		flag.Usage()
-		os.Exit(2)
-	}
-	pat := flag.Arg(0)*/
-	let args = Args::parse();
+    flag.Usage = func() {
+        name := os.Args[0]
+        fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [option] QUERY\n"+
+            "for example\n\n  %s 'byte file:java -file:test'\n\n", name, name)
+        flag.PrintDefaults()
+        fmt.Fprintf(os.Stderr, "\n")
+    }
+    flag.Parse()
 
-	/*var searcher zoekt.Searcher
-	var err error
-	if *shard != "" {
-		searcher, err = loadShard(*shard, *verbose)
-	} else {
-		searcher, err = shards.NewDirectorySearcher(*index)
-	}
+    if len(flag.Args()) == 0 {
+        fmt.Fprintf(os.Stderr, "Pattern is missing.\n")
+        flag.Usage()
+        os.Exit(2)
+    }
+    pat := flag.Arg(0)*/
+    let args = Args::parse();
 
-	if err != nil {
-		log.Fatal(err)
-	}
+    /*var searcher zoekt.Searcher
+    var err error
+    if *shard != "" {
+        searcher, err = loadShard(*shard, *verbose)
+    } else {
+        searcher, err = shards.NewDirectorySearcher(*index)
+    }
 
-	query, err := query.Parse(pat)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if *verbose {
-		log.Println("query:", query)
-	}*/
-	let query = match query::parse(args.query) {
-		Ok(v) => v, 
-		//Err(e) => error!("{:?}", e),
-		Err(e) => e,
-	};
- 
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    query, err := query.Parse(pat)
+    if err != nil {
+        log.Fatal(err)
+    }
+    if *verbose {
+        log.Println("query:", query)
+    }*/
+    match args.shard {
+        Some(v) => load_shared(v, args.verbose),
+        None => println!("none value"),
+    }
+
+    let query = match query::parse(args.query) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("{:?}", e);
+            std::process::exit(1);
+        }
+    };
+
     if args.verbose {
         println!("query: {}", query);
     }
 
-	/*var sOpts zoekt.SearchOptions
-	sres, err := searcher.Search(context.Background(), query, &sOpts)
-	if *cpuProfile != "" {
-		// If profiling, do it another time so we measure with
-		// warm caches.
-		f, err := os.Create(*cpuProfile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		if *verbose {
-			log.Println("Displaying matches...")
-		}
+    /*var sOpts zoekt.SearchOptions
+    sres, err := searcher.Search(context.Background(), query, &sOpts)
+    if *cpuProfile != "" {
+        // If profiling, do it another time so we measure with
+        // warm caches.
+        f, err := os.Create(*cpuProfile)
+        if err != nil {
+            log.Fatal(err)
+        }
+        defer f.Close()
+        if *verbose {
+            log.Println("Displaying matches...")
+        }
 
-		t := time.Now()
-		pprof.StartCPUProfile(f)
-		for {
-			sres, _ = searcher.Search(context.Background(), query, &sOpts)
-			if time.Since(t) > *profileTime {
-				break
-			}
-		}
-		pprof.StopCPUProfile()
-	}
+        t := time.Now()
+        pprof.StartCPUProfile(f)
+        for {
+            sres, _ = searcher.Search(context.Background(), query, &sOpts)
+            if time.Since(t) > *profileTime {
+                break
+            }
+        }
+        pprof.StopCPUProfile()
+    }
 
-	if err != nil {
-		log.Fatal(err)
-	}
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	displayMatches(sres.Files, pat, *withRepo, *list)
-	if *verbose {
-		log.Printf("stats: %#v", sres.Stats)
-	}*/
+    displayMatches(sres.Files, pat, *withRepo, *list)
+    if *verbose {
+        log.Printf("stats: %#v", sres.Stats)
+    }*/
 }
