@@ -463,7 +463,7 @@ pub fn new_searcher() {
 }
 
 // ReadMetadata returns the metadata of index shard without reading
-// the index data. The IndexFile is not closed.
+// the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
 pub fn read_metadata() {
 	/*rd := &reader{r: inf}

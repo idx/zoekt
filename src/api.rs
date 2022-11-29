@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"context"
@@ -262,21 +262,26 @@ type RepoListEntry struct {
 type RepoList struct {
 	Repos   []*RepoListEntry
 	Crashes int
-}
+}*/
 
-type Searcher interface {
-	Search(ctx context.Context, q query.Q, opts *SearchOptions) (*SearchResult, error)
+//type Searcher interface {'
+pub trait Searcher {
+	//Search(ctx context.Context, q que'ry.Q, opts *SearchOptions) (*SearchResult, error)
+	fn search(&self) -> Result<String, String>;
 
 	// List lists repositories. The query `q` can only contain
 	// query.Repo atoms.
-	List(ctx context.Context, q query.Q) (*RepoList, error)
-	Close()
+	//List(ctx context.Context, q query.Q) (*RepoList, error)
+	fn list() -> Result<String, String>;
+	//Close()
+	fn close();
 
 	// Describe the searcher for debug messages.
-	String() string
+	//String() string
+	fn string() -> String;
 }
 
-type SearchOptions struct {
+/*type SearchOptions struct {
 	// Return an upper-bound estimate of eligible documents in
 	// stats.ShardFilesConsidered.
 	EstimateDocCount bool
@@ -309,4 +314,4 @@ type SearchOptions struct {
 
 func (s *SearchOptions) String() string {
 	return fmt.Sprintf("%#v", s)
-}
+}*/

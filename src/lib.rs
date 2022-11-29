@@ -1,4 +1,4 @@
-//pub mod api;
+pub mod api;
 //pub mod bits_test;
 //pub mod bits;
 //pub mod contentprovider;
@@ -28,5 +28,6 @@ pub mod query;
 //pub mod shards;
 //pub mod web;
 
+pub use api::Searcher;
 pub use indexfile_unix::*;
 pub use read::*;
