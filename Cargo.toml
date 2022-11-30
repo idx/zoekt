@@ -30,3 +30,5 @@ default-run = "zoekt"
 
 [dependencies]
 clap = { version = "4.0.26", features = ["derive"] }
+memmap2 = { version = "0.5.8" }
+anyhow = { version = "1.0.66" }

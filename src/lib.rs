@@ -25,7 +25,7 @@ pub mod read;
 //pub mod ctags;
 //pub mod gitindex;
 pub mod query;
-//pub mod shards;
+pub mod shards;
 //pub mod web;
 
 pub use api::Searcher;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package shards
+/*package shards
 
 import (
 	"context"
@@ -147,12 +147,14 @@ func newShardedSearcher(n int64) *shardedSearcher {
 		capacity: n,
 	}
 	return ss
-}
+}*/
+
 
 // NewDirectorySearcher returns a searcher instance that loads all
 // shards corresponding to a glob into memory.
-func NewDirectorySearcher(dir string) (zoekt.Searcher, error) {
-	ss := newShardedSearcher(int64(runtime.GOMAXPROCS(0)))
+//func NewDirectorySearcher(dir string) (zoekt.Searcher, error) {
+pub fn new_directory_searcher() {
+	/*ss := newShardedSearcher(int64(runtime.GOMAXPROCS(0)))
 	tl := &loader{
 		ss: ss,
 	}
@@ -164,10 +166,10 @@ func NewDirectorySearcher(dir string) (zoekt.Searcher, error) {
 	return &directorySearcher{
 		Searcher:         ss,
 		directoryWatcher: dw,
-	}, nil
+	}, nil*/
 }
 
-type directorySearcher struct {
+/*type directorySearcher struct {
 	zoekt.Searcher
 
 	directoryWatcher *DirectoryWatcher
@@ -545,4 +547,4 @@ func loadShard(fn string) (zoekt.Searcher, error) {
 	}
 
 	return s, nil
-}
+}*/

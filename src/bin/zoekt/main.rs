@@ -29,7 +29,9 @@ use clap::Parser;
     "github.com/google/zoekt/query"
     "github.com/google/zoekt/shards"
 )*/
+use std::{fs::File, process::exit};
 use zoekt::query;
+use zoekt::shards;
 
 /*func displayMatches(files []zoekt.FileMatch, pat string, withRepo bool, list bool) {
     for _, f := range files {
@@ -49,7 +51,7 @@ use zoekt::query;
 }*/
 
 //func loadShard(fn string, verbose bool) (zoekt.Searcher, error) {
-fn load_shared(r#fn: String, verbose: bool) {
+fn load_shared(filename: String, verbose: bool) -> std::io::Result<()> {
     /*f, err := os.Open(fn)
     if err != nil {
         return nil, err
@@ -77,13 +79,17 @@ fn load_shared(r#fn: String, verbose: bool) {
     }
 
     return s, nil*/
-    zoekt::new_index_file(r#fn);
+    let f = File::open(filename)?;
+
+    let _i_file = zoekt::new_index_file(f)?;
 
     zoekt::new_searcher();
 
     if verbose {
         zoekt::read_metadata();
-    }
+    };
+
+    Ok(())
 }
 
 #[derive(Parser, Debug)]
@@ -108,14 +114,14 @@ struct Args {
 }
 //func main() {
 fn main() {
-	/*shard := flag.String("shard", "", "search in a specific shard")
-	index := flag.String("index_dir",
-		filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
-	cpuProfile := flag.String("cpu_profile", "", "write cpu profile to `file`")
-	profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")
-	verbose := flag.Bool("v", false, "print some background data")
-	withRepo := flag.Bool("r", false, "print the repo before the file name")
-	list := flag.Bool("l", false, "print matching filenames only")
+    /*shard := flag.String("shard", "", "search in a specific shard")
+    index := flag.String("index_dir",
+        filepath.Join(os.Getenv("HOME"), ".zoekt"), "search for index files in `directory`")
+    cpuProfile := flag.String("cpu_profile", "", "write cpu profile to `file`")
+    profileTime := flag.Duration("profile_time", time.Second, "run this long to gather stats.")
+    verbose := flag.Bool("v", false, "print some background data")
+    withRepo := flag.Bool("r", false, "print the repo before the file name")
+    list := flag.Bool("l", false, "print matching filenames only")
 
     flag.Usage = func() {
         name := os.Args[0]
@@ -153,16 +159,25 @@ fn main() {
     if *verbose {
         log.Println("query:", query)
     }*/
-    match args.shard {
-        Some(v) => load_shared(v, args.verbose),
-        None => println!("none value"),
+    let _searcher;
+
+    if let Some(v) = args.shard {
+        _searcher = match load_shared(v, args.verbose) {
+            Ok(v) => v,
+            Err(e) => {
+                eprintln!("{:?}", e);
+                exit(1);
+            }
+        };
+    } else {
+        _searcher = shards::new_directory_searcher();
     }
 
     let query = match query::parse(args.query) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("{:?}", e);
-            std::process::exit(1);
+            exit(1);
         }
     };
 
