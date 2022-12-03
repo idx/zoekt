@@ -21,17 +21,22 @@ import (
     "os"
     "syscall"
 )*/
-use std::fs::File;
-use std::u32;
 use memmap2::Mmap;
+use std::fs;
+use std::u32;
 
 /*type mmapedIndexFile struct {
     name string
     size uint32
     data []byte
+}*/
+struct MmapedIndexFile {
+    _name: String,
+    _size: u32,
+    _data: Vec<u8>,
 }
 
-func (f *mmapedIndexFile) Read(off, sz uint32) ([]byte, error) {
+/*func (f *mmapedI[ndexFile) Read(off, sz uint32) ([]byte, error) {
     if off+sz > uint32(len(f.data)) {
         return nil, fmt.Errorf("out of bounds: %d, len %d", off+sz, len(f.data))
     }
@@ -53,7 +58,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file(f: File) -> std::io::Result<()> {
+pub fn new_index_file(f: fs::File) -> std::io::Result<()> {
     /*defer f.Close()
 
     fi, err := f.Stat()
@@ -77,11 +82,15 @@ pub fn new_index_file(f: File) -> std::io::Result<()> {
     }
 
     return r, err*/
-    let metadata = f.metadata()?;
-    let sz = metadata.len();
-    if sz >= u32::MAX as u64 {
-        
-    }
+    let sz = f.metadata().unwrap().len();
+    if sz >= u32::MAX as u64 {}
+
+    let _r = MmapedIndexFile {
+        _name: "".to_string(),
+        _size: sz as u32,
+        _data: Vec::new(),
+    };
+
     let _mmap = unsafe { Mmap::map(&f) }?;
 
     Ok(())
