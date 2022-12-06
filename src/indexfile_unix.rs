@@ -30,10 +30,10 @@ use std::u32;
     size uint32
     data []byte
 }*/
-struct MmapedIndexFile {
+pub struct MmapedIndexFile {
     _name: String,
     _size: u32,
-    _data: Vec<u8>,
+    _data: Mmap,
 }
 
 /*func (f *mmapedI[ndexFile) Read(off, sz uint32) ([]byte, error) {
@@ -58,7 +58,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file(f: fs::File) -> std::io::Result<()> {
+pub fn new_index_file(f: fs::File) -> std::io::Result<MmapedIndexFile> {
     /*defer f.Close()
 
     fi, err := f.Stat()
@@ -85,13 +85,13 @@ pub fn new_index_file(f: fs::File) -> std::io::Result<()> {
     let sz = f.metadata().unwrap().len();
     if sz >= u32::MAX as u64 {}
 
-    let _r = MmapedIndexFile {
+    let r = MmapedIndexFile {
         _name: "".to_string(),
         _size: sz as u32,
-        _data: Vec::new(),
+        _data: unsafe { Mmap::map(&f) }?,
     };
 
-    let _mmap = unsafe { Mmap::map(&f) }?;
+    //let _mmap = unsafe { Mmap::map(&f) }?;
 
-    Ok(())
+    Ok(r)
 }

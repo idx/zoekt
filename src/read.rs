@@ -442,6 +442,8 @@ func (d *indexData) readDocSections(i uint32, buf []DocumentSection) ([]Document
 	return unmarshalDocSections(blob, buf), sec.sz, nil
 }*/
 
+use crate::MmapedIndexFile;
+
 // NewSearcher creates a Searcher for a single index file.  Search
 // results coming from this searcher are valid only for the lifetime
 // of the Searcher itself, ie. []byte members should be copied into
@@ -465,7 +467,7 @@ pub fn new_searcher() {
 // ReadMetadata returns the metadata of index shard without reading
 // the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
-pub fn read_metadata() {
+pub fn read_metadata(_inf: MmapedIndexFile) {
 	/*rd := &reader{r: inf}
 	var toc indexTOC
 	if err := rd.readTOC(&toc); err != nil {
