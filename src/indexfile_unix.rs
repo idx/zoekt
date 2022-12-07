@@ -21,7 +21,7 @@ import (
     "os"
     "syscall"
 )*/
-use memmap2::Mmap;
+use memmap2::{Mmap, MmapOptions};
 use std::fs;
 use std::u32;
 
@@ -85,10 +85,11 @@ pub fn new_index_file(f: fs::File) -> std::io::Result<MmapedIndexFile> {
     let sz = f.metadata().unwrap().len();
     if sz >= u32::MAX as u64 {}
 
+    let rounded = (sz + 4095) & !4095;
     let r = MmapedIndexFile {
         _name: "".to_string(),
         _size: sz as u32,
-        _data: unsafe { Mmap::map(&f) }?,
+        _data: unsafe { MmapOptions::new().len(rounded.try_into().unwrap()).map(&f) }?,
     };
 
     //let _mmap = unsafe { Mmap::map(&f) }?;
