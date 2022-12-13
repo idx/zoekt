@@ -30,13 +30,13 @@ use std::u32;
     size uint32
     data []byte
 }*/
-pub struct MmapedIndexFile {
-    _name: String,
-    _size: u32,
-    _data: Mmap,
+pub struct IndexFile {
+    pub _name: String,
+    pub _size: u32,
+    pub data: Mmap,
 }
 
-/*func (f *mmapedI[ndexFile) Read(off, sz uint32) ([]byte, error) {
+/*func (f *mmapedIndexFile) Read(off, sz uint32) ([]byte, error) {
     if off+sz > uint32(len(f.data)) {
         return nil, fmt.Errorf("out of bounds: %d, len %d", off+sz, len(f.data))
     }
@@ -58,7 +58,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file(f: fs::File) -> std::io::Result<MmapedIndexFile> {
+pub fn new_index_file(f: fs::File) -> std::io::Result<IndexFile> {
     /*defer f.Close()
 
     fi, err := f.Stat()
@@ -86,10 +86,10 @@ pub fn new_index_file(f: fs::File) -> std::io::Result<MmapedIndexFile> {
     if sz >= u32::MAX as u64 {}
 
     let rounded = (sz + 4095) & !4095;
-    let r = MmapedIndexFile {
+    let r = IndexFile {
         _name: "".to_string(),
         _size: sz as u32,
-        _data: unsafe { MmapOptions::new().len(rounded.try_into().unwrap()).map(&f) }?,
+        data: unsafe { MmapOptions::new().len(rounded.try_into().unwrap()).map(&f) }?,
     };
 
     //let _mmap = unsafe { Mmap::map(&f) }?;

@@ -10,6 +10,7 @@ pub mod api;
 //pub mod indexbuilder;
 //pub mod indexdata;
 //pub mod indexfile_other;
+#[cfg(target_os = "linux")]
 pub mod indexfile_unix;
 //pub mod matchiter;
 //pub mod matchtree_test;
