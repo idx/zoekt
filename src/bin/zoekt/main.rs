@@ -29,7 +29,7 @@ use clap::Parser;
     "github.com/google/zoekt/query"
     "github.com/google/zoekt/shards"
 )*/
-use std::{fs::File, process::exit};
+use std::process::exit;
 use zoekt::query;
 use zoekt::shards;
 
@@ -79,9 +79,7 @@ fn load_shared(filename: String, verbose: bool) -> std::io::Result<()> {
     }
 
     return s, nil*/
-    let f = File::open(filename)?;
-
-    let i_file = zoekt::new_index_file(f)?;
+    let i_file = zoekt::new_index_file(filename)?;
 
     zoekt::new_searcher();
 

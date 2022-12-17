@@ -22,7 +22,8 @@ import (
     "syscall"
 )*/
 use memmap2::{Mmap, MmapOptions};
-use std::fs;
+//use std::fs;
+use std::{fs::File};
 use std::u32;
 
 /*type mmapedIndexFile struct {
@@ -31,8 +32,8 @@ use std::u32;
     data []byte
 }*/
 pub struct IndexFile {
-    pub _name: String,
-    pub _size: u32,
+    pub name: String,
+    pub size: u32,
     pub data: Mmap,
 }
 
@@ -58,7 +59,7 @@ func (f *mmapedIndexFile) Close() {
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
 //func NewIndexFile(f *os.File) (IndexFile, error) {
-pub fn new_index_file(f: fs::File) -> std::io::Result<IndexFile> {
+pub fn new_index_file(filename: String) -> std::io::Result<IndexFile> {
     /*defer f.Close()
 
     fi, err := f.Stat()
@@ -82,13 +83,16 @@ pub fn new_index_file(f: fs::File) -> std::io::Result<IndexFile> {
     }
 
     return r, err*/
+    let name = filename.clone();
+    let f = File::open(filename)?;
+
     let sz = f.metadata().unwrap().len();
     if sz >= u32::MAX as u64 {}
 
     let rounded = (sz + 4095) & !4095;
     let r = IndexFile {
-        _name: "".to_string(),
-        _size: sz as u32,
+        name: name,
+        size: sz as u32,
         data: unsafe { MmapOptions::new().len(rounded.try_into().unwrap()).map(&f) }?,
     };
 
