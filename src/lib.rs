@@ -18,8 +18,8 @@ pub mod indexfile_unix;
 //pub mod read_test;
 pub mod read;
 //pub mod section_test;
-//pub mod section;
-//pub mod toc;
+pub mod section;
+pub mod toc;
 //pub mod write;
 
 //pub mod build;
@@ -32,3 +32,5 @@ pub mod shards;
 pub use api::Searcher;
 pub use indexfile_unix::*;
 pub use read::*;
+pub use section::*;
+pub use toc::*;

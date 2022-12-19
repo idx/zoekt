@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+/*package zoekt
 
 import (
 	"encoding/binary"
@@ -91,15 +91,19 @@ type sectionKind int
 const (
 	sectionKindSimple  sectionKind = 0
 	sectionKindComplex sectionKind = 1
-)
+)*/
 
 // simpleSection is a simple range of bytes.
-type simpleSection struct {
+/*type simpleSection struct {
 	off uint32
 	sz  uint32
+}*/
+pub struct SimpleSection {
+    pub _off: u32,
+    pub _sz: u32,
 }
 
-func (s *simpleSection) kind() sectionKind {
+/*func (s *simpleSection) kind() sectionKind {
 	return sectionKindSimple
 }
 
@@ -119,18 +123,23 @@ func (s *simpleSection) read(r *reader) error {
 func (s *simpleSection) write(w *writer) {
 	w.U32(s.off)
 	w.U32(s.sz)
-}
+}*/
 
 // compoundSection is a range of bytes containg a list of variable
 // sized items.
-type compoundSection struct {
+/*type compoundSection struct {
 	data simpleSection
 
 	offsets []uint32
 	index   simpleSection
+}*/
+pub struct CompoundSection<'a> {
+    pub _data: SimpleSection,
+	pub _offsets: &'a[u32],
+	pub _index: SimpleSection
 }
 
-func (s *compoundSection) kind() sectionKind {
+/*func (s *compoundSection) kind() sectionKind {
 	return sectionKindComplex
 }
 
@@ -180,4 +189,4 @@ func (s *compoundSection) relativeIndex() []uint32 {
 		ri = append(ri, s.data.sz)
 	}
 	return ri
-}
+}*/

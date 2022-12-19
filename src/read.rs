@@ -21,6 +21,8 @@ import (
     "log"
     "sort"
 )*/
+use crate::IndexFile;
+//use crate::IndexToc;
 
 // IndexFile is a file suitable for concurrent read access. For performance
 // reasons, it allows a mmap'd implementation.
@@ -41,6 +43,7 @@ pub struct Reader {
     pub _off: u32,
 }
 
+impl Reader {
 /*func (r *reader) seek(off uint32) {
     r.off = off
 }
@@ -91,10 +94,11 @@ func (r *reader) Str() (string, error) {
     }
     r.off += uint32(slen)
     return string(b), nil
-}
+}*/
 
-func (r *reader) readTOC(toc *indexTOC) error {
-    sz, err := r.r.Size()
+//func (r *reader) readTOC(toc *indexTOC) error {
+    fn read_toc(&self) {
+    /*sz, err := r.r.Size()
     if err != nil {
         return err
     }
@@ -161,10 +165,10 @@ func (r *reader) readTOC(toc *indexTOC) error {
             }
         }
     }
-    return nil
-}
+    return nil*/
+    }
 
-func (r *indexData) readSectionBlob(sec simpleSection) ([]byte, error) {
+/*func (r *indexData) readSectionBlob(sec simpleSection) ([]byte, error) {
     return r.file.Read(sec.off, sec.sz)
 }
 
@@ -198,18 +202,20 @@ func readSectionU64(f IndexFile, sec simpleSection) ([]uint64, error) {
         blob = blob[8:]
     }
     return arr, nil
-}
+}*/
 
-func (r *reader) readJSON(data interface{}, sec *simpleSection) error {
-    blob, err := r.r.Read(sec.off, sec.sz)
+//func (r *reader) readJSON(data interface{}, sec *simpleSection) error {
+    fn read_json(&self) {
+    /*blob, err := r.r.Read(sec.off, sec.sz)
     if err != nil {
         return err
     }
 
-    return json.Unmarshal(blob, data)
+    return json.Unmarshal(blob, data)*/
+    }
 }
 
-func (r *reader) readIndexData(toc *indexTOC) (*indexData, error) {
+/*func (r *reader) readIndexData(toc *indexTOC) (*indexData, error) {
     d := indexData{
         file:           r.r,
         ngrams:         map[ngram]simpleSection{},
@@ -446,8 +452,6 @@ func (d *indexData) readDocSections(i uint32, buf []DocumentSection) ([]Document
     return unmarshalDocSections(blob, buf), sec.sz, nil
 }*/
 
-use crate::IndexFile;
-
 // NewSearcher creates a Searcher for a single index file.  Search
 // results coming from this searcher are valid only for the lifetime
 // of the Searcher itself, ie. []byte members should be copied into
@@ -489,10 +493,16 @@ pub fn read_metadata(inf: IndexFile) {
     }
 
     return &repo, &md, nil*/
-	let _rd = Reader {
+	let rd = Reader {
 		_r: inf,
 		_off: 0,
     };
+    //let _toc = IndexToc {};
+    rd.read_toc();
+
+    rd.read_json();
+
+    rd.read_json();
 
 //    (0..10).for_each(|x| println!("{:016x}: {:02x}", x, inf.data[x]));
 }

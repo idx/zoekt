@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package zoekt
+//package zoekt
+use crate::SimpleSection;
+use crate::CompoundSection;
 
 // FormatVersion is a version number. It is increased every time the
 // on-disk index format is changed.
@@ -28,7 +30,7 @@ package zoekt
 // 14: languages
 // 15: rune based symbol sections
 // 16 (TBA): TODO: remove fallback parsing in readTOC
-const IndexFormatVersion = 15
+/*const IndexFormatVersion = 15
 
 // FeatureVersion is increased if a feature is added that requires reindexing data
 // without changing the format version
@@ -61,9 +63,9 @@ const WriteMinFeatureVersion = 10
 
 // ReadMinFeatureVersion constrains backwards compatibility by refusing to
 // load a file with a FeatureVersion below it.
-const ReadMinFeatureVersion = 8
+const ReadMinFeatureVersion = 8*/
 
-type indexTOC struct {
+/*type indexTOC struct {
 	fileContents compoundSection
 	fileNames    compoundSection
 	fileSections compoundSection
@@ -85,9 +87,32 @@ type indexTOC struct {
 	nameEndRunes     simpleSection
 	contentChecksums simpleSection
 	runeDocSections  simpleSection
+}*/
+pub struct IndexToc<'a> {
+	pub _file_contents: CompoundSection<'a>,
+	pub _file_names: CompoundSection<'a>,
+	pub _file_sections: CompoundSection<'a>,
+	pub _postings: CompoundSection<'a>,
+	pub _newlines: CompoundSection<'a>,
+	pub _ngram_text: SimpleSection,
+	pub _rune_offsets: SimpleSection,
+	pub _file_end_runes: SimpleSection,
+	pub _languages: SimpleSection,
+
+	pub _branch_masks: SimpleSection,
+	pub _sub_repos: SimpleSection,
+
+	pub _name_ngram_text: SimpleSection,
+	pub _name_postings: CompoundSection<'a>,
+	pub _name_rune_offsets: SimpleSection,
+	pub _meta_data: SimpleSection,
+	pub _repo_meta_data: SimpleSection,
+	pub _name_end_runes: SimpleSection,
+	pub _content_checksums: SimpleSection,
+	pub _rune_doc_sections: SimpleSection,
 }
 
-func (t *indexTOC) sections() []section {
+/*func (t *indexTOC) sections() []section {
 	// This old sections list is only needed to maintain backwards compatibility,
 	// and can be removed when a migration to tagged sections is complete.
 	return []section{
@@ -160,4 +185,4 @@ func (t *indexTOC) sectionsTaggedList() []taggedSection {
 // the current iteration of the indexer.
 func (t *indexTOC) sectionsTaggedCompatibilityList() []taggedSection {
 	return []taggedSection{}
-}
+}*/
