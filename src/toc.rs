@@ -14,7 +14,7 @@
 
 //package zoekt
 use crate::SimpleSection;
-use crate::CompoundSection;
+//use crate::CompoundSection;
 
 // FormatVersion is a version number. It is increased every time the
 // on-disk index format is changed.
@@ -88,12 +88,15 @@ const ReadMinFeatureVersion = 8*/
 	contentChecksums simpleSection
 	runeDocSections  simpleSection
 }*/
-pub struct IndexToc<'a> {
-	pub _file_contents: CompoundSection<'a>,
-	pub _file_names: CompoundSection<'a>,
-	pub _file_sections: CompoundSection<'a>,
-	pub _postings: CompoundSection<'a>,
-	pub _newlines: CompoundSection<'a>,
+
+#[derive(Default)]
+//pub struct IndexToc<'a> {
+pub struct IndexToc {
+	//pub _file_contents: CompoundSection<'a>,
+	//pub _file_names: CompoundSection<'a>,
+	//pub _file_sections: CompoundSection<'a>,
+	//pub _postings: CompoundSection<'a>,
+	//pub _newlines: CompoundSection<'a>,
 	pub _ngram_text: SimpleSection,
 	pub _rune_offsets: SimpleSection,
 	pub _file_end_runes: SimpleSection,
@@ -103,7 +106,7 @@ pub struct IndexToc<'a> {
 	pub _sub_repos: SimpleSection,
 
 	pub _name_ngram_text: SimpleSection,
-	pub _name_postings: CompoundSection<'a>,
+	//pub _name_postings: CompoundSection<'a>,
 	pub _name_rune_offsets: SimpleSection,
 	pub _meta_data: SimpleSection,
 	pub _repo_meta_data: SimpleSection,

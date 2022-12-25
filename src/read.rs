@@ -22,7 +22,7 @@ import (
     "sort"
 )*/
 use crate::IndexFile;
-//use crate::IndexToc;
+use crate::IndexToc;
 
 // IndexFile is a file suitable for concurrent read access. For performance
 // reasons, it allows a mmap'd implementation.
@@ -38,12 +38,12 @@ use crate::IndexFile;
     r   IndexFile
     off uint32
 }*/
-pub struct Reader {
-    pub _r: IndexFile,
+pub struct Reader<'a> {
+    pub _r: &'a IndexFile,
     pub _off: u32,
 }
 
-impl Reader {
+impl Reader<'_> {
 /*func (r *reader) seek(off uint32) {
     r.off = off
 }
@@ -457,7 +457,7 @@ func (d *indexData) readDocSections(i uint32, buf []DocumentSection) ([]Document
 // of the Searcher itself, ie. []byte members should be copied into
 // fresh buffers if the result is to survive closing the shard.
 //func NewSearcher(r IndexFile) (Searcher, error) {
-pub fn new_searcher() {
+pub fn new_searcher(_r: &IndexFile) {
     /*rd := &reader{r: r}
 
     var toc indexTOC
@@ -475,7 +475,7 @@ pub fn new_searcher() {
 // ReadMetadata returns the metadata of index shard without reading
 // the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
-pub fn read_metadata(inf: IndexFile) {
+pub fn read_metadata(inf: &IndexFile) {
     /*rd := &reader{r: inf}
     var toc indexTOC
     if err := rd.readTOC(&toc); err != nil {
@@ -497,7 +497,7 @@ pub fn read_metadata(inf: IndexFile) {
 		_r: inf,
 		_off: 0,
     };
-    //let _toc = IndexToc {};
+    let _toc: IndexToc = Default::default();
     rd.read_toc();
 
     rd.read_json();

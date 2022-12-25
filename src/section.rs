@@ -98,6 +98,7 @@ const (
 	off uint32
 	sz  uint32
 }*/
+#[derive(Default)]
 pub struct SimpleSection {
     pub _off: u32,
     pub _sz: u32,
@@ -133,6 +134,7 @@ func (s *simpleSection) write(w *writer) {
 	offsets []uint32
 	index   simpleSection
 }*/
+#[derive(Default)]
 pub struct CompoundSection<'a> {
     pub _data: SimpleSection,
 	pub _offsets: &'a[u32],

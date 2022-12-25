@@ -81,10 +81,10 @@ fn load_shared(filename: String, verbose: bool) -> std::io::Result<()> {
     return s, nil*/
     let i_file = zoekt::new_index_file(filename)?;
 
-    zoekt::new_searcher();
+    zoekt::new_searcher(&i_file);
 
     if verbose {
-        zoekt::read_metadata(i_file);
+        zoekt::read_metadata(&i_file);
     };
 
     Ok(())
