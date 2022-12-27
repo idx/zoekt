@@ -13,8 +13,8 @@
 // limitations under the License.
 
 //package zoekt
+use crate::CompoundSection;
 use crate::SimpleSection;
-//use crate::CompoundSection;
 
 // FormatVersion is a version number. It is increased every time the
 // on-disk index format is changed.
@@ -66,126 +66,125 @@ const WriteMinFeatureVersion = 10
 const ReadMinFeatureVersion = 8*/
 
 /*type indexTOC struct {
-	fileContents compoundSection
-	fileNames    compoundSection
-	fileSections compoundSection
-	postings     compoundSection
-	newlines     compoundSection
-	ngramText    simpleSection
-	runeOffsets  simpleSection
-	fileEndRunes simpleSection
-	languages    simpleSection
+    fileContents compoundSection
+    fileNames    compoundSection
+    fileSections compoundSection
+    postings     compoundSection
+    newlines     compoundSection
+    ngramText    simpleSection
+    runeOffsets  simpleSection
+    fileEndRunes simpleSection
+    languages    simpleSection
 
-	branchMasks simpleSection
-	subRepos    simpleSection
+    branchMasks simpleSection
+    subRepos    simpleSection
 
-	nameNgramText    simpleSection
-	namePostings     compoundSection
-	nameRuneOffsets  simpleSection
-	metaData         simpleSection
-	repoMetaData     simpleSection
-	nameEndRunes     simpleSection
-	contentChecksums simpleSection
-	runeDocSections  simpleSection
+    nameNgramText    simpleSection
+    namePostings     compoundSection
+    nameRuneOffsets  simpleSection
+    metaData         simpleSection
+    repoMetaData     simpleSection
+    nameEndRunes     simpleSection
+    contentChecksums simpleSection
+    runeDocSections  simpleSection
 }*/
 
 #[derive(Default)]
-//pub struct IndexToc<'a> {
-pub struct IndexToc {
-	//pub _file_contents: CompoundSection<'a>,
-	//pub _file_names: CompoundSection<'a>,
-	//pub _file_sections: CompoundSection<'a>,
-	//pub _postings: CompoundSection<'a>,
-	//pub _newlines: CompoundSection<'a>,
-	pub _ngram_text: SimpleSection,
-	pub _rune_offsets: SimpleSection,
-	pub _file_end_runes: SimpleSection,
-	pub _languages: SimpleSection,
+pub struct IndexToc<'a> {
+    pub file_contents: CompoundSection<'a>,
+    pub file_names: CompoundSection<'a>,
+    pub file_sections: CompoundSection<'a>,
+    pub postings: CompoundSection<'a>,
+    pub newlines: CompoundSection<'a>,
+    pub ngram_text: SimpleSection,
+    pub rune_offsets: SimpleSection,
+    pub file_end_runes: SimpleSection,
+    pub languages: SimpleSection,
 
-	pub _branch_masks: SimpleSection,
-	pub _sub_repos: SimpleSection,
+    pub branch_masks: SimpleSection,
+    pub sub_repos: SimpleSection,
 
-	pub _name_ngram_text: SimpleSection,
-	//pub _name_postings: CompoundSection<'a>,
-	pub _name_rune_offsets: SimpleSection,
-	pub _meta_data: SimpleSection,
-	pub _repo_meta_data: SimpleSection,
-	pub _name_end_runes: SimpleSection,
-	pub _content_checksums: SimpleSection,
-	pub _rune_doc_sections: SimpleSection,
+    pub name_ngram_text: SimpleSection,
+    pub name_postings: CompoundSection<'a>,
+    pub name_rune_offsets: SimpleSection,
+    pub meta_data: SimpleSection,
+    pub repo_meta_data: SimpleSection,
+    pub name_end_runes: SimpleSection,
+    pub content_checksums: SimpleSection,
+    pub rune_doc_sections: SimpleSection,
 }
 
 /*func (t *indexTOC) sections() []section {
-	// This old sections list is only needed to maintain backwards compatibility,
-	// and can be removed when a migration to tagged sections is complete.
-	return []section{
-		// This must be first, so it can be reliably read across
-		// file format versions.
-		&t.metaData,
-		&t.repoMetaData,
-		&t.fileContents,
-		&t.fileNames,
-		&t.fileSections,
-		&t.newlines,
-		&t.ngramText,
-		&t.postings,
-		&t.nameNgramText,
-		&t.namePostings,
-		&t.branchMasks,
-		&t.subRepos,
-		&t.runeOffsets,
-		&t.nameRuneOffsets,
-		&t.fileEndRunes,
-		&t.nameEndRunes,
-		&t.contentChecksums,
-		&t.languages,
-		&t.runeDocSections,
-	}
+    // This old sections list is only needed to maintain backwards compatibility,
+    // and can be removed when a migration to tagged sections is complete.
+    return []section{
+        // This must be first, so it can be reliably read across
+        // file format versions.
+        &t.metaData,
+        &t.repoMetaData,
+        &t.fileContents,
+        &t.fileNames,
+        &t.fileSections,
+        &t.newlines,
+        &t.ngramText,
+        &t.postings,
+        &t.nameNgramText,
+        &t.namePostings,
+        &t.branchMasks,
+        &t.subRepos,
+        &t.runeOffsets,
+        &t.nameRuneOffsets,
+        &t.fileEndRunes,
+        &t.nameEndRunes,
+        &t.contentChecksums,
+        &t.languages,
+        &t.runeDocSections,
+    }
 }
 
 type taggedSection struct {
-	tag string
-	sec section
+    tag string
+    sec section
 }
 
 func (t *indexTOC) sectionsTagged() map[string]section {
-	out := map[string]section{}
-	for _, ent := range t.sectionsTaggedList() {
-		out[ent.tag] = ent.sec
-	}
-	for _, ent := range t.sectionsTaggedCompatibilityList() {
-		out[ent.tag] = ent.sec
-	}
-	return out
+    out := map[string]section{}
+    for _, ent := range t.sectionsTaggedList() {
+        out[ent.tag] = ent.sec
+    }
+    for _, ent := range t.sectionsTaggedCompatibilityList() {
+        out[ent.tag] = ent.sec
+    }
+    return out
 }
 
 func (t *indexTOC) sectionsTaggedList() []taggedSection {
-	return []taggedSection{
-		{"metadata", &t.metaData},
-		{"repoMetaData", &t.repoMetaData},
-		{"fileContents", &t.fileContents},
-		{"fileNames", &t.fileNames},
-		{"fileSections", &t.fileSections},
-		{"newlines", &t.newlines},
-		{"ngramText", &t.ngramText},
-		{"postings", &t.postings},
-		{"nameNgramText", &t.nameNgramText},
-		{"namePostings", &t.namePostings},
-		{"branchMasks", &t.branchMasks},
-		{"subRepos", &t.subRepos},
-		{"runeOffsets", &t.runeOffsets},
-		{"nameRuneOffsets", &t.nameRuneOffsets},
-		{"fileEndRunes", &t.fileEndRunes},
-		{"nameEndRunes", &t.nameEndRunes},
-		{"contentChecksums", &t.contentChecksums},
-		{"languages", &t.languages},
-		{"runeDocSections", &t.runeDocSections},
-	}
+    return []taggedSection{
+        {"metadata", &t.metaData},
+        {"repoMetaData", &t.repoMetaData},
+        {"fileContents", &t.fileContents},
+        {"fileNames", &t.fileNames},
+        {"fileSections", &t.fileSections},
+        {"newlines", &t.newlines},
+        {"ngramText", &t.ngramText},
+        {"postings", &t.postings},
+        {"nameNgramText", &t.nameNgramText},
+        {"namePostings", &t.namePostings},
+        {"branchMasks", &t.branchMasks},
+        {"subRepos", &t.subRepos},
+        {"runeOffsets", &t.runeOffsets},
+        {"nameRuneOffsets", &t.nameRuneOffsets},
+        {"fileEndRunes", &t.fileEndRunes},
+        {"nameEndRunes", &t.nameEndRunes},
+        {"contentChecksums", &t.contentChecksums},
+        {"languages", &t.languages},
+        {"runeDocSections", &t.runeDocSections},
+    }
 }
 
 // sectionsTaggedCompatibilityList returns a list of sections that will be
 // handled or converted for backwards compatiblity, but aren't written by
 // the current iteration of the indexer.
 func (t *indexTOC) sectionsTaggedCompatibilityList() []taggedSection {
-	return []taggedSection{}
+    return []taggedSection{}
 }*/

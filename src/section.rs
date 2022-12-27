@@ -100,8 +100,8 @@ const (
 }*/
 #[derive(Default)]
 pub struct SimpleSection {
-    pub _off: u32,
-    pub _sz: u32,
+    pub off: u32,
+    pub sz: u32,
 }
 
 /*func (s *simpleSection) kind() sectionKind {

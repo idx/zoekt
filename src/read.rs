@@ -97,7 +97,7 @@ func (r *reader) Str() (string, error) {
 }*/
 
 //func (r *reader) readTOC(toc *indexTOC) error {
-    fn read_toc(&self) {
+    fn read_toc(&self, _toc: IndexToc) {
     /*sz, err := r.r.Size()
     if err != nil {
         return err
@@ -497,8 +497,8 @@ pub fn read_metadata(inf: &IndexFile) {
 		_r: inf,
 		_off: 0,
     };
-    let _toc: IndexToc = Default::default();
-    rd.read_toc();
+    let toc: IndexToc = Default::default();
+    rd.read_toc(toc);
 
     rd.read_json();
 
