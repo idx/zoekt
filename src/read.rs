@@ -114,9 +114,10 @@ func (r *reader) Str() (string, error) {
     sectionCount, err := r.U32()
     if err != nil {
         return err
-    }
+    }*/
+    let _sz = self._r.size;
 
-    if sectionCount == 0 {
+    /*if sectionCount == 0 {
         // tagged sections are indicated by a 0 sectionCount,
         // and then a list of string-tagged type-indicated sections.
         secs := toc.sectionsTagged()

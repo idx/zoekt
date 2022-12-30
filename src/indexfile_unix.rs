@@ -37,6 +37,7 @@ pub struct IndexFile {
     pub data: Mmap,
 }
 
+impl IndexFile {
 /*func (f *mmapedIndexFile) Read(off, sz uint32) ([]byte, error) {
     if off+sz > uint32(len(f.data)) {
         return nil, fmt.Errorf("out of bounds: %d, len %d", off+sz, len(f.data))
@@ -55,6 +56,10 @@ func (f *mmapedIndexFile) Size() (uint32, error) {
 func (f *mmapedIndexFile) Close() {
     syscall.Munmap(f.data)
 }*/
+    pub fn size(&self) -> u32 {
+        self.size        
+    }
+}
 
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.

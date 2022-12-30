@@ -104,12 +104,14 @@ pub struct SimpleSection {
     pub sz: u32,
 }
 
+impl SimpleSection {
 /*func (s *simpleSection) kind() sectionKind {
 	return sectionKindSimple
-}
+}*/
 
-func (s *simpleSection) read(r *reader) error {
-	var err error
+//func (s *simpleSection) read(r *reader) error {
+	fn _read(&self) {
+	/*var err error
 	s.off, err = r.U32()
 	if err != nil {
 		return err
@@ -118,13 +120,14 @@ func (s *simpleSection) read(r *reader) error {
 	if err != nil {
 		return err
 	}
-	return nil
+	return nil*/
 }
 
-func (s *simpleSection) write(w *writer) {
+/*func (s *simpleSection) write(w *writer) {
 	w.U32(s.off)
 	w.U32(s.sz)
 }*/
+}
 
 // compoundSection is a range of bytes containg a list of variable
 // sized items.
