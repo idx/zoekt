@@ -23,6 +23,7 @@ import (
 )*/
 use crate::IndexFile;
 use crate::IndexToc;
+use crate::SimpleSection;
 
 // IndexFile is a file suitable for concurrent read access. For performance
 // reasons, it allows a mmap'd implementation.
@@ -39,8 +40,8 @@ use crate::IndexToc;
     off uint32
 }*/
 pub struct Reader<'a> {
-    pub _r: &'a IndexFile,
-    pub _off: u32,
+    pub r: &'a IndexFile,
+    pub off: u32,
 }
 
 impl Reader<'_> {
@@ -97,7 +98,7 @@ func (r *reader) Str() (string, error) {
 }*/
 
 //func (r *reader) readTOC(toc *indexTOC) error {
-    fn read_toc(&self, _toc: IndexToc) {
+    fn read_toc(mut self, _toc: IndexToc) {
     /*sz, err := r.r.Size()
     if err != nil {
         return err
@@ -115,7 +116,10 @@ func (r *reader) Str() (string, error) {
     if err != nil {
         return err
     }*/
-    let _sz = self._r.size;
+    let sz = self.r.size;
+    self.off = sz - 8;
+
+    let _toc_section: SimpleSection;
 
     /*if sectionCount == 0 {
         // tagged sections are indicated by a 0 sectionCount,
@@ -206,14 +210,14 @@ func readSectionU64(f IndexFile, sec simpleSection) ([]uint64, error) {
 }*/
 
 //func (r *reader) readJSON(data interface{}, sec *simpleSection) error {
-    fn read_json(&self) {
+    //fn read_json(self) {
     /*blob, err := r.r.Read(sec.off, sec.sz)
     if err != nil {
         return err
     }
 
     return json.Unmarshal(blob, data)*/
-    }
+    //}
 }
 
 /*func (r *reader) readIndexData(toc *indexTOC) (*indexData, error) {
@@ -495,15 +499,15 @@ pub fn read_metadata(inf: &IndexFile) {
 
     return &repo, &md, nil*/
 	let rd = Reader {
-		_r: inf,
-		_off: 0,
+		r: inf,
+	    off: 0,
     };
     let toc: IndexToc = Default::default();
     rd.read_toc(toc);
 
-    rd.read_json();
+    //rd.read_json();
 
-    rd.read_json();
+    //rd.read_json();
 
 //    (0..10).for_each(|x| println!("{:016x}: {:02x}", x, inf.data[x]));
 }
