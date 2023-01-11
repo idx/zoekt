@@ -47,18 +47,20 @@ pub struct Reader<'a> {
 impl Reader<'_> {
 /*func (r *reader) seek(off uint32) {
     r.off = off
-}
+}*/
 
-func (r *reader) U32() (uint32, error) {
-    b, err := r.r.Read(r.off, 4)
+//func (r *reader) U32() (uint32, error) {
+    pub fn u32(self) -> u32 {
+    /*b, err := r.r.Read(r.off, 4)
     r.off += 4
     if err != nil {
         return 0, err
     }
-    return binary.BigEndian.Uint32(b), nil
+    return binary.BigEndian.Uint32(b), nil*/
+    0
 }
 
-func (r *reader) U64() (uint64, error) {
+/*func (r *reader) U64() (uint64, error) {
     b, err := r.r.Read(r.off, 8)
     r.off += 8
     if err != nil {
@@ -119,7 +121,8 @@ func (r *reader) Str() (string, error) {
     let sz = self.r.size;
     self.off = sz - 8;
 
-    let _toc_section: SimpleSection;
+    let toc_section: SimpleSection = Default::default();
+    toc_section.read(self);
 
     /*if sectionCount == 0 {
         // tagged sections are indicated by a 0 sectionCount,

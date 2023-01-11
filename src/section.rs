@@ -93,6 +93,8 @@ const (
 	sectionKindComplex sectionKind = 1
 )*/
 
+use crate::Reader;
+
 // simpleSection is a simple range of bytes.
 /*type simpleSection struct {
 	off uint32
@@ -110,7 +112,7 @@ impl SimpleSection {
 }*/
 
 //func (s *simpleSection) read(r *reader) error {
-	fn _read(&self) {
+pub fn read(mut self, r: Reader) {
 	/*var err error
 	s.off, err = r.U32()
 	if err != nil {
@@ -121,6 +123,7 @@ impl SimpleSection {
 		return err
 	}
 	return nil*/
+	self.off = r.u32();
 }
 
 /*func (s *simpleSection) write(w *writer) {
