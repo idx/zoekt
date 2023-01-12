@@ -22,6 +22,7 @@ import (
     "syscall"
 )*/
 use memmap2::{Mmap, MmapOptions};
+//use nom::number::complete::*;
 //use std::fs;
 use std::{fs::File};
 use std::u32;
@@ -43,9 +44,11 @@ impl IndexFile {
         return nil, fmt.Errorf("out of bounds: %d, len %d", off+sz, len(f.data))
     }
     return f.data[off : off+sz], nil
-}
+}*/
+    pub fn read(&self, _off: u32, _sz: u32) {
+    }
 
-func (f *mmapedIndexFile) Name() string {
+/*func (f *mmapedIndexFile) Name() string {
     return f.name
 }
 
@@ -63,7 +66,7 @@ func (f *mmapedIndexFile) Close() {
 
 // NewIndexFile returns a new index file. The index file takes
 // ownership of the passed in file, and may close it.
-//func NewIndexFile(f *os.File) (IndexFile, error) {
+//func NewIndexFile(f *os.File) (IndexFile,  error) {
 pub fn new_index_file(filename: String) -> std::io::Result<IndexFile> {
     /*defer f.Close()
 

@@ -124,6 +124,8 @@ pub fn read(mut self, r: Reader) {
 	}
 	return nil*/
 	self.off = r.u32();
+
+	self.sz = r.u32();
 }
 
 /*func (s *simpleSection) write(w *writer) {

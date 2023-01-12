@@ -50,13 +50,15 @@ impl Reader<'_> {
 }*/
 
 //func (r *reader) U32() (uint32, error) {
-    pub fn u32(self) -> u32 {
+    pub fn u32(&self) -> u32 {
     /*b, err := r.r.Read(r.off, 4)
     r.off += 4
     if err != nil {
         return 0, err
     }
     return binary.BigEndian.Uint32(b), nil*/
+    self.r.read(self.off, 4);
+    
     0
 }
 
