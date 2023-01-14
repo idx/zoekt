@@ -24,8 +24,14 @@ import (
 use memmap2::{Mmap, MmapOptions};
 //use nom::number::complete::*;
 //use std::fs;
-use std::{fs::File};
-use std::u32;
+use std::{fs::File, u32};
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+pub enum IndexFileError {
+    #[error("out of bounds: {0}, len {1}")]
+    Read(u32, usize)
+}
 
 /*type mmapedIndexFile struct {
     name string
@@ -45,22 +51,33 @@ impl IndexFile {
     }
     return f.data[off : off+sz], nil
 }*/
-    pub fn read(&self, _off: u32, _sz: u32) {
+    pub fn read(&self, off: u32, sz: u32) -> Result<u32, IndexFileError>{
+    //pub fn read(&self, off: u32, sz: u32) -> u32 {
+        if off + sz > self.data.len() as u32 {
+            IndexFileError::Read(off + sz, self.data.len());
+        }
+        Ok(0)
     }
 
 /*func (f *mmapedIndexFile) Name() string {
     return f.name
-}
+}*/
+    pub fn name(&self) -> &String {
+        &self.name
+    }
 
-func (f *mmapedIndexFile) Size() (uint32, error) {
+/*func (f *mmapedIndexFile) Size() (uint32, error) {
     return f.size, nil
-}
-
-func (f *mmapedIndexFile) Close() {
-    syscall.Munmap(f.data)
 }*/
     pub fn size(&self) -> u32 {
         self.size        
+    }
+
+/*func (f *mmapedIndexFile) Close() {
+    syscall.Munmap(f.data)
+}*/
+    pub fn close(&self) {
+
     }
 }
 

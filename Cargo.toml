@@ -34,3 +34,4 @@ filename = { version = "0.1.1"}
 nom = { version = "7.1.2"}
 memmap2 = { version = "0.5.8" }
 anyhow = { version = "1.0.66" }
+thiserror = { version = "1.0.38" }
