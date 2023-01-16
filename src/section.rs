@@ -111,9 +111,8 @@ impl SimpleSection {
 	return sectionKindSimple
 }*/
 
-//func (s *simpleSection) read(r *reader) error {
-pub fn read(mut self, r: Reader) {
-	/*var err error
+/*func (s *simpleSection) read(r *reader) error {
+	var err error
 	s.off, err = r.U32()
 	if err != nil {
 		return err
@@ -123,10 +122,11 @@ pub fn read(mut self, r: Reader) {
 		return err
 	}
 	return nil*/
-	self.off = r.u32();
+	pub fn read(&mut self, r: &Reader) {
+		self.off = r.u32();
 
-	self.sz = r.u32();
-}
+		self.sz = r.u32();
+	}
 
 /*func (s *simpleSection) write(w *writer) {
 	w.U32(s.off)

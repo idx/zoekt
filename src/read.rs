@@ -102,7 +102,7 @@ func (r *reader) Str() (string, error) {
 }*/
 
 //func (r *reader) readTOC(toc *indexTOC) error {
-    fn read_toc(mut self, _toc: IndexToc) {
+    fn read_toc(&mut self, _toc: &IndexToc<'_>) {
     /*sz, err := r.r.Size()
     if err != nil {
         return err
@@ -123,7 +123,7 @@ func (r *reader) Str() (string, error) {
     let sz = self.r.size;
     self.off = sz - 8;
 
-    let toc_section: SimpleSection = Default::default();
+    let mut toc_section: SimpleSection = Default::default();
     toc_section.read(self);
 
     /*if sectionCount == 0 {
@@ -215,14 +215,14 @@ func readSectionU64(f IndexFile, sec simpleSection) ([]uint64, error) {
 }*/
 
 //func (r *reader) readJSON(data interface{}, sec *simpleSection) error {
-    //fn read_json(self) {
     /*blob, err := r.r.Read(sec.off, sec.sz)
     if err != nil {
         return err
     }
 
     return json.Unmarshal(blob, data)*/
-    //}
+    fn read_json(&self) {
+    }
 }
 
 /*func (r *reader) readIndexData(toc *indexTOC) (*indexData, error) {
@@ -503,14 +503,14 @@ pub fn read_metadata(inf: &IndexFile) {
     }
 
     return &repo, &md, nil*/
-	let rd = Reader {
+	let mut rd = Reader {
 		r: inf,
 	    off: 0,
     };
     let toc: IndexToc = Default::default();
-    rd.read_toc(toc);
+    rd.read_toc(&toc);
 
-    //rd.read_json();
+    rd.read_json();
 
     //rd.read_json();
 
