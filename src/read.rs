@@ -57,7 +57,9 @@ impl Reader<'_> {
         return 0, err
     }
     return binary.BigEndian.Uint32(b), nil*/
-    let _b = self.r.read(self.off, 4);
+    let b = self.r.read(self.off, 4);
+
+    println!("{:?}", b);
     
     0
 }

@@ -51,12 +51,11 @@ impl IndexFile {
     }
     return f.data[off : off+sz], nil
 }*/
-    pub fn read(&self, off: u32, sz: u32) -> Result<u32, IndexFileError>{
-    //pub fn read(&self, off: u32, sz: u32) -> u32 {
+    pub fn read(&self, off: u32, sz: u32) -> Result<Vec<u8>, IndexFileError> {
         if off + sz > self.data.len() as u32 {
             IndexFileError::Read(off + sz, self.data.len());
         }
-        Ok(0)
+        Ok(self.data[off as usize..(off + sz) as usize].to_vec())
     }
 
 /*func (f *mmapedIndexFile) Name() string {
