@@ -24,6 +24,7 @@ import (
 use crate::IndexFile;
 use crate::IndexToc;
 use crate::SimpleSection;
+use anyhow::Error;
 
 // IndexFile is a file suitable for concurrent read access. For performance
 // reasons, it allows a mmap'd implementation.
@@ -50,18 +51,16 @@ impl Reader<'_> {
 }*/
 
 //func (r *reader) U32() (uint32, error) {
-    pub fn u32(&self) -> u32 {
+    pub fn u32(&mut self) -> Result<u32, Error> {
     /*b, err := r.r.Read(r.off, 4)
     r.off += 4
     if err != nil {
         return 0, err
     }
     return binary.BigEndian.Uint32(b), nil*/
-    let b = self.r.read(self.off, 4);
-
-    println!("{:?}", b);
-    
-    0
+    let b = self.r.read(self.off, 4)?;
+    self.off += 4;
+    Ok(u32::from_le_bytes(b.as_slice().try_into()?))
 }
 
 /*func (r *reader) U64() (uint64, error) {
@@ -104,8 +103,9 @@ func (r *reader) Str() (string, error) {
 }*/
 
 //func (r *reader) readTOC(toc *indexTOC) error {
-    fn read_toc(&mut self, _toc: &IndexToc<'_>) {
-    /*sz, err := r.r.Size()
+    fn read_toc(&mut self, _toc: &IndexToc<'_>) -> Result<(), Error> {
+    //fn read_toc(&mut self, _toc: &IndexToc<'_>) {
+            /*sz, err := r.r.Size()
     if err != nil {
         return err
     }
@@ -126,7 +126,7 @@ func (r *reader) Str() (string, error) {
     self.off = sz - 8;
 
     let mut toc_section: SimpleSection = Default::default();
-    toc_section.read(self);
+    toc_section.read(self)?;
 
     /*if sectionCount == 0 {
         // tagged sections are indicated by a 0 sectionCount,
@@ -178,6 +178,7 @@ func (r *reader) Str() (string, error) {
         }
     }
     return nil*/
+        Ok(())
     }
 
 /*func (r *indexData) readSectionBlob(sec simpleSection) ([]byte, error) {
@@ -487,7 +488,7 @@ pub fn new_searcher(_r: &IndexFile) {
 // ReadMetadata returns the metadata of index shard without reading
 // the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
-pub fn read_metadata(inf: &IndexFile) {
+pub fn read_metadata(inf: &IndexFile) -> Result<(), Error> {
     /*rd := &reader{r: inf}
     var toc indexTOC
     if err := rd.readTOC(&toc); err != nil {
@@ -510,11 +511,12 @@ pub fn read_metadata(inf: &IndexFile) {
 	    off: 0,
     };
     let toc: IndexToc = Default::default();
-    rd.read_toc(&toc);
+    rd.read_toc(&toc)?;
 
     rd.read_json();
 
     //rd.read_json();
 
 //    (0..10).for_each(|x| println!("{:016x}: {:02x}", x, inf.data[x]));
+    Ok(())
 }

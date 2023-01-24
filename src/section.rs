@@ -93,7 +93,9 @@ const (
 	sectionKindComplex sectionKind = 1
 )*/
 
+//use crate::{Reader, IndexFileError};
 use crate::Reader;
+use anyhow::Error;
 
 // simpleSection is a simple range of bytes.
 /*type simpleSection struct {
@@ -122,10 +124,11 @@ impl SimpleSection {
 		return err
 	}
 	return nil*/
-	pub fn read(&mut self, r: &Reader) {
-		self.off = r.u32();
+	pub fn read(&mut self, r: &mut Reader) -> Result<(), Error> {
+		self.off = r.u32()?;
 
-		self.sz = r.u32();
+		self.sz = r.u32()?;
+		Ok(())
 	}
 
 /*func (s *simpleSection) write(w *writer) {
