@@ -12,24 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*package zoekt
+//package zoekt
 
-import (
+/*import (
 	"encoding/binary"
 	"io"
 	"log"
-)
+)*/
 
-var _ = log.Println
+//use crate::{Reader, IndexFileError};
+use crate::Reader;
+use anyhow::Error;
+
+//var _ = log.Println
 
 // writer is an io.Writer that keeps track of errors and offsets
-type writer struct {
+/*type writer struct {
 	err error
 	w   io.Writer
 	off uint32
+}*/
+pub struct Writer {
+	//err error
+	//w   io.Writer
+    _off: u32,
 }
 
-func (w *writer) Write(b []byte) error {
+impl Writer {
+/*func (w *writer) Write(b []byte) error {
 	if w.err != nil {
 		return w.err
 	}
@@ -38,64 +48,76 @@ func (w *writer) Write(b []byte) error {
 	n, w.err = w.w.Write(b)
 	w.off += uint32(n)
 	return w.err
-}
+}*/
+	fn write(&mut self, _b: &[u8]) -> Result<(), Error> {
+	//fn Write(&mut self) {
+		Ok(())
+	}
 
-func (w *writer) Off() uint32 { return w.off }
+//func (w *writer) Off() uint32 { return w.off }
 
-func (w *writer) B(b byte) {
+/*func (w *writer) B(b byte) {
 	s := []byte{b}
 	w.Write(s)
-}
+}*/
 
-func (w *writer) U32(n uint32) {
+/*func (w *writer) U32(n uint32) {
 	var enc [4]byte
 	binary.BigEndian.PutUint32(enc[:], n)
 	w.Write(enc[:])
-}
+}*/
 
-func (w *writer) U64(n uint64) {
+/*func (w *writer) U64(n uint64) {
 	var enc [8]byte
 	binary.BigEndian.PutUint64(enc[:], n)
 	w.Write(enc[:])
-}
+}*/
+	pub fn u64(&mut self, n: u64) {
+		let enc: [u8; 8] = n.to_be_bytes();
+		self.write(&enc).unwrap();
 
-func (w *writer) Varint(n uint32) {
+		()
+	}
+	
+/*func (w *writer) Varint(n uint32) {
 	var enc [8]byte
 	m := binary.PutUvarint(enc[:], uint64(n))
 	w.Write(enc[:m])
-}
+}*/
 
-func (w *writer) String(s string) {
+/*func (w *writer) String(s string) {
 	b := []byte(s)
 	w.Varint(uint32(len(b)))
 	w.Write(b)
-}
+}*/
 
-func (s *simpleSection) start(w *writer) {
+/*func (s *simpleSection) start(w *writer) {
 	s.off = w.Off()
-}
+}*/
 
-func (s *simpleSection) end(w *writer) {
+/*func (s *simpleSection) end(w *writer) {
 	s.sz = w.Off() - s.off
+}*/
 }
 
 // section is a range of bytes in the index file.
-type section interface {
+/*type section interface {
 	read(*reader) error
 	write(*writer)
 	kind() sectionKind // simple or complex, used in serialization
+}*/
+pub trait Section {
+    fn read(&mut self, reader: &mut Reader) -> Result<(), Error>;
+    //fn write(&self, writer: &mut Writer);
+    //fn kind(&self) -> SectionKind;
 }
 
-type sectionKind int
+/*type sectionKind int
 
 const (
 	sectionKindSimple  sectionKind = 0
 	sectionKindComplex sectionKind = 1
 )*/
-
-//use crate::{Reader, IndexFileError};
-use crate::Reader;
-use anyhow::Error;
 
 // simpleSection is a simple range of bytes.
 /*type simpleSection struct {
@@ -104,8 +126,8 @@ use anyhow::Error;
 }*/
 #[derive(Default)]
 pub struct SimpleSection {
-    pub off: u32,
-    pub sz: u32,
+    off: u32,
+    sz: u32,
 }
 
 impl SimpleSection {
@@ -151,6 +173,8 @@ pub struct CompoundSection<'a> {
 	pub _offsets: &'a[u32],
 	pub _index: SimpleSection
 }
+
+impl CompoundSection<'_> {
 
 /*func (s *compoundSection) kind() sectionKind {
 	return sectionKindComplex
@@ -203,3 +227,4 @@ func (s *compoundSection) relativeIndex() []uint32 {
 	}
 	return ri
 }*/
+}
