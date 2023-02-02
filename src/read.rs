@@ -23,6 +23,7 @@ import (
 )*/
 use crate::IndexFile;
 use crate::IndexToc;
+use crate::Section;
 use crate::SimpleSection;
 use anyhow::Error;
 

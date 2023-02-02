@@ -66,6 +66,10 @@ impl Writer {
 	binary.BigEndian.PutUint32(enc[:], n)
 	w.Write(enc[:])
 }*/
+pub fn u32(&mut self, n: u32) {
+	let enc: [u8; 4] = n.to_be_bytes();
+	self.write(&enc).unwrap();
+}
 
 /*func (w *writer) U64(n uint64) {
 	var enc [8]byte
@@ -75,8 +79,6 @@ impl Writer {
 	pub fn u64(&mut self, n: u64) {
 		let enc: [u8; 8] = n.to_be_bytes();
 		self.write(&enc).unwrap();
-
-		()
 	}
 	
 /*func (w *writer) Varint(n uint32) {
@@ -130,7 +132,7 @@ pub struct SimpleSection {
     sz: u32,
 }
 
-impl SimpleSection {
+impl Section for SimpleSection {
 /*func (s *simpleSection) kind() sectionKind {
 	return sectionKindSimple
 }*/
@@ -146,7 +148,7 @@ impl SimpleSection {
 		return err
 	}
 	return nil*/
-	pub fn read(&mut self, r: &mut Reader) -> Result<(), Error> {
+	fn read(&mut self, r: &mut Reader) -> Result<(), Error> {
 		self.off = r.u32()?;
 
 		self.sz = r.u32()?;
@@ -174,7 +176,7 @@ pub struct CompoundSection<'a> {
 	pub _index: SimpleSection
 }
 
-impl CompoundSection<'_> {
+impl Section for CompoundSection<'_> {
 
 /*func (s *compoundSection) kind() sectionKind {
 	return sectionKindComplex
@@ -213,11 +215,17 @@ func (s *compoundSection) read(r *reader) error {
 	var err error
 	s.offsets, err = readSectionU32(r.r, s.index)
 	return err
+}*/
+fn read(&mut self, r: &mut Reader) -> Result<(), Error> {
+	self._data.read(r)?;
+
+	self._index.read(r)?;
+	Ok(())
 }
 
 // relativeIndex returns the relative offsets of the items (first
 // element is 0), plus a final marking the end of the last item.
-func (s *compoundSection) relativeIndex() []uint32 {
+/*func (s *compoundSection) relativeIndex() []uint32 {
 	ri := make([]uint32, 0, len(s.offsets)+1)
 	for _, o := range s.offsets {
 		ri = append(ri, o-s.offsets[0])

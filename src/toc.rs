@@ -13,6 +13,7 @@
 // limitations under the License.
 
 //package zoekt
+use crate::Section;
 use crate::CompoundSection;
 use crate::SimpleSection;
 
@@ -188,3 +189,12 @@ func (t *indexTOC) sectionsTaggedList() []taggedSection {
 func (t *indexTOC) sectionsTaggedCompatibilityList() []taggedSection {
     return []taggedSection{}
 }*/
+
+impl IndexToc<'_> {
+    fn sections(&self) -> Vec<Box<dyn Section>> {
+        vec![
+            //&self.meta_data as *const dyn Section,
+            //&self.repo_meta_data,
+        ]
+    }
+}
