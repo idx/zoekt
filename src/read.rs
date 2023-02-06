@@ -24,6 +24,7 @@ import (
 use crate::IndexFile;
 use crate::IndexToc;
 use crate::Section;
+use crate::IndexMetadata;
 use crate::SimpleSection;
 use anyhow::Error;
 
@@ -106,7 +107,7 @@ func (r *reader) Str() (string, error) {
 //func (r *reader) readTOC(toc *indexTOC) error {
     fn read_toc(&mut self, _toc: &IndexToc<'_>) -> Result<(), Error> {
     //fn read_toc(&mut self, _toc: &IndexToc<'_>) {
-            /*sz, err := r.r.Size()
+    /*sz, err := r.r.Size()
     if err != nil {
         return err
     }
@@ -219,13 +220,14 @@ func readSectionU64(f IndexFile, sec simpleSection) ([]uint64, error) {
 }*/
 
 //func (r *reader) readJSON(data interface{}, sec *simpleSection) error {
+    fn read_json(&mut self, _sec: &SimpleSection) -> Result<(), Error> {
     /*blob, err := r.r.Read(sec.off, sec.sz)
     if err != nil {
         return err
     }
 
     return json.Unmarshal(blob, data)*/
-    fn read_json(&self) {
+        Ok(())
     }
 }
 
@@ -490,7 +492,7 @@ pub fn new_searcher(_r: &IndexFile) {
 // the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
 //pub fn read_metadata(inf: &IndexFile) -> Result<*Repository, *IndexMetadata, Error> {
-pub fn read_metadata(inf: &IndexFile) -> Result<(), Error> {
+pub fn read_metadata(inf: &IndexFile) -> Result<IndexMetadata, Error> {
     /*rd := &reader{r: inf}
     var toc indexTOC
     if err := rd.readTOC(&toc); err != nil {
@@ -515,13 +517,14 @@ pub fn read_metadata(inf: &IndexFile) -> Result<(), Error> {
     let toc: IndexToc = IndexToc::default();
     rd.read_toc(&toc)?;
 
-    //let mut md = IndexMetadata::default();
+    let md = IndexMetadata::default();
     //rd.read_json(&mut md, &toc.meta_data)?;
+    rd.read_json(&toc.meta_data)?;
 
     //let mut repo = Repository::default();    
     //rd.read_json(&mut repo, &toc.repo_meta_data)?;
 
 //    (0..10).for_each(|x| println!("{:016x}: {:02x}", x, inf.data[x]));
     //Ok((&repo, &md))
-    Ok(())
+    Ok(md)
 }

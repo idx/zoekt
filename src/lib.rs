@@ -29,6 +29,7 @@ pub mod query;
 pub mod shards;
 //pub mod web;
 
+pub use api::IndexMetadata;
 pub use api::Searcher;
 pub use indexfile_unix::*;
 pub use read::*;
