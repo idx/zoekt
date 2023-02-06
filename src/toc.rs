@@ -115,10 +115,12 @@ pub struct IndexToc<'a> {
     pub rune_doc_sections: SimpleSection,
 }
 
-/*func (t *indexTOC) sections() []section {
+impl IndexToc<'_> {
+//func (t *indexTOC) sections() []section {
+    pub fn sections(&self) -> Vec<&dyn Section> {
     // This old sections list is only needed to maintain backwards compatibility,
     // and can be removed when a migration to tagged sections is complete.
-    return []section{
+    /*return []section{
         // This must be first, so it can be reliably read across
         // file format versions.
         &t.metaData,
@@ -140,10 +142,32 @@ pub struct IndexToc<'a> {
         &t.contentChecksums,
         &t.languages,
         &t.runeDocSections,
+    }*/
+        vec![
+            &self.meta_data,
+            &self.repo_meta_data,
+            &self.file_contents,
+            &self.file_names,
+            &self.file_sections,
+            &self.newlines,
+            &self.ngram_text,
+            &self.postings,
+            &self.name_ngram_text,
+            &self.name_postings,
+            &self.branch_masks,
+            &self.sub_repos,
+            &self.rune_offsets,
+            &self.name_rune_offsets,
+            &self.file_end_runes,
+            &self.name_end_runes,
+            &self.content_checksums,
+            &self.languages,
+            &self.rune_doc_sections,
+        ]
     }
 }
 
-type taggedSection struct {
+/*type taggedSection struct {
     tag string
     sec section
 }
@@ -190,11 +214,3 @@ func (t *indexTOC) sectionsTaggedCompatibilityList() []taggedSection {
     return []taggedSection{}
 }*/
 
-impl IndexToc<'_> {
-    fn sections(&self) -> Vec<Box<dyn Section>> {
-        vec![
-            //&self.meta_data as *const dyn Section,
-            //&self.repo_meta_data,
-        ]
-    }
-}

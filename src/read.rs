@@ -489,6 +489,7 @@ pub fn new_searcher(_r: &IndexFile) {
 // ReadMetadata returns the metadata of index shard without reading
 // the index data. The IndexFile is not  closed.
 //func ReadMetadata(inf IndexFile) (*Repository, *IndexMetadata, error) {
+//pub fn read_metadata(inf: &IndexFile) -> Result<*Repository, *IndexMetadata, Error> {
 pub fn read_metadata(inf: &IndexFile) -> Result<(), Error> {
     /*rd := &reader{r: inf}
     var toc indexTOC
@@ -511,13 +512,16 @@ pub fn read_metadata(inf: &IndexFile) -> Result<(), Error> {
 		r: inf,
 	    off: 0,
     };
-    let toc: IndexToc = Default::default();
+    let toc: IndexToc = IndexToc::default();
     rd.read_toc(&toc)?;
 
-    rd.read_json();
+    //let mut md = IndexMetadata::default();
+    //rd.read_json(&mut md, &toc.meta_data)?;
 
-    //rd.read_json();
+    //let mut repo = Repository::default();    
+    //rd.read_json(&mut repo, &toc.repo_meta_data)?;
 
 //    (0..10).for_each(|x| println!("{:016x}: {:02x}", x, inf.data[x]));
+    //Ok((&repo, &md))
     Ok(())
 }
